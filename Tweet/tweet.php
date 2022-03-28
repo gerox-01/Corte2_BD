@@ -15,6 +15,10 @@
 
     <?php
     require_once './nav.php';
+    require_once './lib/tools.php';
+    
+    LimpiarEntradas();
+    // IniciarSesionSegura();
     $tweet = $_POST['tweet'] ?? '';
     ?>
 
@@ -31,7 +35,6 @@
     </form>
 
     <?php
-    require_once './tools.php';
 
     
     $tweet = $_POST['tweet'] ?? '';
@@ -40,6 +43,7 @@
     if(isset($_POST['tweet'])){
         $msg = grabarTweet($_SESSION['username'], $tweet, $DateAndTime);
         echo "$msg";
+        header('Location: index.php');
     }
 
 

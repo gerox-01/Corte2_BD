@@ -10,7 +10,7 @@
         $servername = "localhost";
         $database = "twitter";
         $username = "root";
-        $password = "123456";
+        $password = "";
 
         $sql = "mysql:host=$servername; dbname=$database;";
         $dsn_Options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
@@ -38,27 +38,40 @@
      * @param number $cantidad_hijos
      * @param color $color
      * @param string $photo 
+     * @return boolean
      */
     function RegistrarUsuarioDB($my_Db_Connection,$usuario,$clave,$nombre,$apellido,$nacimiento,$cantidad_hijos,$color,$foto){
 
-        $my_Insert_Statement=
+        $encryptPass = encriptarPassword($clave);
+
+        $sql = "SELECT * FROM usuario WHERE usuario = :usuario";
+        $statement = $my_Db_Connection->prepare($sql);
+        $statement->bindParam(':usuario', $usuario);
+        if($statement->execute()){
+            $result = $statement->fetchAll();
+            if(count($result) > 0){
+                return False;
+            }
+        }else{
+            $my_Insert_Statement=
             $my_Db_Connection->prepare("INSERT INTO usuario (usuario,clave,nombre,apellido,nacimiento,cantidad_hijos,color,foto)".
             "VALUES (:usuario, :clave,  :nombre, :apellido, :nacimiento, :cantidad_hijos, :color,:foto)");
-        $my_Insert_Statement->bindParam(':usuario',$usuario);
-        $my_Insert_Statement->bindParam(':clave',$clave);
-        $my_Insert_Statement->bindParam(':nombre',$nombre);
-        $my_Insert_Statement->bindParam(':apellido',$apellido);
-        $my_Insert_Statement->bindParam(':nacimiento',$nacimiento);
-        $my_Insert_Statement->bindParam(':cantidad_hijos',$cantidad_hijos);
-        $my_Insert_Statement->bindParam(':color',$color);
-        $my_Insert_Statement->bindParam(':foto',$foto);
+        
+            $my_Insert_Statement->bindParam(':usuario',$usuario);
+            $my_Insert_Statement->bindParam(':clave',$encryptPass);
+            $my_Insert_Statement->bindParam(':nombre',$nombre);
+            $my_Insert_Statement->bindParam(':apellido',$apellido);
+            $my_Insert_Statement->bindParam(':nacimiento',$nacimiento);
+            $my_Insert_Statement->bindParam(':cantidad_hijos',$cantidad_hijos);
+            $my_Insert_Statement->bindParam(':color',$color);
+            $my_Insert_Statement->bindParam(':foto',$foto);
 
-        if ($my_Insert_Statement->execute()) {
-            echo "Nuevo Usuario Creado";
-            return TRUE;
-        }else{
-            echo "No se pudo crear Usuario";
-            return FALSE;
-        }   
+            if ($my_Insert_Statement->execute()) {
+                echo "Nuevo Usuario Creado";
+                return TRUE;
+            }else{
+                echo "No se pudo crear Usuario";
+                return FALSE;
+            }   
+        }
     }
-?>

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="css/styles.css">
 
     <title>Signup</title>
@@ -13,9 +14,19 @@
 <body>
 
     <?php
+    require_once "./lib/tools.php";
+    require_once "./lib/db_tools.php";
     require_once './nav.php';
+    LimpiarEntradas();
+
+    $CONN = ConexionDB();
     ?>
+
+
     <?php
+
+    #region CodigoRevisar-Alejo
+    #region Variables
     $name = '';
     $nameErr = '';
     $lastname = '';
@@ -36,6 +47,7 @@
     $fechanacimiento;
     $archivo;
     $fileDestination;
+    #endregion
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($_POST["name"])) {
@@ -53,7 +65,6 @@
         } else {
             $email = test_input($_POST["email"]);
 
-            // check if e-mail address is well-formed
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $emailErr = "Invalid email format";
             }
@@ -100,7 +111,7 @@
 
         if (
             isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])
-            && isset($_POST['confirmpassword'])  && isset($_POST['archivo'])
+            && isset($_POST['confirmpassword']) && isset($_POST['archivo'])
         ) {
             $archivo = $_POST['archivo'];
             $email = $_POST['email'];
@@ -120,25 +131,18 @@
             $display = '<p>No se han completado todos los campos</p>';
         }
     }
+    #endregion
+
     ?>
 
 
-    <!-- <form action="signup.php" method="post" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <button type="submit" name="submit">UPLOAD</button>
-    </form> -->
-
     <form method="post" class="form-register" id="style-5" enctype="multipart/form-data">
         <div>
-            <label for="archivo">Foto:</label>
-            <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
-        </div>
-        <div>
-            <label for="name">Name:</label>
+            <label for="name">Nombre:</label>
             <input class="r-options" type="text" name="name" id="name" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba el nombre">
         </div>
         <div>
-            <label for="lastname">Lastname:</label>
+            <label for="lastname">Apellido:</label>
             <input class="r-options" type="text" name="lastname" id="lastname" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba apellidos">
         </div>
         <div>
@@ -149,9 +153,9 @@
             <label for="tipodoc">Tipo de documento:</label>
             <select class="r-selected" name="tipodoc" id="tipodoc" required="required">
                 <option value="">Seleccione una opción</option>
-                <option value="CC">Cédula de ciudadanía</option>
-                <option value="CE">Cédula de extranjería</option>
-                <option value="TI">Tarjeta de identidad</option>
+                <option value="Cédula de ciudadanía">Cédula de ciudadanía</option>
+                <option value="Cédula de extranjería">Cédula de extranjería</option>
+                <option value="Tarjeta de identidad">Tarjeta de identidad</option>
             </select>
         </div>
         <div>
@@ -159,48 +163,39 @@
             <input class="r-options" type="text" name="numdoc" id="numdoc" required="required">
         </div>
         <div>
+            <label for="archivo">Foto:</label>
+            <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
+        </div>
+        <!-- Numero de hijos -->
+        <div>
+            <label for="numhijos">Numero de hijos:</label>
+            <input class="r-options" type="number" name="numhijos" id="numhijos" required="required">
+        </div>
+        <!-- Color favorito del usuario -->
+        <div>
             <label for='color'>Color favorito:</label>
             <input class="r-options" type='color' name='color' id='color' required='required'>
         </div>
         <div>
-            <label for="email">Correo:</label>
-            <input class="r-options" type="email" name="email" id="email" required="required" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" title="Escriba correo correctamente">
-        </div>
-        <div>
-            <label for="web">Portal web:</label>
-            <input class="r-options" type="url" name="web" id="web" required="required" pattern="[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)" title="Escriba url correctamente">
-        </div>
-        <div>
-            <label for="username">Username:</label>
+            <label for="username">Usuario:</label>
             <input class="r-options" type="text" name="username" id="username" required="required" pattern="^[a-z0-9_-]{3,16}$" title="Escriba usuario sin espacios y tildes, mas de 3 y menos de 13  caracteres">
         </div>
         <div>
-            <label for="password">Password:</label>
+            <label for="password">Contraseña:</label>
             <input class="r-options" type="password" name="password" id="password" required="required" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
         </div>
         <div>
-            <label for="confirmpassword">Confirm Password:</label>
+            <label for="confirmpassword">Confirmar contraseña:</label>
             <input class="r-options" type="password" name="confirmpassword" id="confirmpassword" required="required" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
-
         </div>
-        <div>
-            <label for="usertype">Tipo de usuario: </label>
-            <select name="usertype" id="usertype" required="required">
-                <option value="">Seleccione un tipo de usuario</option>
-                <option value="sale">Vendedor</option>
-                <option value="buy">Comprador</option>
-            </select>
-        </div>
-        <input type="submit" name="btnRegistrar" value="Register" class='button-r'>
+        <input type="submit" name="btnRegistrar" value="Registrarse" class='button-r'>
     </form>
 
     <?php
-    require_once "./lib/tools.php";
-    require_once "./lib/db_tools.php";
 
-    $CONN = ConexionDB();
-
-    if (isset($_POST['btnRegistrar'])) {
+    #region CargarImagen
+    function loadImage()
+    {
         $archivo = $_FILES['archivo']['name'];
         if (isset($archivo) && $archivo != "") {
             $tipo = $_FILES['archivo']['type'];
@@ -219,59 +214,53 @@
                 if (move_uploaded_file($temp, $fileDestination)) {
                     //Permisos
                     $_SESSION['archivo'] =  $fileDestination;
-                    // $_SESSION['archivo'] =  '../uploaded_files/'.$archivo;
-                    echo '<script>alert("Usuario Registrado")</script>';
-                    echo '<script>window.location.href="index.php"; </script>';
                 } else {
                     echo '<script>alert("Error. credenciales incorrectas")</script>';
                 }
             }
         }
     }
+    #endregion
 
 
-    if (isset($_POST['usertype'])) {
-        $usertype = $_POST['usertype'];
-        if ($usertype == 'sale') {
-            $usertype = 'Vendedor';
-        } else if ($usertype == 'buy') {
-            $usertype = 'Comprador';
-        }
-
-        $_SESSION['usertype'] = $usertype;
-    }
-
+    #region GuardarDatos
     if (isset($_POST['name'])) {
-        $_SESSION['username'] =  $_POST['username'];
-        $_SESSION['password'] =  $_POST['password'];
-        $_SESSION['name'] =  $_POST['name'];
+        $_SESSION['name'] = $_POST['name'];
         $_SESSION['lastname'] =  $_POST['lastname'];
         $_SESSION['fecha'] =  $_POST['fecha'];
-        $_SESSION['color'] =  $_POST['color'];
-        $_SESSION['email'] =  $_POST['email'];
-        $_SESSION['web'] =  $_POST['web'];
         $_SESSION['tipodoc'] =  $_POST['tipodoc'];
+        $_SESSION['numdoc'] =  $_POST['numdoc'];
+        $_SESSION['numhijos'] =  $_POST['numhijos'];
+        $_SESSION['color'] =  $_POST['color'];
+        $_SESSION['username'] =  $_POST['username'];
+        $_SESSION['password'] =  $_POST['password'];
+        $_SESSION['confirmpassword'] =  $_POST['confirmpassword'];
 
 
         if ($_POST['password'] == $_POST['confirmpassword']) {
-            if ($CONN != NULL) {
-                RegistrarUsuarioDB(
+            loadImage();
+            if ($CONN !== null) {
+                $insertuser = RegistrarUsuarioDB(
                     $CONN,
                     $_SESSION['username'],
                     $_SESSION['password'],
                     $_SESSION['name'],
                     $_SESSION['lastname'],
                     $_SESSION['fecha'],
+                    $_SESSION['numhijos'],
                     $_SESSION['color'],
-                    $_SESSION['email'],
-                    $_SESSION['web'],
-                    $_SESSION['tipodoc'],
-                    $_SESSION['usertype'],
                     $_SESSION['archivo']
                 );
+                if($insertuser){
+                    echo '<script>alert("Usuario Registrado")</script>';
+                    echo '<script>window.location.href="index.php"; </script>';
+                }else{
+                    echo '<script>alert("Error. credenciales incorrectas")</script>';
+                    echo '<script>window.location.href="signup.php"; </script>';
+                }
             }
         } else {
-            echo "Las contraseñas no coinciden";
+            echo "<p style='color:red;'>Las contraseñas no coinciden</p>";
         }
     }
     ?>

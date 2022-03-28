@@ -7,8 +7,11 @@
  * Descripción: parcial 1
  */
 
+
 header('Content-Type: text/html; charset=UTF-8');
 require_once('./nav.php');
+
+
 if (isset($_SESSION['username'])) {
     $user = $_SESSION['username'];
 } else {
@@ -34,15 +37,21 @@ if (isset($_SESSION['username'])) {
 <body>
 
     <?php
-    require_once('./tools.php');
+    require_once('./lib/tools.php');
+    LimpiarEntradas();
 
-    //Iniciar sesión
+
     $tweet = leerTweet();
-
+    $color = leerColor($_SESSION['username']);
+    if($color != ''){
+        $color = $color;
+    }else{
+        $color = '#f5f5f5';
+    }
 
 
     if ($tweet == 'Hola') {
-        echo "<div class='i-tweet' id='style-5' >";
+        echo "<div class='i-tweet' style='background-color: $color !important;' id='style-5' >";
         echo "<div class='force-overflow'>";
         echo "<h1>No hay Tweets</h1>";
         echo "</div>";
@@ -50,7 +59,7 @@ if (isset($_SESSION['username'])) {
     } else {
         $userTweet = $_SESSION['username'];
         if (count($tweet) > 0) {
-            echo "<div class='i-tweet' id='style-5'>";
+            echo "<div class='i-tweet' style='background-color: $color !important;' id='style-5'>";
             echo "<div class='force-overflow'>";
             foreach ($tweet as $t) {
                 $tweetS = explode(":", $t);
@@ -66,15 +75,17 @@ if (isset($_SESSION['username'])) {
                     echo "</div>";
 
                     if ($tweetS[0] == $userTweet) {
-                        echo '<form method="post">';
-                        echo '    <div>';
-                        echo '        <input type="hidden" name="tweet" value="<?php echo $tweetS[1]; ?>">';
-                        echo '        <input type="submit" value="Eliminar">';
+                        echo '<form method="get" style="margin-top: 0 !important;" >';
+                        echo '    <div style="padding: 0 !important; margin: 0 !important;" >';
+                        echo '        <input type="hidden" name="tweet" value="'. $tweetS[1] .'">';
+                        echo '        <input type="hidden" name="date" value="'. $tweetS[2] .'">';
+                        echo '        <input style="background: red; color: white; font-weight: bold; border-radius: 10px !important;" type="submit" value="Eliminar">';
                         echo '    </div>';
                         echo '</form>';
-                        if (isset($_POST['tweet'])) {
-                            $tweet = $_POST['tweet'];
-                            eliminarTweet($_SESSION['username'], $tweet);
+                        if (isset($_GET['tweet'])) {
+                            $tweet = $_GET['tweet'];
+                            $date = $_GET['date'];
+                            eliminarTweet($_SESSION['username'], $tweet, $date);
                         }
                     }
                 }
