@@ -98,8 +98,10 @@
         $tipodoc = $_POST['tipodoc'];
         $num = $_POST['num'];
 
-        if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password']) 
-            && isset($_POST['confirmpassword'])  && isset($_POST['archivo'])) {
+        if (
+            isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])
+            && isset($_POST['confirmpassword'])  && isset($_POST['archivo'])
+        ) {
             $archivo = $_POST['archivo'];
             $email = $_POST['email'];
             $username = $_POST['username'];
@@ -114,8 +116,7 @@
                     $display = '<p>Las contraseñas no coinciden</p>';
                 }
             }
-        } 
-        else {
+        } else {
             $display = '<p>No se han completado todos los campos</p>';
         }
     }
@@ -130,7 +131,7 @@
     <form method="post" class="form-register" id="style-5" enctype="multipart/form-data">
         <div>
             <label for="archivo">Foto:</label>
-            <input type="file" name="archivo" id="archivo" accept="image/*" requerid/><br><br>
+            <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
         </div>
         <div>
             <label for="name">Name:</label>
@@ -194,40 +195,40 @@
     </form>
 
     <?php
-    require_once "tools.php";
+    require_once "./lib/tools.php";
+    require_once "./lib/db_tools.php";
 
-    if(isset($_POST['btnRegistrar']) )
-        {
-            $archivo = $_FILES['archivo']['name'];
-            if(isset($archivo) && $archivo != ""){
-                $tipo = $_FILES['archivo']['type'];
-                $tamano = $_FILES['archivo']['size'];
-                $temp = $_FILES['archivo']['tmp_name'];
-                
-                $fileExt = explode('.', $archivo);
-                $fileActualExt = strtolower(end($fileExt));
+    $CONN = ConexionDB();
 
-                if (!((strpos($tipo, "gif") || strpos($tipo, "jpeg") || strpos($tipo, "jpg") || strpos($tipo, "png")) && ($tamano < 2000000))) {
-                    echo '<script>alert("Error. La extensión o el tamaño de los archivos no es correcta")</script>';
-                }
-                else {
-                    //Imagen concuerda, Entra
-                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
-                    $fileDestination = '../uploaded_files/'.$fileNameNew;
-                    if (move_uploaded_file($temp, $fileDestination)) {
-                        //Permisos
-                        $_SESSION['archivo'] =  $fileDestination;
-                        // $_SESSION['archivo'] =  '../uploaded_files/'.$archivo;
-                        echo '<script>alert("Usuario Registrado")</script>';
-                        echo '<script>window.location.href="index.php"; </script>';
-                    }
-                    else {
-                        echo '<script>alert("Error. credenciales incorrectas")</script>';
-                    }
+    if (isset($_POST['btnRegistrar'])) {
+        $archivo = $_FILES['archivo']['name'];
+        if (isset($archivo) && $archivo != "") {
+            $tipo = $_FILES['archivo']['type'];
+            $tamano = $_FILES['archivo']['size'];
+            $temp = $_FILES['archivo']['tmp_name'];
+
+            $fileExt = explode('.', $archivo);
+            $fileActualExt = strtolower(end($fileExt));
+
+            if (!((strpos($tipo, "gif") || strpos($tipo, "jpeg") || strpos($tipo, "jpg") || strpos($tipo, "png")) && ($tamano < 2000000))) {
+                echo '<script>alert("Error. La extensión o el tamaño de los archivos no es correcta")</script>';
+            } else {
+                //Imagen concuerda, Entra
+                $fileNameNew = uniqid('', true) . "." . $fileActualExt;
+                $fileDestination = '../uploaded_files/' . $fileNameNew;
+                if (move_uploaded_file($temp, $fileDestination)) {
+                    //Permisos
+                    $_SESSION['archivo'] =  $fileDestination;
+                    // $_SESSION['archivo'] =  '../uploaded_files/'.$archivo;
+                    echo '<script>alert("Usuario Registrado")</script>';
+                    echo '<script>window.location.href="index.php"; </script>';
+                } else {
+                    echo '<script>alert("Error. credenciales incorrectas")</script>';
                 }
             }
         }
-   
+    }
+
 
     if (isset($_POST['usertype'])) {
         $usertype = $_POST['usertype'];
@@ -243,7 +244,6 @@
     if (isset($_POST['name'])) {
         $_SESSION['username'] =  $_POST['username'];
         $_SESSION['password'] =  $_POST['password'];
-
         $_SESSION['name'] =  $_POST['name'];
         $_SESSION['lastname'] =  $_POST['lastname'];
         $_SESSION['fecha'] =  $_POST['fecha'];
@@ -251,15 +251,25 @@
         $_SESSION['email'] =  $_POST['email'];
         $_SESSION['web'] =  $_POST['web'];
         $_SESSION['tipodoc'] =  $_POST['tipodoc'];
-       
+
 
         if ($_POST['password'] == $_POST['confirmpassword']) {
-            grabarUsuario($_SESSION['username'], $_SESSION['password'], 
-            $_SESSION['name'], $_SESSION['lastname'], $_SESSION['fecha'], 
-            $_SESSION['color'], $_SESSION['email'], $_SESSION['web'], $_SESSION['tipodoc'], 
-            $_SESSION['usertype'], $_SESSION['archivo']);
-            // header("Location: login.php");
-            
+            if ($CONN != NULL) {
+                RegistrarUsuarioDB(
+                    $CONN,
+                    $_SESSION['username'],
+                    $_SESSION['password'],
+                    $_SESSION['name'],
+                    $_SESSION['lastname'],
+                    $_SESSION['fecha'],
+                    $_SESSION['color'],
+                    $_SESSION['email'],
+                    $_SESSION['web'],
+                    $_SESSION['tipodoc'],
+                    $_SESSION['usertype'],
+                    $_SESSION['archivo']
+                );
+            }
         } else {
             echo "Las contraseñas no coinciden";
         }

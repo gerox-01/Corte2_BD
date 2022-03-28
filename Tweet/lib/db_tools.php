@@ -8,7 +8,7 @@
      */
     function ConexionDB(){
         $servername = "localhost";
-        $database = "tweets";
+        $database = "twitter";
         $username = "root";
         $password = "123456";
 
@@ -42,16 +42,16 @@
     function RegistrarUsuarioDB($my_Db_Connection,$usuario,$clave,$nombre,$apellido,$nacimiento,$cantidad_hijos,$color,$foto){
 
         $my_Insert_Statement=
-            $my_Db_Connection->prepare("INSERT INTO usuarios (Usuario,Clave,Nombre,Apellido,FNacimiento,Hijos,Color,Foto)".
-            "VALUES (:Usuario, :Clave,  :Nombre, :Apellido, :FNacimiento, :Hijos, :Color,:Foto)");
-        $my_Insert_Statement->bindParam(':Usuario',$usuario);
-        $my_Insert_Statement->bindParam(':Clave',$clave);
-        $my_Insert_Statement->bindParam(':Nombre',$nombre);
-        $my_Insert_Statement->bindParam(':Apellido',$apellido);
-        $my_Insert_Statement->bindParam(':FNacimiento',$nacimiento);
-        $my_Insert_Statement->bindParam(':Hijos',$cantidad_hijos);
-        $my_Insert_Statement->bindParam(':Color',$color);
-        $my_Insert_Statement->bindParam(':Foto',$foto);
+            $my_Db_Connection->prepare("INSERT INTO usuario (usuario,clave,nombre,apellido,nacimiento,cantidad_hijos,color,foto)".
+            "VALUES (:usuario, :clave,  :nombre, :apellido, :nacimiento, :cantidad_hijos, :color,:foto)");
+        $my_Insert_Statement->bindParam(':usuario',$usuario);
+        $my_Insert_Statement->bindParam(':clave',$clave);
+        $my_Insert_Statement->bindParam(':nombre',$nombre);
+        $my_Insert_Statement->bindParam(':apellido',$apellido);
+        $my_Insert_Statement->bindParam(':nacimiento',$nacimiento);
+        $my_Insert_Statement->bindParam(':cantidad_hijos',$cantidad_hijos);
+        $my_Insert_Statement->bindParam(':color',$color);
+        $my_Insert_Statement->bindParam(':foto',$foto);
 
         if ($my_Insert_Statement->execute()) {
             echo "Nuevo Usuario Creado";
