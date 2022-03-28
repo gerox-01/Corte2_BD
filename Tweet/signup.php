@@ -251,9 +251,10 @@
                     $_SESSION['color'],
                     $_SESSION['archivo']
                 );
+                session_destroy();
                 if($insertuser){
                     echo '<script>alert("Usuario Registrado")</script>';
-                    echo '<script>window.location.href="index.php"; </script>';
+                    echo '<script>window.location.href="login.php"; </script>';
                 }else{
                     echo '<script>alert("Error. credenciales incorrectas")</script>';
                     echo '<script>window.location.href="signup.php"; </script>';
@@ -273,7 +274,7 @@
             <p>| Alejandro Monroy</p>
         </div>
     </footer>
-
+x
 
 </body>
 
