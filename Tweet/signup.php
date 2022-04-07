@@ -136,63 +136,109 @@
     ?>
 
 
-    <form method="post" class="form-register" id="style-5" enctype="multipart/form-data">
-        <!-- Nombre -->
-        <div>
-            <label for="name">Nombre:</label>
-            <input class="r-options" type="text" name="name" id="name" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba el nombre">
+    <form method="post" style='overflow-y: hidden !important;' class="form-register" id="style-5" enctype="multipart/form-data">
+        <div style='display:flex; align-items: center; justify-content: start;'>
+            <!-- Nombre -->
+            <div>
+                <label for="name">Nombre:</label>
+                <input class="r-options" type="text" name="name" id="name" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba el nombre">
+            </div>
+            <!-- Apellido -->
+            <div>
+                <label for="lastname">Apellido:</label>
+                <input class="r-options" type="text" name="lastname" id="lastname" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba apellidos">
+            </div>
+            <!-- Correo -->
+            <div>
+                <label for="correo">Correo:</label>
+                <input class="r-options" type="email" name="email" id="email" required="required">
+            </div>
+            <!-- Tipo de documento -->
+            <div style='display: flex; flex-direction: column;'>
+                <label for="tipodoc">Tipo de Documento:</label>
+                <select name="tipDoc" required="required">
+                    <?php $tiposdoc = SeleccionarTipoDocDB($CONN);
+                    foreach ($tiposdoc as $opciones) {
+                    ?>
+                        <option value="<?php echo $opciones['id_tipdoc'] ?>"><?php echo $opciones['tip_doc'] ?></option>
+                    <?php
+
+                    }
+                    ?>
+                </select>
+            </div>
+            <!-- Numero de documento -->
+            <div>
+                <label for="num">Numero de Documento:</label>
+                <input class="r-options" type="text" name="num_doc" id="num_doc" required="required" pattern="([0-9]+)" title="Escriba el numero de documento">
+            </div>
         </div>
-        <!-- Apellido -->
-        <div>
-            <label for="lastname">Apellido:</label>
-            <input class="r-options" type="text" name="lastname" id="lastname" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba apellidos">
+        <div style='display:flex; align-items: center; justify-content: start;'>
+            <!-- Direccion -->
+            <div>
+                <label for="direccion">Dirección:</label>
+                <input class="r-options" type="text" name="direccion" id="direccion" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba la dirección">
+            </div>
+            <!-- Numero de hijos -->
+            <div style='display: flex; flex-direction: column;'>
+                <label for="numhijos">Numero de hijos:</label>
+                <select name="numhijos" id="numhijos">
+                    <?php
+                    $canthijos = SeleccionarCanHijos($CONN);
+                    foreach ($canthijos as $opciones) {
+                    ?>
+                        <option value="<?php echo $opciones['id_cant_hijos'] ?>"><?php echo $opciones['cant_hijos'] ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </div>
+            <!-- Estado civil -->
+            <div style='display: flex; flex-direction: column;'>
+                <label for="estadocivil">Estado civil:</label>
+                <select name="estCivil" id="estCivil" required="required">
+                    <?php
+                    $estadocivil = SeleccionarEstadoCivilDB($CONN);
+                    foreach ($estadocivil as $opciones) {
+                    ?>
+                        <option value="<?php echo $opciones['id_est_civil'] ?>"><?php echo $opciones['est_civil'] ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </div>
+            <!-- Color favorito del usuario -->
+            <div>
+                <label for='color'>Color favorito:</label>
+                <input class="r-options" type='color' name='color' id='color' required='required'>
+            </div>
+            <!-- Foto -->
+            <div style='display: flex; flex-direction: column;'>
+                <label for="archivo">Foto:</label>
+                <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
+            </div>
         </div>
-        <!-- Correo -->
-        <div>
-            <label for="correo">Correo:</label>
-            <input class="r-options" type="email" name="email" id="email" required="required">
-        </div>
-        <!-- Direccion -->
-        <div>
-            <label for="direccion">Dirección:</label>
-            <input class="r-options" type="text" name="direccion" id="direccion" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba la dirección">
-        </div>
-        <!-- Numero de hijos -->
-        <div>
-            <label for="numhijos">Numero de hijos:</label>
-            <input class="r-options" type="number" name="numhijos" id="numhijos" required="required">
-        </div>
-        <!-- Estado civil -->
-        <div>
-            <label for="estadocivil">Estado civil:</label>
-            <select class="r-options" name="estadocivil" id="estadocivil" required="required">
-                <option value="soltero">Soltero</option>
-                <option value="casado">Casado</option>
-                <option value="viudo">Viudo</option>
-                <option value="divorciado">Divorciado</option>
-            </select>
-        </div>
-        <!-- Color favorito del usuario -->
-        <div>
-            <label for='color'>Color favorito:</label>
-            <input class="r-options" type='color' name='color' id='color' required='required'>
-        </div>
-        <!-- Foto -->
-        <div>
-            <label for="archivo">Foto:</label>
-            <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
-        </div>
-        <div>
-            <label for="username">Usuario:</label>
-            <input class="r-options" type="text" name="username" id="username" required="required" pattern="^[a-z0-9_-]{3,16}$" title="Escriba usuario sin espacios y tildes, mas de 3 y menos de 13  caracteres">
-        </div>
-        <div>
-            <label for="password">Contraseña:</label>
-            <input class="r-options" type="password" name="password" id="password" required="required" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
-        </div>
-        <div>
-            <label for="confirmpassword">Confirmar contraseña:</label>
-            <input class="r-options" type="password" name="confirmpassword" id="confirmpassword" required="required" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
+        <div style='display:flex; align-items: center; justify-content: start;'>
+            <!-- Fecha de nacimiento -->
+            <div>
+                <label for="fecha_nac">Fecha de nacimiento:</label>
+                <input class="r-options" type="date" name="fecha_nac" id="fecha_nac" required="required">
+            </div>
+            <!-- usuario -->
+            <div>
+                <label for="username">Usuario:</label>
+                <input class="r-options" type="text" name="username" id="username" required="required" pattern="^[a-z0-9_-]{3,16}$" title="Escriba usuario sin espacios y tildes, mas de 3 y menos de 13  caracteres">
+            </div>
+            <!-- Contraseña -->
+            <div>
+                <label for="password">Contraseña:</label>
+                <input class="r-options" type="password" name="password" id="password" required="required" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
+            </div>
+            <!-- Confirmar contraseña -->
+            <div>
+                <label for="confirmpassword">Confirmar contraseña:</label>
+                <input class="r-options" type="password" name="confirmpassword" id="confirmpassword" required="required" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
+            </div>
         </div>
         <input type="submit" name="btnRegistrar" value="Registrarse" class='button-r'>
     </form>
@@ -236,11 +282,14 @@
         $_SESSION['confirmpassword'] =  $_POST['confirmpassword'];
         $_SESSION['name'] = $_POST['name'];
         $_SESSION['lastname'] =  $_POST['lastname'];
-        $_SESSION['email'] =  $_POST['email'];
-        $_SESSION['direccion'] =  $_POST['direccion'];
-        $_SESSION['numhijos'] =  $_POST['numhijos'];
-        $_SESSION['estadocivil'] =  $_POST['estadocivil'];
+        $_SESSION['fecha_nac'] =  $_POST['fecha_nac'];
         $_SESSION['color'] =  $_POST['color'];
+        $_SESSION['email'] =  $_POST['email'];
+        $_SESSION['tipDoc'] =  $_POST['tipDoc'];
+        $_SESSION['num_doc'] =  $_POST['num_doc'];
+        $_SESSION['numhijos'] =  $_POST['numhijos'];
+        $_SESSION['direccion'] =  $_POST['direccion'];
+        $_SESSION['estCivil'] =  $_POST['estCivil'];
 
 
         if ($_POST['password'] == $_POST['confirmpassword']) {
@@ -254,20 +303,20 @@
                     $_SESSION['lastname'],
                     $_SESSION['fecha_nac'],
                     $_SESSION['color'],
-                    $_SESSION['email'],
-                    $_SESSION['id_tipod_doc'],
+                    $_SESSION['email'], 
+                    $_SESSION['tipDoc'],
                     $_SESSION['num_doc'],
-                    $_SESSION['num_hijos'],
-                    $_SESSION['foto'],
+                    $_SESSION['numhijos'],
+                    $_SESSION['archivo'],
                     $_SESSION['direccion'],
-                    $_SESSION['estadocivil']
-                    
+                    $_SESSION['estCivil']
+
                 );
                 session_destroy();
-                if($insertuser){
+                if ($insertuser) {
                     echo '<script>alert("Usuario Registrado")</script>';
                     echo '<script>window.location.href="login.php"; </script>';
-                }else{
+                } else {
                     echo '<script>alert("Error. credenciales incorrectas")</script>';
                     echo '<script>window.location.href="signup.php"; </script>';
                 }
@@ -286,7 +335,7 @@
             <p>| Alejandro Monroy</p>
         </div>
     </footer>
-x
+    x
 
 </body>
 

@@ -15,7 +15,7 @@ function iniciarSesion()
  *    @param $usuario: nombre de usuario
  *    @param $clave: clave del usuario
  */
-function grabarUsuario($name, $lastname, $fecha, $tipodoc, $numdoc, $numhijos, $color, $username, $password, $usertype, $fileDestination)
+function grabarUsuario($name, $lastname, $fecha, $tipodoc, $num_doc, $numhijos, $color, $username, $password, $usertype, $fileDestination)
 {
 
     // a = append = agregar al final
@@ -25,7 +25,7 @@ function grabarUsuario($name, $lastname, $fecha, $tipodoc, $numdoc, $numhijos, $
     $encryptPass = encriptarPassword($password);
 
     $file = "usuario.txt";
-    $texto = $name . ":" . $lastname . ":" . $fecha . ":" . $tipodoc . ":" . $numdoc . ":" . $numhijos . ":" . $color . ":" . $username . ":" . $encryptPass . ":" . $usertype . ":" . $fileDestination . "\n";
+    $texto = $name . ":" . $lastname . ":" . $fecha . ":" . $tipodoc . ":" . $num_doc . ":" . $numhijos . ":" . $color . ":" . $username . ":" . $encryptPass . ":" . $usertype . ":" . $fileDestination . "\n";
     $fp = fopen($file, "a");
     fwrite($fp, $texto);
     fclose($fp);

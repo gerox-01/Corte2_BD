@@ -9,7 +9,7 @@
 function ConexionDB()
 {
     $servername = "localhost";
-    $database = "twitter";
+    $database = "corte2bd";
     $username = "root";
     $password = "";
 
@@ -60,7 +60,7 @@ function RegistrarUsuarioDB(
 
     $encryptPass = encriptarPassword($clave);
 
-    $sql = "SELECT * FROM usuario WHERE usuario = :usuario";
+    $sql = "SELECT * FROM usuarios WHERE usuario = :usuario";
     $statement = $my_Db_Connection->prepare($sql);
     $statement->bindParam(':usuario', $usuario);
     try {
@@ -101,6 +101,73 @@ function RegistrarUsuarioDB(
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
         return FALSE;
+    }
+}
+
+
+/**
+ * Seleccionar los tipos de documentos
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 07/04/2022
+ * @param string $connection
+ * @return array
+ */
+function SeleccionarTipoDocDB($my_Db_Connection)
+{
+    $sql = "SELECT `id_tipdoc`, `tip_doc` FROM `tipdoc`";
+    $statement = $my_Db_Connection->prepare($sql);
+    try {
+        if ($statement->execute()) {
+            $result = $statement->fetchAll();
+            return $result;
+        }
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        return NULL;
+    }
+}
+
+/**
+ * Seleccionar los estados civiles
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 07/04/2022
+ * @param string $connection
+ * @return array
+ */
+function SeleccionarEstadoCivilDB($my_Db_Connection)
+{
+    $sql = "SELECT `id_est_civil`, `est_civil` FROM `estadocivil`";
+    $statement = $my_Db_Connection->prepare($sql);
+    try {
+        if ($statement->execute()) {
+            $result = $statement->fetchAll();
+            return $result;
+        }
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        return NULL;
+    }
+}
+
+/**
+ * Seleccionar cantidad de hijos
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 07/04/2022
+ * @param string $connection
+ * @return array
+ */
+function SeleccionarCanHijos($my_Db_Connection)
+{
+    $sql = "SELECT `id_cant_hijos`, `cant_hijos` FROM `cantidadhijos`";
+    $statement = $my_Db_Connection->prepare($sql);
+    try {
+        if ($statement->execute()) {
+            $result = $statement->fetchAll();
+            return $result;
+        }
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        return NULL;
     }
 }
 
@@ -149,22 +216,40 @@ function ValidarLoginDB($my_Db_Connection, $usuario, $clave)
 
     $vclave = encriptarPassword($clave);
 
-    $sql = "SELECT * FROM usuarios WHERE usuario = :usuario AND clave = :clave";
-    $statement = $my_Db_Connection->prepare($sql);
-    $statement->bindParam(':usuario', $usuario);
-    $statement->bindParam(':clave', $vclave);
+    // $sql = "SELECT * FROM usuarios WHERE usuario = :usuario AND clave = :clave";
+    // $statement = $my_Db_Connection->prepare($sql);
+    // $statement->bindParam(':usuario', $usuario);
+    // $statement->bindParam(':clave', $vclave);
     try {
-        if ($statement->execute()) {
-            $result = $statement->fetchAll();
-            if (count($result) > 0) {
-                return TRUE;
-            }
+        $clavecryp = encriptarPassword($clave);
+        $my_Select_Statement =
+            $my_Db_Connection->prepare("SELECT `id_usuario`,`usuario`,  `nombres`, `apellidos`, `fecha_nac`, `color`, `correo`, `id_tip_doc`, `num_doc`, `id_num_hijos`, `foto`, `direccion`, `id_est_civil` FROM `usuarios` WHERE `usuario` = :usuario and `clave` = :clavecryp");
+        $my_Select_Statement->execute([':usuario' => $usuario, ':clavecryp' => $clavecryp]);
+        $user = $my_Select_Statement->fetch(); //user->usuario
+        if ($user) {
+            $_SESSION['iduser'] = $user['id_usuario'];
+            $_SESSION['user'] = $user['usuario'];
+            $_SESSION['nombre'] = $user['nombres'];
+            $_SESSION['apellido'] = $user['apellidos'];
+            $_SESSION['fecha'] = $user['fecha_nac'];
+            $_SESSION['color'] = $user['color'];
+            $_SESSION['email'] = $user['correo'];
+            $_SESSION['tipodoc'] = $user['id_tip_doc'];
+            $_SESSION['numdoc'] = $user['num_doc'];
+            $_SESSION['hijos'] = $user['id_num_hijos'];
+            $_SESSION['foto'] = $user['foto'];
+            $_SESSION['direccion'] = $user['direccion'];
+            $_SESSION['estadociv'] = $user['id_est_civil'];
+
+
+
+            return TRUE;
         } else {
             return FALSE;
         }
     } catch (PDOException $e) {
         echo 'Error: ' . $e->getMessage();
-        return NULL;
+        return FALSE;
     }
 }
 
@@ -179,7 +264,8 @@ function ValidarLoginDB($my_Db_Connection, $usuario, $clave)
 function encriptarPassword($clave)
 {
     $encryptPass = md5($clave);
-    return $encryptPass;
+    $password = crypt($clave, $encryptPass); 
+            return $password;
 }
 
 
