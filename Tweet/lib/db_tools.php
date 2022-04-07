@@ -183,7 +183,11 @@ function SeleccionarCanHijos($my_Db_Connection)
 function ObtenerUsuarioDB($my_Db_Connection, $usuario)
 {
     $datos = [];
-    $sql = "SELECT `id_usuario`,`usuario`,  `nombres`, `apellidos`, `fecha_nac`, `color`, `correo`, `id_tip_doc`, `num_doc`, `id_num_hijos`, `foto`, `direccion`, `id_est_civil` FROM `usuarios` WHERE `usuario` = :usuario";
+    $sql = "SELECT `id_usuario`, `usuario`, `clave`, `nombres`, `apellidos`, `fecha_nac`, `color`, `correo`, TP.tip_doc as `tipodoc`, `num_doc`, NH.cant_hijos as `cant_hijos`, `foto`, `direccion`, EC.est_civil as `est_civil` FROM `usuarios` U 
+    INNER join tipdoc TP on TP.id_tipdoc = U.id_tip_doc
+    inner join cantidadhijos NH on NH.id_cant_hijos = U.id_num_hijos
+    inner join estadocivil EC on EC.id_est_civil = U.id_est_civil
+    WHERE `usuario` = :usuario";
     $statement = $my_Db_Connection->prepare($sql);
     $statement->bindParam(':usuario', $usuario);
     try {
@@ -211,19 +215,15 @@ function ObtenerUsuarioDB($my_Db_Connection, $usuario)
  * @param string $clave
  * @return boolean
  */
-function ValidarLoginDB($my_Db_Connection, $usuario, $clave)
-{
+function ValidarLoginDB($my_Db_Connection, $usuario, $clave){
 
-    $vclave = encriptarPassword($clave);
-
-    // $sql = "SELECT * FROM usuarios WHERE usuario = :usuario AND clave = :clave";
-    // $statement = $my_Db_Connection->prepare($sql);
-    // $statement->bindParam(':usuario', $usuario);
-    // $statement->bindParam(':clave', $vclave);
     try {
         $clavecryp = encriptarPassword($clave);
         $my_Select_Statement =
-            $my_Db_Connection->prepare("SELECT `id_usuario`,`usuario`,  `nombres`, `apellidos`, `fecha_nac`, `color`, `correo`, `id_tip_doc`, `num_doc`, `id_num_hijos`, `foto`, `direccion`, `id_est_civil` FROM `usuarios` WHERE `usuario` = :usuario and `clave` = :clavecryp");
+            $my_Db_Connection->prepare("SELECT `id_usuario`, `usuario`, `clave`, `nombres`, `apellidos`, `fecha_nac`, `color`, `correo`, TP.tip_doc as `tipdoc`, `num_doc`, NH.cant_hijos as `cant_hijos`, `foto`, `direccion`, EC.est_civil as `estcivil` FROM `usuarios` U 
+            INNER join tipdoc TP on TP.id_tipdoc = U.id_tip_doc
+            inner join cantidadhijos NH on NH.id_cant_hijos = U.id_num_hijos
+            inner join estadocivil EC on EC.id_est_civil = U.id_est_civil WHERE `usuario` = :usuario and `clave` = :clavecryp");
         $my_Select_Statement->execute([':usuario' => $usuario, ':clavecryp' => $clavecryp]);
         $user = $my_Select_Statement->fetch(); //user->usuario
         if ($user) {
@@ -234,15 +234,12 @@ function ValidarLoginDB($my_Db_Connection, $usuario, $clave)
             $_SESSION['fecha'] = $user['fecha_nac'];
             $_SESSION['color'] = $user['color'];
             $_SESSION['email'] = $user['correo'];
-            $_SESSION['tipodoc'] = $user['id_tip_doc'];
+            $_SESSION['tipodoc'] = $user['tipdoc'];
             $_SESSION['numdoc'] = $user['num_doc'];
-            $_SESSION['hijos'] = $user['id_num_hijos'];
+            $_SESSION['hijos'] = $user['cant_hijos'];
             $_SESSION['foto'] = $user['foto'];
             $_SESSION['direccion'] = $user['direccion'];
-            $_SESSION['estadociv'] = $user['id_est_civil'];
-
-
-
+            $_SESSION['estadociv'] = $user['estcivil'];
             return TRUE;
         } else {
             return FALSE;
@@ -267,21 +264,6 @@ function encriptarPassword($clave)
     $password = crypt($clave, $encryptPass); 
             return $password;
 }
-
-
-/**
- * Desencriptar la clave
- * Autor: Alejandro Monroy y Gerónimo Quiroga
- * Fecha: 30/03/2022
- * @param string $clave
- * @return string
- */
-// function desencriptarPassword($clave){
-//     $key = "12345678";
-//     // openssl_decode
-//     $decryptPass = openssl_decrypt($clave, 'AES-128-ECB', $key);
-//     return $decryptPass;
-// }
 
 
 /** 

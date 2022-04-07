@@ -87,37 +87,37 @@
                     <!-- Nombre usuario -->
                     <div style='margin-right: 15px;'>
                         <p><strong>Nombre: ⬇</strong></p>
-                        <p><?php echo $value['nombre']; ?></p>
+                        <p><?php echo $_SESSION['nombre']; ?></p>
                     </div>
                     <!-- Apellido del usuario -->
                     <div style='margin-right: 15px;'>
                         <p><strong>Apellido: ⬇</strong></p>
-                        <p><?php echo $value['apellido']; ?></p>
+                        <p><?php echo $_SESSION['apellido']; ?></p>
                     </div>
                     <!-- Correo del usuario -->
                     <div style='margin-right: 15px;'>
                         <p><strong>Correo: ⬇</strong></p>
-                        <p><?php echo $value['correo']; ?></p>
+                        <p><?php echo $_SESSION['email']; ?></p>
                     </div>
                     <!-- Tipo de documento -->
                     <div style='margin-right: 15px;'>
                         <p><strong>Dirección: ⬇</strong></p>
-                        <p><?php echo $value['direccion']; ?></p>
+                        <p><?php echo $_SESSION['direccion']; ?></p>
                     </div>
                     <!-- Numero de documento -->
                     <div style='margin-right: 15px;'>
                         <p><strong>Cantidad hijos: ⬇</strong></p>
-                        <p><?php echo $value['cantidad_hijos']; ?></p>
+                        <p><?php echo $value['cant_hijos']; ?></p>
                     </div>
                     <!-- Cantidad de hijos -->
                     <div style='margin-right: 15px;'>
                         <p><strong>Estado civil: ⬇</strong></p>
-                        <p><?php echo $value['estado_civil']; ?></p>
+                        <p><?php echo $value['est_civil']; ?></p>
                     </div>
                     <!-- Color -->
                     <div style='margin-right: 15px;'>
                         <p><strong>Color: ⬇</strong></p>
-                        <p><?php echo $value['color']; ?></p>
+                        <p><?php echo $_SESSION['color']; ?></p>
                     </div>
                     <!-- Foto del usuario -->
                     <div style='margin-right: 15px;'>

@@ -14,6 +14,7 @@
 <body>
     <?php
     require_once('./lib/tools.php');
+    require_once('./lib/db_tools.php');
     require_once('./nav.php');
 
     LimpiarEntradas();
@@ -21,21 +22,28 @@
     $user = $_SESSION['username'];
     $data = mostrarPerfil($user);
     ?>
-    
+
     <!-- Actualizar el perfil -->
     <h1>Actualizar perfil</h1>
     <form method="post" enctype="multipart/form-data">
-        <input type="text" name="nombre" placeholder="Nombre" value="<?php echo $data[0]; ?>">
-        <input type="text" name="apellidos" placeholder="Apellidos" value="<?php echo $data[1]; ?>">
-        <input type="date" name="fecha" placeholder="Fecha de nacimiento" value="<?php echo $data[2]; ?>">
+        <input type="text" name="nombre" placeholder="<?php echo $_SESSION['nombre'] ?>" value="<?php echo $_SESSION['nombre'] ?>">
+        <input type="text" name="apellido" placeholder="<?php echo $_SESSION['apellido'] ?>" value="<?php echo $_SESSION['apellido'] ?>">
+        <input type="date" name="fecha" placeholder="Fecha de nacimiento" value="<?php echo $_SESSION['fecha']; ?>">
         <select class="r-selected" name="tipodoc" id="tipodoc" required="required">
-            <option value="<?php echo $data[3]; ?>"><?php echo $data[3]; ?></option>
-            <option value="CC">Cédula de ciudadanía</option>
-            <option value="CE">Cédula de extranjería</option>
-            <option value="TI">Tarjeta de identidad</option>
+            <?php $tiposdoc = SeleccionarTipoDocDB($CONN);
+            foreach ($tiposdoc as $opciones) {
+                $selected = '';
+                if ($opciones['id_tipdoc'] == $_SESSION['tip_doc']) {
+                    $selected = 'selected="selected"';
+                }
+            ?>
+                <option value="<?php echo $opciones['id_tipdoc'] ?>" <?php echo $selected ?>><?php echo $opciones['tip_doc'] ?></option>
+            <?php
+            }
+            ?>
         </select>
-        <input type="text" name="documento" placeholder="Número de documento" value="<?php echo $data[4]; ?>">
-        <input type="file" name="archivo" id="archivo" accept="image/*">
+        <input type="text" name="documento" placeholder="Número de documento" value="<?php echo $_SESSION['numdoc']; ?>">
+        <input type="file" name="archivo" id="archivo" accept="image/*" value='<?php echo $_SESSION['foto']?>'src='<?php echo $_SESSION['foto']?>'>
         <input type="text" name="hijos" placeholder="Numero de hijos" value="<?php echo $data[5]; ?>">
         <input type="color" name="color" placeholder="Color favorito" value="<?php echo $data[6]; ?>">
         <select name="usertype" id="usertype" required="required">
@@ -48,32 +56,31 @@
 
     <?php
     if (isset($_POST['actualizar'])) {
-        
+
         #region Foto
-        function loadImage(){
+        function loadImage()
+        {
             $archivo = $_FILES['archivo']['name'];
-            if(isset($archivo) && $archivo != ""){
+            if (isset($archivo) && $archivo != "") {
                 $tipo = $_FILES['archivo']['type'];
                 $tamano = $_FILES['archivo']['size'];
                 $temp = $_FILES['archivo']['tmp_name'];
-                
+
                 $fileExt = explode('.', $archivo);
                 $fileActualExt = strtolower(end($fileExt));
-    
+
                 if (!((strpos($tipo, "gif") || strpos($tipo, "jpeg") || strpos($tipo, "jpg") || strpos($tipo, "png")) && ($tamano < 2000000))) {
                     echo '<script>alert("Error. La extensión o el tamaño de los archivos no es correcta")</script>';
-                }
-                else {
+                } else {
                     //Imagen concuerda, Entra
                     $fileNameNew = uniqid('', true) . "." . $fileActualExt;
-                    $fileDestination = '../uploaded_files/'.$fileNameNew;
+                    $fileDestination = '../uploaded_files/' . $fileNameNew;
                     if (move_uploaded_file($temp, $fileDestination)) {
                         //Permisos
                         $_SESSION['archivo'] =  $fileDestination;
                         echo '<script>alert("Usuario Registrado")</script>';
                         echo '<script>window.location.href="index.php"; </script>';
-                    }
-                    else {
+                    } else {
                         echo '<script>alert("Error. credenciales incorrectas")</script>';
                     }
                 }
@@ -94,7 +101,7 @@
         #endregion
         loadImage();
 
-        if(actualizarPerfil($nombre, $apellidos, $fecha, $tipodoc, $documento, $_SESSION['archivo'], $hijos, $color, $usertype, $usuario)){
+        if (actualizarPerfil($nombre, $apellidos, $fecha, $tipodoc, $documento, $_SESSION['archivo'], $hijos, $color, $usertype, $usuario)) {
             echo '<script>alert("Perfil actualizado correctamente")</script>';
         } else {
             echo '<script>alert("Error al actualizar el perfil")</script>';
