@@ -137,44 +137,50 @@
 
 
     <form method="post" class="form-register" id="style-5" enctype="multipart/form-data">
+        <!-- Nombre -->
         <div>
             <label for="name">Nombre:</label>
             <input class="r-options" type="text" name="name" id="name" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba el nombre">
         </div>
+        <!-- Apellido -->
         <div>
             <label for="lastname">Apellido:</label>
             <input class="r-options" type="text" name="lastname" id="lastname" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba apellidos">
         </div>
+        <!-- Correo -->
         <div>
-            <label for="fecha">Fecha nacimiento: </label>
-            <input class="r-options" type="date" name="fecha" id="fecha" required="required">
+            <label for="correo">Correo:</label>
+            <input class="r-options" type="email" name="email" id="email" required="required">
         </div>
+        <!-- Direccion -->
         <div>
-            <label for="tipodoc">Tipo de documento:</label>
-            <select class="r-selected" name="tipodoc" id="tipodoc" required="required">
-                <option value="">Seleccione una opción</option>
-                <option value="Cédula de ciudadanía">Cédula de ciudadanía</option>
-                <option value="Cédula de extranjería">Cédula de extranjería</option>
-                <option value="Tarjeta de identidad">Tarjeta de identidad</option>
-            </select>
-        </div>
-        <div>
-            <label for="numdoc">Numero de documento:</label>
-            <input class="r-options" type="text" name="numdoc" id="numdoc" required="required">
-        </div>
-        <div>
-            <label for="archivo">Foto:</label>
-            <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
+            <label for="direccion">Dirección:</label>
+            <input class="r-options" type="text" name="direccion" id="direccion" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba la dirección">
         </div>
         <!-- Numero de hijos -->
         <div>
             <label for="numhijos">Numero de hijos:</label>
             <input class="r-options" type="number" name="numhijos" id="numhijos" required="required">
         </div>
+        <!-- Estado civil -->
+        <div>
+            <label for="estadocivil">Estado civil:</label>
+            <select class="r-options" name="estadocivil" id="estadocivil" required="required">
+                <option value="soltero">Soltero</option>
+                <option value="casado">Casado</option>
+                <option value="viudo">Viudo</option>
+                <option value="divorciado">Divorciado</option>
+            </select>
+        </div>
         <!-- Color favorito del usuario -->
         <div>
             <label for='color'>Color favorito:</label>
             <input class="r-options" type='color' name='color' id='color' required='required'>
+        </div>
+        <!-- Foto -->
+        <div>
+            <label for="archivo">Foto:</label>
+            <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
         </div>
         <div>
             <label for="username">Usuario:</label>
@@ -215,7 +221,7 @@
                     //Permisos
                     $_SESSION['archivo'] =  $fileDestination;
                 } else {
-                    echo '<script>alert("Error. credenciales incorrectas")</script>';
+                    echo '<script>alert("Error. Imagen no subida")</script>';
                 }
             }
         }
@@ -225,16 +231,16 @@
 
     #region GuardarDatos
     if (isset($_POST['name'])) {
-        $_SESSION['name'] = $_POST['name'];
-        $_SESSION['lastname'] =  $_POST['lastname'];
-        $_SESSION['fecha'] =  $_POST['fecha'];
-        $_SESSION['tipodoc'] =  $_POST['tipodoc'];
-        $_SESSION['numdoc'] =  $_POST['numdoc'];
-        $_SESSION['numhijos'] =  $_POST['numhijos'];
-        $_SESSION['color'] =  $_POST['color'];
         $_SESSION['username'] =  $_POST['username'];
         $_SESSION['password'] =  $_POST['password'];
         $_SESSION['confirmpassword'] =  $_POST['confirmpassword'];
+        $_SESSION['name'] = $_POST['name'];
+        $_SESSION['lastname'] =  $_POST['lastname'];
+        $_SESSION['email'] =  $_POST['email'];
+        $_SESSION['direccion'] =  $_POST['direccion'];
+        $_SESSION['numhijos'] =  $_POST['numhijos'];
+        $_SESSION['estadocivil'] =  $_POST['estadocivil'];
+        $_SESSION['color'] =  $_POST['color'];
 
 
         if ($_POST['password'] == $_POST['confirmpassword']) {
@@ -246,10 +252,16 @@
                     $_SESSION['password'],
                     $_SESSION['name'],
                     $_SESSION['lastname'],
-                    $_SESSION['fecha'],
-                    $_SESSION['numhijos'],
+                    $_SESSION['fecha_nac'],
                     $_SESSION['color'],
-                    $_SESSION['archivo']
+                    $_SESSION['email'],
+                    $_SESSION['id_tipod_doc'],
+                    $_SESSION['num_doc'],
+                    $_SESSION['num_hijos'],
+                    $_SESSION['foto'],
+                    $_SESSION['direccion'],
+                    $_SESSION['estadocivil']
+                    
                 );
                 session_destroy();
                 if($insertuser){

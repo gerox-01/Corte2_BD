@@ -142,8 +142,9 @@ function leerTweet()
  */
 function leerImagen($user)
 {
-    //Archivo
+    //Mandame la foto de la base de datos
     $file = "usuario.txt";
+    
     //Abrir archivo
     $fp = fopen($file, "r");
     //Leer archivo
@@ -348,11 +349,11 @@ function actualizarPerfil($nombre, $apellido, $fecha, $tipodoc, $documento, $fot
  * @param $password: contraseña a encriptar
  * @return string con la contraseña encriptada
  */
-function encriptarPassword($password)
-{
-    $password = password_hash($password, PASSWORD_DEFAULT);
-    return $password;
-}
+// function encriptarPassword($password)
+// {
+//     $password = password_hash($password, PASSWORD_DEFAULT);
+//     return $password;
+// }
 
 
 /**

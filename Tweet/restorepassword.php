@@ -22,15 +22,15 @@
             <h1>Cambiar contraseña</h1>
             <div>
                 <label for="password">Contraseña actual: </label>
-                <input type="password" name="password" id="password" placeholder="Contraseña actual">
+                <input type="password" name="password" required="required" id="password" placeholder="Contraseña actual">
             </div>
             <div>
                 <label for="password">Contraseña nueva: </label>
-                <input type="password" name="passwordn" id="passwordn" placeholder="Contraseña nueva">
+                <input type="password" name="passwordn" required="required" id="passwordn" placeholder="Contraseña nueva" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
             </div>
             <div>
                 <label for="confirmpassword">Confirmar contraseña: </label>
-                <input type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirmar contraseña">
+                <input type="password" name="confirmpassword" required="required" id="confirmpassword" placeholder="Confirmar contraseña" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
             </div>
             <div>
                 <input type="submit" value="Cambiar contraseña">
@@ -38,8 +38,7 @@
     </form>
 
     <?php
-    require_once('tools.php');
-    // session_start();
+    require_once('./lib/tools.php');
 
     $_SESSION['username'] =  $_SESSION['username'];
     $password = $_POST['password'] ?? '';

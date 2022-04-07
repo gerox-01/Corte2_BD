@@ -12,23 +12,43 @@
 <body>
 
     <?php
+    #region Conexión y ObtenerDatos
     require_once './lib/tools.php';
+    require_once './lib/db_tools.php';
+
     IniciarSesionSegura();
 
-    $usert = '';
+    $CONN=ConexionDB();
+    $usuario=$_SESSION['username'] ?? '';
+    
+    if($CONN!=NULL){
+        $datosuser=ObtenerUsuarioDB($CONN, $usuario);
+        if ($datosuser!=NULL) {
+            foreach ($datosuser as $key => $value) {
+                global $colorr;
+                $colorr = $value["color"];
+            }
+        }
+    }
+
+    $_SESSION['foto'] = $value['foto'] ?? '';
+    #endregion
     ?>
 
-    <nav class="navbar">
-        <div style="padding: 5px; display: grid ;justify-content: space-around;">
-
-            <div style=" display: flex; flex-direction: row; justify-content: center;  align-items: center;  margin-top: 10px;">
+    <nav style='overflow-y: auto; height: 8rem;'>
+        <div>
+            <!-- Navigación -->
+            <div style="display: flex; flex-direction: row; justify-content: space-around;  align-items: center;  margin-top: 10px;">
                 <?php
                 if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "") {
                     echo "<div>
-                    <a href='index.php'>💬 Inicio</a>
+                    <a href='index.php' style='font-weight: bold; font-size: 1.2rem;'>🏠 Inicio</a>
                 </div>
                 <div>
                     <a href='tweet.php'>🐦Tweet</a>
+                </div>
+                <div>
+                    <a href='perfil.php'>💬 Mensajes</a>
                 </div>
                 <div>
                     <a href='perfil.php'>🔎 Perfil</a>
@@ -56,80 +76,59 @@
                     header("Location: index.php");
                 }
                 ?>
-            </div>
-
+            
+        </div>
+            <!-- Datos Usuario -->
             <div style="display: flex; justify-content: center;">
                 <?php
-                $usuario = $_SESSION['username'] ?? '';
-                $datausuario  = mostrarPerfil($usuario);
-                $nombre = $datausuario[0] ?? '';
-                $apellido = $datausuario[1] ?? '';
-                $date = $datausuario[2] ?? '';
-                $tipodocumento = $datausuario[3] ?? '';
-                $documento = $datausuario[4] ?? '';
-                $hijos = $datausuario[5] ?? '';
-                $color = $datausuario[6] ?? '';
-                $user = $datausuario[7] ?? '';
-                $rol = $datausuario[9] ?? '';
-
+                #region MostrarDatosUsuario
                 if (isset($_SESSION['username'])) {
                 ?>
-                    <!-- Muestra nombre usuario -->
-                    <div>
-                        <p><?php echo '<strong>Nombre: </strong>' . $nombre ?></p>
+                    <!-- Nombre usuario -->
+                    <div style='margin-right: 15px;'>
+                        <p><strong>Nombre: ⬇</strong></p>
+                        <p><?php echo $value['nombre']; ?></p>
                     </div>
-                    <!-- Muestra el apellido del usuario -->
-                    <div>
-                        <p><?php echo '<strong>Apellido: </strong>' . $apellido ?></p>
+                    <!-- Apellido del usuario -->
+                    <div style='margin-right: 15px;'>
+                        <p><strong>Apellido: ⬇</strong></p>
+                        <p><?php echo $value['apellido']; ?></p>
                     </div>
-                    <!-- Fecha nacimiento del usuario -->
-                    <div>
-                        <p><?php echo '<strong>Fecha nacimiento: </strong>' . $date ?></p>
+                    <!-- Correo del usuario -->
+                    <div style='margin-right: 15px;'>
+                        <p><strong>Correo: ⬇</strong></p>
+                        <p><?php echo $value['correo']; ?></p>
                     </div>
                     <!-- Tipo de documento -->
-                    <div>
-                        <p><?php echo '<strong>Tipo de documento: </strong>' . $tipodocumento ?></p>
+                    <div style='margin-right: 15px;'>
+                        <p><strong>Dirección: ⬇</strong></p>
+                        <p><?php echo $value['direccion']; ?></p>
                     </div>
                     <!-- Numero de documento -->
-                    <div>
-                        <p><?php echo '<strong>Número de documento: </strong>' . $documento ?></p>
+                    <div style='margin-right: 15px;'>
+                        <p><strong>Cantidad hijos: ⬇</strong></p>
+                        <p><?php echo $value['cantidad_hijos']; ?></p>
                     </div>
                     <!-- Cantidad de hijos -->
-                    <div>
-                        <p><?php echo '<strong>Cantidad de hijos: </strong>' . $hijos ?></p>
+                    <div style='margin-right: 15px;'>
+                        <p><strong>Estado civil: ⬇</strong></p>
+                        <p><?php echo $value['estado_civil']; ?></p>
                     </div>
                     <!-- Color -->
-                    <div>
-                        <p><?php echo '<strong>Color: </strong>' . $color ?></p>
+                    <div style='margin-right: 15px;'>
+                        <p><strong>Color: ⬇</strong></p>
+                        <p><?php echo $value['color']; ?></p>
                     </div>
-                    <!-- Usuario -->
-                    <div>
-                        <p><?php echo '<strong>Nombre de usuario: </strong>' . $user ?></p>
-                    </div>
-                    <!-- Tipo de usuario -->
-                    <div>
-                        <p><?php echo '<strong>Tipo de usuario: </strong>' . $rol ?></p>
+                    <!-- Foto del usuario -->
+                    <div style='margin-right: 15px;'>
+                        <p><strong>Foto: ⬇</strong></p>
+                        <p><?php echo '<img style="height:100px; width: 100px;"  src="' . $value['foto'] . '">'; ?></p>
                     </div>
                 <?php
                 }
+                #endregion
                 ?>
-
-                <div>
-                    <?php
-                    $filef  = leerImagen($usuario);
-                    if (isset($filef)) {
-                        if ($filef != '') {
-                            echo '<b>Foto:</b><br><img style="height:100px; width: 100px;"  src="' . $filef . '"><br><br>';
-                        } else {
-                            echo '';
-                        }
-                    } else {
-                        echo "No tiene avatar.";
-                    }
-                    ?>
-                </div>
             </div>
-
         </div>
     </nav>
 

@@ -13,12 +13,14 @@
 
 <body>
     <?php
-    require_once('./lib/tools.php');
+    require_once('./lib/db_tools.php');
+    require_once('./nav.php');
 
     LimpiarEntradas();
-    // IniciarSesionSegura();
 
+    $CONN = ConexionDB();
 
+    #region CodigoRevisar
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (empty($_POST["username"])) {
@@ -39,12 +41,8 @@
         $data = htmlspecialchars($data);
         return $data;
     }
-    ?>
-
-
-
-    <?php
-    require_once('./nav.php');
+    #endregion
+    
     ?>
 
     <div class="formulario">
@@ -59,16 +57,27 @@
             </div>
             <button name="send" value="send">Enviar</button>
         </form>
+
+
         <?php
+        #region Validar Inicio de Sesión
         if (isset($_POST['username']) && isset($_POST['password'])) {
-            $msg = leerUsuario($_POST['username'], $_POST['password']) ? header("Location: index.php") : "Usuario y clave incorrectos";
-            $_SESSION['username'] = $_POST['username'];
-            $_SESSION['password'] = $_POST['password'];      
+            if($CONN != NULL){
+                $vlogin = ValidarLoginDB($CONN, $_POST['username'], $_POST['password']);
+                if($vlogin){
+                    $_SESSION['username'] = $_POST['username'];
+                    $_SESSION['password'] = $_POST['password'];
+                    header("Location: index.php");
+                }else{
+                    echo "Usuario y clave incorrectos";
+                }
+            }
             LimpiarEntradas();      
-        } else {
-            // echo "<p>No se ha enviado ningún dato</p>";
         }
+        #endregion
         ?>
+
+
     </div>
 
 
