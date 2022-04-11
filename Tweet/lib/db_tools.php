@@ -26,6 +26,12 @@ function ConexionDB()
 }
 
 
+/***
+ *    SECCION DE USUARIO!!
+ */
+
+
+
 /**
  * Registra un usuario en la base de datos
  * Autor: Alejandro Monroy y Gerónimo Quiroga
@@ -215,7 +221,8 @@ function ObtenerUsuarioDB($my_Db_Connection, $usuario)
  * @param string $clave
  * @return boolean
  */
-function ValidarLoginDB($my_Db_Connection, $usuario, $clave){
+function ValidarLoginDB($my_Db_Connection, $usuario, $clave)
+{
 
     try {
         $clavecryp = encriptarPassword($clave);
@@ -261,9 +268,91 @@ function ValidarLoginDB($my_Db_Connection, $usuario, $clave){
 function encriptarPassword($clave)
 {
     $encryptPass = md5($clave);
-    $password = crypt($clave, $encryptPass); 
-            return $password;
+    $password = crypt($clave, $encryptPass);
+    return $password;
 }
+
+
+/**
+ * Obtener color del usuario
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 03/04/2022
+ * @param string conexión
+ * @param string usuario
+ * @return string
+ */
+function color($conexion, $usuario)
+{
+    $sql = "SELECT color FROM usuarios WHERE usuario = :usuario";
+    $statement = $conexion->prepare($sql);
+    $statement->bindParam(':usuario', $usuario);
+    try {
+        if ($statement->execute()) {
+            $result = $statement->fetchAll();
+            if (count($result) > 0) {
+                return $result[0]['color'];
+            }
+        } else {
+            return NULL;
+        }
+    } catch (PDOException $e) {
+        echo 'Error: ' . $e->getMessage();
+        return NULL;
+    }
+}
+
+
+/**
+ * Actualizar el usuario de la sesión
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 10/04/2022
+ * @param string conexión
+ * @param string usuario
+ * @param string nombre
+ * @param string apellido
+ * @param string fecha
+ * @param string color
+ * @param string email
+ * @param string tipodoc
+ * @param string numdoc
+ * @param string hijos
+ * @param string foto
+ * @param string direccion
+ * @param string estadociv
+ * @return boolean
+ */
+function ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha, $color, $email, $tipodoc, $numdoc, $hijos, $foto, $direccion, $estadociv)
+{
+    $sql = "UPDATE usuarios SET nombres = :nombre, apellidos = :apellido, fecha_nac = :fecha, color = :color, correo = :email, id_tip_doc = :tipodoc, num_doc = :numdoc, id_num_hijos = :hijos, foto = :foto, direccion = :direccion, id_est_civil = :estadociv WHERE usuario = :usuario";
+    $statement = $CONN->prepare($sql);
+    $statement->bindParam(':usuario', $usuario);
+    $statement->bindParam(':nombre', $nombre);
+    $statement->bindParam(':apellido', $apellido);
+    $statement->bindParam(':fecha', $fecha);
+    $statement->bindParam(':color', $color);
+    $statement->bindParam(':email', $email);
+    $statement->bindParam(':tipodoc', $tipodoc);
+    $statement->bindParam(':numdoc', $numdoc);
+    $statement->bindParam(':hijos', $hijos);
+    $statement->bindParam(':foto', $foto);
+    $statement->bindParam(':direccion', $direccion);
+    $statement->bindParam(':estadociv', $estadociv);
+    try {
+        if ($statement->execute()) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    } catch (PDOException $e) {
+        echo 'Error: ' . $e->getMessage();
+        return FALSE;
+    }
+}
+
+
+/***
+ *  SECCION DE TWEETS!!
+ */
 
 
 /** 
@@ -276,14 +365,13 @@ function encriptarPassword($clave)
  * @param string $fecha
  * @return boolean
  */
-function GuardarTweet($connection, $usuario, $tweet, $fecha, $foto)
+function GuardarTweet($connection, $tweet, $usuario, $estado)
 {
-    $sql = "INSERT INTO tweet (usuario, tweet, fecha, foto) VALUES (:usuario, :tweet, :fecha, :foto)";
+    $sql = "INSERT INTO tuits (mensaje_tuit, id_usuario_tuit, Estado) VALUES (:tweet, :usuario, :estado)";
     $statement = $connection->prepare($sql);
-    $statement->bindParam(':usuario', $usuario);
     $statement->bindParam(':tweet', $tweet);
-    $statement->bindParam(':fecha', $fecha);
-    $statement->bindParam(':foto', $foto);
+    $statement->bindParam(':usuario', $usuario);
+    $statement->bindParam(':estado', $estado);
     try {
         if ($statement->execute()) {
             return TRUE;
@@ -307,7 +395,7 @@ function MostrarTweet($connection)
 {
     $datostweets = [];
 
-    $sql = "SELECT `tweet`, `fecha`, `usuario`, `foto` FROM `tweet`";
+    $sql = "SELECT tuits.id_tuit as 'idtuit', tuits.mensaje_tuit as 'mensaje', tuits.fecha_tuit as 'fecha', usuarios.usuario as 'usuario', usuarios.foto as 'foto' FROM tuits INNER JOIN usuarios ON tuits.id_usuario_tuit = usuarios.id_usuario";
     $statement = $connection->prepare($sql);
     try {
         if ($statement->execute()) {
@@ -324,30 +412,27 @@ function MostrarTweet($connection)
     }
 }
 
+
 /**
- * Obtener color del usuario
+ * Eliminar un Tweet o Articulo
  * Autor: Alejandro Monroy y Gerónimo Quiroga
- * Fecha: 03/04/2022
+ * Fecha: 10/04/2022
  * @param string conexión
- * @param string usuario
- * @return string
+ * @param string id
+ * @return boolean
  */
-function color($conexion, $usuario)
-{
-    $sql = "SELECT color FROM usuario WHERE usuario = :usuario";
-    $statement = $conexion->prepare($sql);
-    $statement->bindParam(':usuario', $usuario);
+function EliminarTweet($connection, $id){
+    $sql = "DELETE FROM tuits WHERE id_tuit = :id";
+    $statement = $connection->prepare($sql);
+    $statement->bindParam(':id', $id);
     try {
         if ($statement->execute()) {
-            $result = $statement->fetchAll();
-            if (count($result) > 0) {
-                return $result[0]['color'];
-            }
+            return TRUE;
         } else {
-            return NULL;
+            return FALSE;
         }
     } catch (PDOException $e) {
         echo 'Error: ' . $e->getMessage();
-        return NULL;
+        return FALSE;
     }
 }

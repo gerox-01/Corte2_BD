@@ -16,34 +16,43 @@
     <?php
     require_once './nav.php';
     require_once './lib/tools.php';
+    require_once './lib/db_tools.php';
+
+    $CONN = ConexionDB();
     
     LimpiarEntradas();
-    // IniciarSesionSegura();
     $tweet = $_POST['tweet'] ?? '';
     ?>
 
     <form method="post">
-        <div class="form-register">
+        <div class="form-register" style="overflow: hidden; width: 100%; height: 75vh;">
             <h1>Tweet</h1>
-            <div>
+            <p style="font-size: 12px; ">Recuerda que tu tweet no debe superar los 140 caracteres<span style="color: red;">*</span></p>
+            <div style="display: flex; justify-content: center; align-items: center;">
                 <label for="tweet">Tweet: </label>
-                <textarea name="tweet" id="tweet" cols="30" rows="10" maxlength="140" placeholder="Escribe tu tweet"></textarea>
+                <textarea name="tweet" id="tweet" cols="30" style="width: 70vw; height: 30vh;" rows="10" maxlength="140" placeholder="Escribe tu tweet"></textarea>
             </div>
             <div>
                 <input type="submit" value="Tweet">
             </div>
     </form>
 
+    
     <?php
 
     
     $tweet = $_POST['tweet'] ?? '';
-    $DateAndTime = date('m-d-Y');
+    $estado = 1;
+    // $DateAndTime = date('m-d-Y');
 
     if(isset($_POST['tweet'])){
-        $msg = grabarTweet($_SESSION['username'], $tweet, $DateAndTime);
-        echo "$msg";
-        header('Location: index.php');
+        $savet = GuardarTweet($CONN, $tweet, $_SESSION['iduser'], $estado);
+        if($savet){
+            echo '<script>alert("Tweet creado")</script>';
+            echo '<script>window.location.href="index.php"; </script>';
+        }else{
+            echo '<script>alert("Error publicando el tweet")</script>';
+        }
     }
 
 

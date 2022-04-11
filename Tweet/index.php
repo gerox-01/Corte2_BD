@@ -44,90 +44,77 @@ if (isset($_SESSION['username'])) {
     $user = $_SESSION['username'];
 
     $CONN = ConexionDB();
-    if ($CONN != NULL) {
-        $tweet = MostrarTweet($CONN);
-        if ($tweet != NULL) {
-            foreach ($tweet as $key => $value) {
-                global $tuit;
-                $tuit = $value['tweet'];
-            }
-        }
-    } else {
+
+    $data = MostrarTweet($CONN);
+    if ($data == null) {
         echo "<div class='i-tweet' style='background-color: #ccc !important;' id='style-5' >";
         echo "<div class='force-overflow'>";
         echo "<h1>No hay Tweets</h1>";
         echo "</div>";
         echo "</div>";
+    } else {
+        echo ' <div class="i-tweet" style="background-color: #ccc !important; height: auto !important; overflow: hidden;" id="style-5">';
+        foreach ($data as $row) {
+            $html = ' <div class="i-tweet" style="background-color: ' . $_SESSION['color'] . ' !important; height: 42vh !important;" id="style-5">
+                        <div style="display: flex;">
+                        <div style="display: flex; flex-direction: column;">
+                          <div class="col">
+                            <h2 style="text-transform: uppercase;">' . $row['usuario'] . ':' . '</h2> 
+                          </div>
+                          <div class="col">
+                            
+                            <img weight="100px" height="100px" class="" src="' . $row['foto'] . '" alt="User Image">
+                          </div>
+                        </div>
+                        <div style="padding-left: 5.5rem; display:flex; flex-direction: column; height:100%; width: 70%; justify-content: space-around; align-items: center;">
+                          <div style="border: 1px solid #ccc; padding: 0.5rem;">
+                            ' . $row['mensaje'] . ' 
+                          </div>
+                          <div class="col tex-end ">
+                            <i>Fecha de tuit: ' . $row['fecha'] . '</i> 
+                          </div>
+                        </div>
+                        </div>
+                        <br>
+                        ';
+            echo $html;
+            if (isset($_SESSION['user'])) {
+                if ($_SESSION['user'] == $row['usuario']) {
+                    echo '<div class="row">
+                          <div class="col">
+                          <form method="POST">
+                          <div class="row">
+                            <div class="col tex-end ">
+                                <input hidden name="mensajetuit" value="' . $row['mensaje'] . '"> 
+                                <input  hidden name="idtuit" value="' . $row['idtuit'] . '"> 
+                                <input style="background-color: red; color: white;" type="submit" name="btneliminar" value="Eliminar"> 
+                            </div>
+                          </div>
+                          </form>
+                          </div>
+                        </div>';
+                }
+
+                EliminarT();
+            }
+            echo '</div>';
+        }
+        echo '</div>';
     }
 
-    #region Tweets Nuevo Formato
-    $color = color($CONN, $user);
-    echo "<div class='i-tweet' style='background-color: $color !important;' id='style-5'>";
-    echo "<div style='display: flex; height: auto Im !important;'>";
-    echo '<div style="displa: flex; flex-direction: column; justify-content: center;padding-right: 20px; color: #ccc; text-transform: uppercase;">';
-    echo "<h2>" . $value['usuario'] . "</h2>";
-    echo '<img style="height:100px; width: 100px;"  src="' . $_SESSION['foto'] . '">';
-    echo "</div>";
-    echo "<div class='i-card' style='height: auto I !important;'>";
-    echo "<div class='i-card-body'>";
-    echo "<p style='color: #cccc'> " . $value['tweet'] . "</p>";
-    echo "<p> <small> " . $value['fecha'] . "</small> </p>";
-    echo "</div>";
-    echo "</div>";
-    echo "</div>";
-    #endregion
-
-    #region Tweets
-    // if ($tweet == 'Hola') {
-    //     echo "<div class='i-tweet' style='background-color: $color !important;' id='style-5' >";
-    //     echo "<div class='force-overflow'>";
-    //     echo "<h1>No hay Tweets</h1>";
-    //     echo "</div>";
-    //     echo "</div>";
-    // } else {
-    //     $userTweet = $_SESSION['username'];
-    //     if (count($tweet) > 0) {
-    //         echo "<div class='i-tweet' style='background-color: $color !important;' id='style-5'>";
-    //         echo "<div class='force-overflow'>";
-    //         foreach ($tweet as $t) {
-    //             $tweetS = explode(":", $t);
-    //             if (isset($tweetS) && count($tweetS) > 2) {
-    //                 echo "<div class='i-card'>";
-    //                 echo "<div class='i-card-header'>";
-    //                 echo "<h2>" . $tweetS[0] . "</h2>";
-    //                 echo "<p>" . $tweetS[2] . "</p>";
-    //                 echo "</div>";
-    //                 echo "<div class='i-card-body'>";
-    //                 echo "<p>" . $tweetS[1] . "</p>";
-    //                 echo "</div>";
-    //                 echo "</div>";
-
-    //                 if ($tweetS[0] == $userTweet) {
-    //                     echo '<form method="get" style="margin-top: 0 !important;" >';
-    //                     echo '    <div style="padding: 0 !important; margin: 0 !important;" >';
-    //                     echo '        <input type="hidden" name="tweet" value="'. $tweetS[1] .'">';
-    //                     echo '        <input type="hidden" name="date" value="'. $tweetS[2] .'">';
-    //                     echo '        <input style="background: red; color: white; font-weight: bold; border-radius: 10px !important;" type="submit" value="Eliminar">';
-    //                     echo '    </div>';
-    //                     echo '</form>';
-    //                     if (isset($_GET['tweet'])) {
-    //                         $tweet = $_GET['tweet'];
-    //                         $date = $_GET['date'];
-    //                         eliminarTweet($_SESSION['username'], $tweet, $date);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //         echo "</div>";
-    //         echo "</div>";
-    //     } else {
-    //         echo "<div class='i-tweet' id='style-5'>";
-    //         echo "<div class='force-overflow'>";
-    //         echo "</div>";
-    //         echo "</div>";
-    //     }
-    // }
-    #endregion
+    function EliminarT()
+    {
+        $CONN = ConexionDB();
+        if (isset($_POST['btneliminar'])) {
+            $deletetweet =  EliminarTweet($CONN, $_POST['idtuit']);
+            if ($deletetweet) {
+                echo '<script>alert("Tweet eliminado")</script>';
+                echo '<script>window.location.href="index.php"; </script>';
+            } else {
+                echo '<script>alert("Error eliminando el tweet")</script>';
+            }
+        }
+    }
     ?>
     </div>
     </div>

@@ -13,46 +13,113 @@
 
 <body>
     <?php
-    require_once('./lib/tools.php');
     require_once('./lib/db_tools.php');
+    require_once('./lib/tools.php');
     require_once('./nav.php');
 
     LimpiarEntradas();
 
     $user = $_SESSION['username'];
-    $data = mostrarPerfil($user);
     ?>
 
     <!-- Actualizar el perfil -->
-    <h1>Actualizar perfil</h1>
-    <form method="post" enctype="multipart/form-data">
-        <input type="text" name="nombre" placeholder="<?php echo $_SESSION['nombre'] ?>" value="<?php echo $_SESSION['nombre'] ?>">
-        <input type="text" name="apellido" placeholder="<?php echo $_SESSION['apellido'] ?>" value="<?php echo $_SESSION['apellido'] ?>">
-        <input type="date" name="fecha" placeholder="Fecha de nacimiento" value="<?php echo $_SESSION['fecha']; ?>">
-        <select class="r-selected" name="tipodoc" id="tipodoc" required="required">
-            <?php $tiposdoc = SeleccionarTipoDocDB($CONN);
-            foreach ($tiposdoc as $opciones) {
-                $selected = '';
-                if ($opciones['id_tipdoc'] == $_SESSION['tip_doc']) {
-                    $selected = 'selected="selected"';
-                }
-            ?>
-                <option value="<?php echo $opciones['id_tipdoc'] ?>" <?php echo $selected ?>><?php echo $opciones['tip_doc'] ?></option>
-            <?php
-            }
-            ?>
-        </select>
-        <input type="text" name="documento" placeholder="Número de documento" value="<?php echo $_SESSION['numdoc']; ?>">
-        <input type="file" name="archivo" id="archivo" accept="image/*" value='<?php echo $_SESSION['foto']?>'src='<?php echo $_SESSION['foto']?>'>
-        <input type="text" name="hijos" placeholder="Numero de hijos" value="<?php echo $data[5]; ?>">
-        <input type="color" name="color" placeholder="Color favorito" value="<?php echo $data[6]; ?>">
-        <select name="usertype" id="usertype" required="required">
-            <option value="<?php echo $data[9]; ?>"><?php echo $data[9]; ?></option>
-            <option value="Vendedor">Vendedor</option>
-            <option value="Comprador">Comprador</option>
-        </select>
-        <input type="submit" name="actualizar" value="Actualizar">
+    <h1 style='width: 95vw; display: flex; justify-content: center;'>Actualizar perfil</h1>
+
+    <form method="post" style='overflow-y: hidden !important; height: 68vh;' class="form-register" id="style-5" enctype="multipart/form-data">
+        <div style='display:flex; align-items: center; justify-content: start;'>
+            <!-- Nombre -->
+            <div>
+                <label for="name">Nombre:</label>
+                <input class="r-options" type="text" name="name" id="name" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba el nombre" value="<?php echo $_SESSION['nombre']; ?>">
+            </div>
+            <!-- Apellido -->
+            <div>
+                <label for="lastname">Apellido:</label>
+                <input class="r-options" type="text" name="lastname" id="lastname" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba apellidos" value="<?php echo $_SESSION['apellido']; ?>">
+            </div>
+            <!-- Correo -->
+            <div>
+                <label for="correo">Correo:</label>
+                <input class="r-options" type="email" name="email" id="email" required="required" value="<?php echo $_SESSION['email']; ?>">
+            </div>
+            <!-- Tipo de documento -->
+            <div style='display: flex; flex-direction: column;'>
+                <label for="tipodoc">Tipo de Documento:</label>
+                <select name="tipDoc" required="required">
+                    <?php $tiposdoc = SeleccionarTipoDocDB($CONN);
+                    foreach ($tiposdoc as $opciones) {
+                    ?>
+                        <option value="<?php echo $opciones['id_tipdoc'] ?>"><?php echo $opciones['tip_doc'] ?></option>
+                    <?php
+
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <div style='display:flex; align-items: center; justify-content: start;'>
+        <!-- Numero de documento -->
+        <div>
+                <label for="num">Numero de Documento:</label>
+                <input class="r-options" type="text" name="num_doc" id="num_doc" required="required" pattern="([0-9]+)" value="<?php echo $_SESSION['numdoc']; ?>" title="Escriba el numero de documento">
+            </div>
+            <!-- Direccion -->
+            <div>
+                <label for="direccion">Dirección:</label>
+                <input class="r-options" type="text" name="direccion" id="direccion" required="required" pattern="([A-Za-z0-9\. -]+)" value="<?php echo $_SESSION['direccion']; ?>" title="Escriba la dirección">
+            </div>
+            <!-- Numero de hijos -->
+            <div style='display: flex; flex-direction: column;'>
+                <label for="numhijos">Numero de hijos:</label>
+                <select name="numhijos" id="numhijos">
+                    <?php
+                    $canthijos = SeleccionarCanHijos($CONN);
+                    foreach ($canthijos as $opciones) {
+                    ?>
+                        <option value="<?php echo $opciones['id_cant_hijos'] ?>"><?php echo $opciones['cant_hijos'] ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </div>
+            <!-- Estado civil -->
+            <div style='display: flex; flex-direction: column;'>
+                <label for="estadocivil">Estado civil:</label>
+                <select name="estCivil" id="estCivil" required="required">
+                    <?php
+                    $estadocivil = SeleccionarEstadoCivilDB($CONN);
+                    foreach ($estadocivil as $opciones) {
+                    ?>
+                        <option value="<?php echo $opciones['id_est_civil'] ?>"><?php echo $opciones['est_civil'] ?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <div style='display:flex; align-items: center; justify-content: start;'>
+         <!-- Color favorito del usuario -->
+         <div>
+                <label for='color'>Color favorito:</label>
+                <input class="r-options" type='color' name='color' id='color' value="<?php echo $_SESSION['color']; ?>" required='required'>
+            </div>
+            <!-- Foto -->
+            <div style='display: flex; flex-direction: column;'>
+                <label for="archivo">Foto:</label>
+                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <img src="<?php echo $_SESSION['foto'] ?>" style="width: 5.3rem;" alt="">
+                <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
+                </div>
+            </div>
+            <!-- Fecha de nacimiento -->
+            <div>
+                <label for="fecha_nac">Fecha de nacimiento:</label>
+                <input class="r-options" type="date" name="fecha_nac" id="fecha_nac" value="<?php echo $_SESSION['fecha']; ?>" required="required">
+            </div>
+        </div>
+        <input type="submit" name="actualizar" value="Actualizar" class='button-r'>
     </form>
+
 
     <?php
     if (isset($_POST['actualizar'])) {
@@ -77,9 +144,9 @@
                     $fileDestination = '../uploaded_files/' . $fileNameNew;
                     if (move_uploaded_file($temp, $fileDestination)) {
                         //Permisos
-                        $_SESSION['archivo'] =  $fileDestination;
-                        echo '<script>alert("Usuario Registrado")</script>';
-                        echo '<script>window.location.href="index.php"; </script>';
+                        $_SESSION['foto'] =  $fileDestination;
+                        // echo '<script>alert("Usuario Registrado")</script>';
+                        // echo '<script>window.location.href="index.php"; </script>';
                     } else {
                         echo '<script>alert("Error. credenciales incorrectas")</script>';
                     }
@@ -89,23 +156,28 @@
         #endregion
 
         #region Actualización datos
-        $nombre = $_POST['nombre'];
-        $apellidos = $_POST['apellidos'];
-        $fecha = $_POST['fecha'];
-        $tipodoc = $_POST['tipodoc'];
-        $documento = $_POST['documento'];
-        $hijos = $_POST['hijos'];
-        $color = $_POST['color'];
-        $usertype = $_POST['usertype'];
-        $usuario = $_SESSION['username'];
+        $_SESSION['nombre'] = $_POST['name'];
+        $_SESSION['apellido'] = $_POST['lastname'];
+        $_SESSION['fecha'] = $_POST['fecha_nac'];
+        $_SESSION['color'] = $_POST['color'];
+        $_SESSION['email'] = $_POST['email'];
+        $_SESSION['tipodoc'] = $_POST['tipDoc'];
+        $_SESSION['numdoc'] = $_POST['num_doc'];
+        $_SESSION['hijos'] = $_POST['numhijos'];
+        $_SESSION['direccion'] = $_POST['direccion'];
+        $_SESSION['estcivil'] = $_POST['estCivil'];
         #endregion
         loadImage();
 
-        if (actualizarPerfil($nombre, $apellidos, $fecha, $tipodoc, $documento, $_SESSION['archivo'], $hijos, $color, $usertype, $usuario)) {
-            echo '<script>alert("Perfil actualizado correctamente")</script>';
-        } else {
-            echo '<script>alert("Error al actualizar el perfil")</script>';
+        $actualizar = ActualizarUsuario($CONN, $_SESSION['username'], $_SESSION['nombre'], $_SESSION['apellido'], $_SESSION['fecha'], $_SESSION['color'], $_SESSION['email'], $_SESSION['tipodoc'], $_SESSION['numdoc'], $_SESSION['hijos'], $_SESSION['foto'], $_SESSION['direccion'], $_SESSION['estcivil']);
+
+        if($actualizar){
+            echo '<script>alert("Usuario Actualizado")</script>';
+            echo '<script>window.location.href="index.php"; </script>';
+        }else{
+            echo '<script>alert("Error. credenciales incorrectas")</script>';
         }
+
     }
     ?>
 </body>

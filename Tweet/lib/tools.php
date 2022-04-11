@@ -217,20 +217,20 @@ function restorepassword($usuario, $clavenueva, $confirmpassword)
  * @param $tweet: tweet del usuario
  * @return void
  */
-function eliminarTweet($usuario, $tweet, $fecha)
-{
-    // Eliminar el registro que corresponde con el usuario y tweet
-    $file = "tweet.txt";
-    $fp = fopen($file, "r");
-    $texto = fread($fp, filesize($file));
-    fclose($fp);
+// function eliminarTweet($usuario, $tweet, $fecha)
+// {
+//     // Eliminar el registro que corresponde con el usuario y tweet
+//     $file = "tweet.txt";
+//     $fp = fopen($file, "r");
+//     $texto = fread($fp, filesize($file));
+//     fclose($fp);
 
-    $texto = str_replace($usuario . ":" . $tweet . ":" . $fecha . "\n", "", $texto);
+//     $texto = str_replace($usuario . ":" . $tweet . ":" . $fecha . "\n", "", $texto);
 
-    $fp = fopen($file, "w");
-    fwrite($fp, $texto);
-    fclose($fp);
-}
+//     $fp = fopen($file, "w");
+//     fwrite($fp, $texto);
+//     fclose($fp);
+// }
 
 /**
  * Limpiar Cadena de texto para evitar inyecciones

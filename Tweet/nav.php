@@ -48,7 +48,7 @@
                     <a href='tweet.php'>🐦Tweet</a>
                 </div>
                 <div>
-                    <a href='perfil.php'>💬 Mensajes</a>
+                    <a href=''>💬 Mensajes</a>
                 </div>
                 <div>
                     <a href='perfil.php'>🔎 Perfil</a>
