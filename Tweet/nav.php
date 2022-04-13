@@ -18,12 +18,12 @@
 
     IniciarSesionSegura();
 
-    $CONN=ConexionDB();
-    $usuario=$_SESSION['username'] ?? '';
-    
-    if($CONN!=NULL){
-        $datosuser=ObtenerUsuarioDB($CONN, $usuario);
-        if ($datosuser!=NULL) {
+    $CONN = ConexionDB();
+    $usuario = $_SESSION['username'] ?? '';
+
+    if ($CONN != NULL) {
+        $datosuser = ObtenerUsuarioDB($CONN, $usuario);
+        if ($datosuser != NULL) {
             foreach ($datosuser as $key => $value) {
                 global $colorr;
                 $colorr = $value["color"];
@@ -38,29 +38,19 @@
     <nav style='overflow-y: auto; height: 8rem;'>
         <div>
             <!-- Navigación -->
-            <div style="display: flex; flex-direction: row; justify-content: space-around;  align-items: center;  margin-top: 10px;">
+            <div style="display: flex; flex-direction: row; justify-content: space-around;  align-items: start;">
                 <?php
                 if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "") {
                     echo "<div>
-                    <a href='index.php' style='font-weight: bold; font-size: 1.2rem;'>🏠 Inicio</a>
-                </div>
-                <div>
-                    <a href='tweet.php'>🐦Tweet</a>
-                </div>
-                <div>
-                    <a href=''>💬 Mensajes</a>
-                </div>
-                <div>
-                    <a href='perfil.php'>🔎 Perfil</a>
-                </div>
-                <div>
-                    <a href='./restorepassword.php'>🖊 Cambiar contraseña</a>
-                </div>
-                <div>
-                    <form method='post' style='margin-top: 0 !important;' >
-                        <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='🔓 Salir' name='exit' id='exit'>
-                    </form>
-                </div>";
+                            <a href='index.php' style='font-weight: bold; font-size: 1.2rem;'>🏠</a>
+                        </div>
+                        <img src='" . $_SESSION['foto'] . "' style='width: 50px; height: 50px; border-radius: 50%;'>
+                        <div style='display: flex; align-items: start;'>
+                                <p style='font-weight: bold; text-transform: uppercase;'>" . $_SESSION['nombre'] . '  ' . $_SESSION['apellido'] . "</p>
+                            <form method='post' style='margin-top: 0 !important;' >
+                                <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='🔓 Cerrar sesión' name='exit' id='exit'>
+                            </form>
+                        </div>";
                 } else {
                     echo "
                     <div>
@@ -76,58 +66,46 @@
                     header("Location: index.php");
                 }
                 ?>
-            
-        </div>
+
+            </div>
             <!-- Datos Usuario -->
-            <div style="display: flex; justify-content: center;">
+            <div style="display: flex; justify-content: space-around; width: 90vw; padding: 0 !important; margin: 0 !important;">
                 <?php
-                #region MostrarDatosUsuario
-                if (isset($_SESSION['username'])) {
-                ?>
-                    <!-- Nombre usuario -->
-                    <div style='margin-right: 15px;'>
-                        <p><strong>Nombre: ⬇</strong></p>
-                        <p><?php echo $_SESSION['nombre']; ?></p>
-                    </div>
-                    <!-- Apellido del usuario -->
-                    <div style='margin-right: 15px;'>
-                        <p><strong>Apellido: ⬇</strong></p>
-                        <p><?php echo $_SESSION['apellido']; ?></p>
-                    </div>
-                    <!-- Correo del usuario -->
-                    <div style='margin-right: 15px;'>
-                        <p><strong>Correo: ⬇</strong></p>
-                        <p><?php echo $_SESSION['email']; ?></p>
-                    </div>
-                    <!-- Tipo de documento -->
-                    <div style='margin-right: 15px;'>
-                        <p><strong>Dirección: ⬇</strong></p>
-                        <p><?php echo $_SESSION['direccion']; ?></p>
-                    </div>
-                    <!-- Numero de documento -->
-                    <div style='margin-right: 15px;'>
-                        <p><strong>Cantidad hijos: ⬇</strong></p>
-                        <p><?php echo $value['cant_hijos']; ?></p>
-                    </div>
-                    <!-- Cantidad de hijos -->
-                    <div style='margin-right: 15px;'>
-                        <p><strong>Estado civil: ⬇</strong></p>
-                        <p><?php echo $value['est_civil']; ?></p>
-                    </div>
-                    <!-- Color -->
-                    <div style='margin-right: 15px;'>
-                        <p><strong>Color: ⬇</strong></p>
-                        <p><?php echo $_SESSION['color']; ?></p>
-                    </div>
-                    <!-- Foto del usuario -->
-                    <div style='margin-right: 15px;'>
-                        <p><strong>Foto: ⬇</strong></p>
-                        <p><?php echo '<img style="height:100px; width: 100px;"  src="' . $value['foto'] . '">'; ?></p>
-                    </div>
-                <?php
+                // Boton de ver articulos
+                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "") {
+                    echo "<form method='post' style='margin-top: 0 !important;' >
+                            <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='📚 Ver articulos' name='verarticulos' id='verarticulos'>
+                        </form>";
                 }
-                #endregion
+
+                // Boton de ver mensajes
+                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "") {
+                    echo "<form method='post' style='margin-top: 0 !important;' >
+                                <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='📨 Ver mensajes' name='vermensajes' id='vermensajes'>
+                            </form>";
+                }
+
+                // Boton de ver perfil
+                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "") {
+                    echo "<form method='post' style='margin-top: 0 !important;' >
+                                <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='📋 Ver perfil' name='verperfil' id='verperfil'>
+                            </form>";
+                }
                 ?>
+
+                <?php 
+
+                if (isset($_POST['verarticulos'])) {
+                    header("Location: index.php");
+                }
+                if (isset($_POST['vermensajes'])) {
+                    header("Location: mensajes.php");
+                }
+                if (isset($_POST['verperfil'])) {
+                    header("Location: perfil.php");
+                }
+                ?>
+
             </div>
         </div>
     </nav>

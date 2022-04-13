@@ -350,11 +350,42 @@ function ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha, $color, 
 }
 
 
+/**
+ * Cambiar clave del usuario
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 12/04/2022
+ * @param string conexión
+ * @param string usuario
+ * @param string clave
+ * @param string newclave
+ * @return boolean
+ */
+function CambiarClave($CONN, $usuario, $clave, $newclave){
+
+    $encryptnew = encriptarPassword($newclave);
+    $encryptold = encriptarPassword($clave);
+
+    $sql = "UPDATE usuarios SET clave = :encryptnew WHERE usuario = :usuario and clave = :encryptold";
+    $statement = $CONN->prepare($sql);
+    $statement->bindParam(':usuario', $usuario);
+    $statement->bindParam(':encryptold', $encryptold);
+    $statement->bindParam(':encryptnew', $encryptnew);
+    try {
+        if ($statement->execute()) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    } catch (PDOException $e) {
+        echo 'Error: ' . $e->getMessage();
+        return FALSE;
+    }
+}
+
+
 /***
  *  SECCION DE TWEETS!!
  */
-
-
 /** 
  * Guardar un Tweet o Articulo
  * Autor: Alejandro Monroy y Gerónimo Quiroga
@@ -395,7 +426,35 @@ function MostrarTweet($connection)
 {
     $datostweets = [];
 
-    $sql = "SELECT tuits.id_tuit as 'idtuit', tuits.mensaje_tuit as 'mensaje', tuits.fecha_tuit as 'fecha', usuarios.usuario as 'usuario', usuarios.foto as 'foto' FROM tuits INNER JOIN usuarios ON tuits.id_usuario_tuit = usuarios.id_usuario";
+    $sql = "SELECT tuits.id_tuit as 'idtuit', tuits.mensaje_tuit as 'mensaje', tuits.fecha_tuit as 'fecha', usuarios.usuario as 'usuario', usuarios.foto as 'foto', tuits.Estado as 'estado' FROM tuits INNER JOIN usuarios ON tuits.id_usuario_tuit = usuarios.id_usuario WHERE tuits.Estado = 1 ORDER BY tuits.fecha_tuit DESC";
+    $statement = $connection->prepare($sql);
+    try {
+        if ($statement->execute()) {
+            $datostweets = $statement->fetchAll();
+            if (count($datostweets) > 0) {
+                return $datostweets;
+            }
+        } else {
+            return NULL;
+        }
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        return NULL;
+    }
+}
+
+/**
+ * Leer un Tweet o Articulo
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 03/04/2022
+ * @param string conexión
+ * @return array
+ */
+function MostrarTweetU($connection)
+{
+    $datostweets = [];
+
+    $sql = "SELECT tuits.id_tuit as 'idtuit', tuits.mensaje_tuit as 'mensaje', tuits.fecha_tuit as 'fecha', usuarios.usuario as 'usuario', usuarios.foto as 'foto', tuits.Estado as 'estado' FROM tuits INNER JOIN usuarios ON tuits.id_usuario_tuit = usuarios.id_usuario ORDER BY tuits.fecha_tuit DESC";
     $statement = $connection->prepare($sql);
     try {
         if ($statement->execute()) {
@@ -424,6 +483,55 @@ function MostrarTweet($connection)
 function EliminarTweet($connection, $id){
     $sql = "DELETE FROM tuits WHERE id_tuit = :id";
     $statement = $connection->prepare($sql);
+    $statement->bindParam(':id', $id);
+    try {
+        if ($statement->execute()) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    } catch (PDOException $e) {
+        echo 'Error: ' . $e->getMessage();
+        return FALSE;
+    }
+}
+
+
+/**
+ * Publicar el tweet
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 12/04/2022
+ * @param string conexión
+ * @param string id
+ * @return boolean
+ */
+function Publicar($CONN, $id){
+    $sql = "UPDATE tuits SET Estado = 1 WHERE id_tuit = :id";
+    $statement = $CONN->prepare($sql);
+    $statement->bindParam(':id', $id);
+    try {
+        if ($statement->execute()) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    } catch (PDOException $e) {
+        echo 'Error: ' . $e->getMessage();
+        return FALSE;
+    }
+}
+
+
+/**
+ * Despublicar tweet
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 12/04/2022
+ * @param string conexión
+ * @param string id
+ */
+function Despublicar($CONN, $id){
+    $sql = "UPDATE tuits SET Estado = 0 WHERE id_tuit = :id";
+    $statement = $CONN->prepare($sql);
     $statement->bindParam(':id', $id);
     try {
         if ($statement->execute()) {

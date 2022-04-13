@@ -15,11 +15,15 @@
 
     <?php
     require_once('././nav.php');
+    require_once('./../Tweet/lib/db_tools.php');
+
+    $CONN = ConexionDB();
+
     ?>
 
     <form method="post">
-        <div class="form-register">
-            <h1>Cambiar contraseña</h1>
+        <div class="form-register" style="overflow: hidden; width: 50vw; height: auto;">
+            <h1>Actualizar contraseña</h1>
             <div>
                 <label for="password">Contraseña actual: </label>
                 <input type="password" name="password" required="required" id="password" placeholder="Contraseña actual">
@@ -33,28 +37,35 @@
                 <input type="password" name="confirmpassword" required="required" id="confirmpassword" placeholder="Confirmar contraseña" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
             </div>
             <div>
-                <input type="submit" value="Cambiar contraseña">
+                <input type="submit" class='button-r' name="cambiarClave" value="Actualizar contraseña">
             </div>
     </form>
 
     <?php
-    require_once('./lib/tools.php');
 
-    $_SESSION['username'] =  $_SESSION['username'];
-    $password = $_POST['password'] ?? '';
-    $passwordn = $_POST['passwordn'] ?? '';
-    $confirmpassword = $_POST['confirmpassword'] ?? '';
 
-    if (isset($_POST['passwordn']) == isset($_POST['confirmpassword'])) {
-            $msg = restorepassword($_SESSION['username'], $passwordn, $confirmpassword) ? "Contraseña cambiada exitosamente" : "Contraseña no cambiada";
 
-            echo "<div class='alert'>";
-            echo "<p>$msg</p>";
-            echo "</div>";
-    }else{
-        echo "<div class='alert'>";
-        echo "<p>No coinciden!</p>";
-        echo "</div>";
+    if ($CONN != NULL) {
+        $user = $_SESSION['username'];
+
+        if (isset($_POST['cambiarClave'])) {
+            $password = $_POST['password'];
+            $passwordn = $_POST['passwordn'];
+            $confirmpassword = $_POST['confirmpassword'];
+
+            if ($password != "" && $passwordn != "" && $confirmpassword != "") {
+                if ($passwordn == $confirmpassword) {
+                    $result = CambiarClave($CONN, $user, $password, $passwordn);
+                    if ($result) {
+                        echo "<script>alert('Contraseña cambiada correctamente');</script>";
+                    } else {
+                        echo "<script>alert('Error al cambiar contraseña');</script>";
+                    }
+                } else {
+                    echo "<script>alert('Las contraseñas no coinciden');</script>";
+                }
+            }
+        }
     }
     ?>
 

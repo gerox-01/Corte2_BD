@@ -31,6 +31,11 @@
             <div style="display: flex; justify-content: center; align-items: center;">
                 <label for="tweet">Tweet: </label>
                 <textarea name="tweet" id="tweet" cols="30" style="width: 70vw; height: 30vh;" rows="10" maxlength="140" placeholder="Escribe tu tweet"></textarea>
+                <!-- Checkbox -->
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <input type="checkbox" name="checkbox" id="checkbox" style="width: 20px; height: 20px;">
+                    <span class="text">Hacer público</span>
+                </div>
             </div>
             <div>
                 <input type="submit" value="Tweet">
@@ -46,6 +51,13 @@
     // $DateAndTime = date('m-d-Y');
 
     if(isset($_POST['tweet'])){
+
+        if(!empty($_POST['chkPublico'])){ //si hay checbox marcado
+            $estado=1; //el estado es verdadero, osea público 
+        } else 
+        {$estado=0;}
+
+
         $savet = GuardarTweet($CONN, $tweet, $_SESSION['iduser'], $estado);
         if($savet){
             echo '<script>alert("Tweet creado")</script>';

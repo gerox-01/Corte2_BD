@@ -22,8 +22,6 @@
     $user = $_SESSION['username'];
     ?>
 
-    <!-- Actualizar el perfil -->
-    <h1 style='width: 95vw; display: flex; justify-content: center;'>Actualizar perfil</h1>
 
     <form method="post" style='overflow-y: hidden !important; height: 68vh;' class="form-register" id="style-5" enctype="multipart/form-data">
         <div style='display:flex; align-items: center; justify-content: start;'>
@@ -58,8 +56,8 @@
             </div>
         </div>
         <div style='display:flex; align-items: center; justify-content: start;'>
-        <!-- Numero de documento -->
-        <div>
+            <!-- Numero de documento -->
+            <div>
                 <label for="num">Numero de Documento:</label>
                 <input class="r-options" type="text" name="num_doc" id="num_doc" required="required" pattern="([0-9]+)" value="<?php echo $_SESSION['numdoc']; ?>" title="Escriba el numero de documento">
             </div>
@@ -98,17 +96,17 @@
             </div>
         </div>
         <div style='display:flex; align-items: center; justify-content: start;'>
-         <!-- Color favorito del usuario -->
-         <div>
+            <!-- Color favorito del usuario -->
+            <div>
                 <label for='color'>Color favorito:</label>
-                <input class="r-options" type='color' name='color' id='color' value="<?php echo $_SESSION['color']; ?>" required='required'>
+                <input class="r-options" type='color' name='color' style="height: 40px;" id='color' value="<?php echo $_SESSION['color']; ?>" required='required'>
             </div>
             <!-- Foto -->
             <div style='display: flex; flex-direction: column;'>
                 <label for="archivo">Foto:</label>
                 <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                <img src="<?php echo $_SESSION['foto'] ?>" style="width: 5.3rem;" alt="">
-                <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
+                    <img src="<?php echo $_SESSION['foto'] ?>" style="width: 5.3rem;" alt="">
+                    <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
                 </div>
             </div>
             <!-- Fecha de nacimiento -->
@@ -117,7 +115,10 @@
                 <input class="r-options" type="date" name="fecha_nac" id="fecha_nac" value="<?php echo $_SESSION['fecha']; ?>" required="required">
             </div>
         </div>
-        <input type="submit" name="actualizar" value="Actualizar" class='button-r'>
+        <div style="display: flex; justify-content: space-between; width: 30vw;">
+            <input type="submit" name="actualizar" value="Actualizar" class='button-r'>
+            <input type="submit" name="cambiarClave" value="Cambiar clave" class='button-r'>
+        </div>
     </form>
 
 
@@ -171,13 +172,16 @@
 
         $actualizar = ActualizarUsuario($CONN, $_SESSION['username'], $_SESSION['nombre'], $_SESSION['apellido'], $_SESSION['fecha'], $_SESSION['color'], $_SESSION['email'], $_SESSION['tipodoc'], $_SESSION['numdoc'], $_SESSION['hijos'], $_SESSION['foto'], $_SESSION['direccion'], $_SESSION['estcivil']);
 
-        if($actualizar){
+        if ($actualizar) {
             echo '<script>alert("Usuario Actualizado")</script>';
             echo '<script>window.location.href="index.php"; </script>';
-        }else{
+        } else {
             echo '<script>alert("Error. credenciales incorrectas")</script>';
         }
+    }
 
+    if(isset($_POST['cambiarClave'])){
+        echo '<script>window.location.href="cambioClave.php"; </script>';
     }
     ?>
 </body>
