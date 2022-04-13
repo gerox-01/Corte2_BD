@@ -20,12 +20,12 @@
     LimpiarEntradas();
 
 
-    $user = $_SESSION['username'] ?? '';
+    // $user = $_SESSION['username'] ?? '';
 
-    if($user == '' || $user == null){
-        header('Location: login.php');
-        die();
-    }
+    // if($user == '' || $user == null){
+    //     header('Location: login.php');
+    //     die();
+    // }
 
     
     $CONN = ConexionDB();

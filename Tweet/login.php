@@ -69,7 +69,7 @@
                     $_SESSION['password'] = $_POST['password'];
                     header("Location: index.php");
                 }else{
-                    echo "Usuario y clave incorrectos";
+                    echo "<p>Usuario y clave incorrectos</p>";
                 }
             }
             LimpiarEntradas();      
