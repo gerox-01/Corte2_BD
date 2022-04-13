@@ -17,6 +17,13 @@
     require_once('./lib/tools.php');
     require_once './lib/db_tools.php';
 
+    $user = $_SESSION['username'] ?? '';
+
+    if($user == '' || $user == null){
+        header('Location: login.php');
+        die();
+    }
+
     $CONN = ConexionDB();
 
     echo '<div style="width: 90vw; display: flex; justify-content: space-around; padding: 0 !important; margin-bottom: 0 !important;">';

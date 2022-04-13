@@ -17,6 +17,13 @@
     require_once('././nav.php');
     require_once('./../Tweet/lib/db_tools.php');
 
+    $user = $_SESSION['username'] ?? '';
+
+    if($user == '' || $user == null){
+        header('Location: login.php');
+        die();
+    }
+
     $CONN = ConexionDB();
 
     ?>

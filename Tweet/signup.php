@@ -19,6 +19,15 @@
     require_once './nav.php';
     LimpiarEntradas();
 
+
+    $user = $_SESSION['username'] ?? '';
+
+    if($user == '' || $user == null){
+        header('Location: login.php');
+        die();
+    }
+
+    
     $CONN = ConexionDB();
     ?>
 

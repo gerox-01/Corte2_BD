@@ -18,6 +18,14 @@
     require_once './lib/tools.php';
     require_once './lib/db_tools.php';
 
+
+    $user = $_SESSION['username'] ?? '';
+
+    if($user == '' || $user == null){
+        header('Location: login.php');
+        die();
+    }
+    
     $CONN = ConexionDB();
 
     LimpiarEntradas();

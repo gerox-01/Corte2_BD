@@ -41,9 +41,14 @@ if (isset($_SESSION['username'])) {
     require_once('./lib/db_tools.php');
     LimpiarEntradas();
 
-    $user = $_SESSION['username'];
+    $user = $_SESSION['username'] ?? '';
 
     $CONN = ConexionDB();
+
+    if($user == '' || $user == null){
+        header('Location: login.php');
+        die();
+    }
     
     echo '<div style="width: 90vw; display: flex; justify-content: space-around; padding: 0 !important; margin-bottom: 0 !important;">';
     echo '<form method="post" style="display: flex; flex-direction: row !important; width: 98vw; justify-content: space-around !important;">';
