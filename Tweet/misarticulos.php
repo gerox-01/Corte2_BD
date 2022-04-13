@@ -64,7 +64,7 @@
                                     </div>
                                     <div style="display: flex; flex-direction: column; width: 80%;">
                                         <p name="mensajetuit" style="border:1px solid #ccc; padding: 5px;">' . $row['mensaje'] . '</p>
-                                        <input hidden name="idtuit" value="' . $row['idtuit'] . '"> 
+                                        <input hidden style="display:none;" id="idtuit" name="idtuit" value="' . $row['idtuit'] . '"> 
                                         <div style="display: flex; justify-content: space-between; align-items: start;">
                                             <p style="margin: 0 !important; padding: 0 !important;" value="a">' . ($row['estado'] == 1 ? 'Sí' : 'No') . '</p>
                                             <p style="margin: 0 !important; padding: 0 !important;">Fecha de tuit: ' . $row['fecha'] . '</p>
@@ -78,7 +78,9 @@
                                 </div>
                             </form>
                         </div>';
+
                     echo $htmlm;
+                    $_SESSION['idtuit'] = $row['idtuit'];
                 }
                 DespublicarTweet();
                 EliminarT();
@@ -93,7 +95,7 @@
         $CONN = ConexionDB();
 
         if (isset($_POST['publicar'])) {
-            $publicar = Publicar($CONN, $_POST['idtuit']);
+            $publicar = Publicar($CONN, $_SESSION['idtuit']);
             if ($publicar) {
                 echo '<script>alert("Artículo publicado")</script>';
                 echo '<script>window.location.href="index.php"; </script>';
@@ -108,7 +110,7 @@
         $CONN = ConexionDB();
 
         if (isset($_POST['despublicar'])) {
-            $despublicar = Despublicar($CONN, $_POST['idtuit']);
+            $despublicar = Despublicar($CONN, $_SESSION['idtuit']);
             if ($despublicar) {
                 echo '<script>alert("Artículo despublicado")</script>';
                 echo '<script>window.location.href="index.php"; </script>';
@@ -123,7 +125,7 @@
         $CONN = ConexionDB();
 
         if (isset($_POST['eliminar'])) {
-            $deletetweet =  EliminarTweet($CONN, $_POST['idtuit']);
+            $deletetweet =  EliminarTweet($CONN, $_SESSION['idtuit']);
             if ($deletetweet) {
                 echo '<script>alert("Artículo eliminado")</script>';
                 echo '<script>window.location.href="index.php"; </script>';
@@ -143,6 +145,13 @@
             <p>| Alejandro Monroy</p>
         </div>
     </footer>
+
+    <script>
+        // function EliminarID(){
+            var tweet = document.getElementById('idtuit');
+            tweet.parentNode.removeChild(tweet);
+        // }
+    </script>
 </body>
 
 </html>
