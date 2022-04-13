@@ -19,57 +19,87 @@
     require_once './lib/db_tools.php';
 
     $CONN = ConexionDB();
-    
+
     LimpiarEntradas();
     $tweet = $_POST['tweet'] ?? '';
+
+    echo '<div style="width: 90vw; display: flex; justify-content: space-around; padding: 0 !important; margin-bottom: 0 !important;">';
+    echo '<form method="post" style="display: flex; flex-direction: row !important; width: 98vw; justify-content: space-around !important;">';
+    echo '<input type="submit" name="todosarticulos" value="Todos los artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
+    echo '<input type="submit" name="misarticulos" value="Mis artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
+    echo '<input type="submit" name="creararticulo" value="Crear artículo" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
+    echo '</form>';
+    echo '</div>';
+
+
+    if (isset($_POST['todosarticulos'])) {
+        echo '<script>window.location.href = "index.php";</script>';
+    } else if (isset($_POST['misarticulos'])) {
+        echo '<script>window.location.href = "misarticulos.php";</script>';
+    } else if (isset($_POST['creararticulo'])) {
+        echo '<script>window.location.href="tweet.php";</script>';
+    }
+
     ?>
 
     <form method="post">
-        <div class="form-register" style="overflow: hidden; width: 100%; height: 75vh;">
+        <div class="form-register" style="overflow: hidden; width: 100%; height: 50vh;">
             <h1>Tweet</h1>
             <p style="font-size: 12px; ">Recuerda que tu tweet no debe superar los 140 caracteres<span style="color: red;">*</span></p>
             <div style="display: flex; justify-content: center; align-items: center;">
-                <label for="tweet">Tweet: </label>
-                <textarea name="tweet" id="tweet" cols="30" style="width: 70vw; height: 30vh;" rows="10" maxlength="140" placeholder="Escribe tu tweet"></textarea>
+                <label for="tweet" style="padding-right: 30px;">Tweet: </label>
+                <textarea name="tweet" id="tweet" cols="30" style="width: 70vw; height: 20vh;" rows="10" maxlength="140" placeholder="Escribe tu tweet"></textarea>
+            </div>
+            <div style="display: flex; width: 100%; justify-content: space-around;">
                 <!-- Checkbox -->
                 <div style="display: flex; justify-content: center; align-items: center;">
-                    <input type="checkbox" name="checkbox" id="checkbox" style="width: 20px; height: 20px;">
-                    <span class="text">Hacer público</span>
+                    <span class="text" style="padding-right: 30px;">Es público: </span>
+                    <input type="checkbox" name="checkbox" id="checkbox" style="width: 20px; height: 20px; cursor: pointer;">
                 </div>
+                <input type="submit" name="crearTweet" style="color: white; background-color: purple; width: 10rem; cursor: pointer;" value="Crear">
             </div>
-            <div>
-                <input type="submit" value="Tweet">
-            </div>
+        </div>
     </form>
 
-    
+
     <?php
 
-    
+
     $tweet = $_POST['tweet'] ?? '';
-    $estado = 1;
     // $DateAndTime = date('m-d-Y');
 
-    if(isset($_POST['tweet'])){
+    if (isset($_POST['tweet'])) {
 
-        if(!empty($_POST['chkPublico'])){ //si hay checbox marcado
-            $estado=1; //el estado es verdadero, osea público 
-        } else 
-        {$estado=0;}
+        if (isset($_POST['crearTweet'])) {
+            if (!empty($_POST['checkbox'])) {
+                $estado = 1;
+            } else {
+                $estado = 0;
+            }
 
 
-        $savet = GuardarTweet($CONN, $tweet, $_SESSION['iduser'], $estado);
-        if($savet){
-            echo '<script>alert("Tweet creado")</script>';
-            echo '<script>window.location.href="index.php"; </script>';
-        }else{
-            echo '<script>alert("Error publicando el tweet")</script>';
+            $savet = GuardarTweet($CONN, $tweet, $_SESSION['iduser'], $estado);
+            if ($savet) {
+                echo '<script>alert("Tweet creado")</script>';
+                echo '<script>window.location.href="index.php"; </script>';
+            } else {
+                echo '<script>alert("Error publicando el tweet")</script>';
+            }
         }
     }
 
 
     ?>
 
+
+    <footer class="i-footer">
+        <p>&copy; T1</p>
+        <div class="i-divfotter">
+            <p class="i-integrantes">Integrantes: </p>
+            <p>David Quiroga |</p>
+            <p>| Alejandro Monroy</p>
+        </div>
+    </footer>
 </body>
 
 </html>
