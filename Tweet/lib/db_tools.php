@@ -545,3 +545,100 @@ function Despublicar($CONN, $id){
     }
 }
 
+
+/**
+ * Listar Usuarios
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 12/04/2022
+ * @param string conexión
+ * @param string id
+ */
+function ListarUsuarios($my_Db_Connection,$usuario){
+    $lista_usuario = [];
+
+    try {
+        $my_Select_Statement = 
+        $my_Db_Connection->prepare("SELECT `usuario`,`nombres`,`apellidos` FROM `usuarios` WHERE `Usuario`!= :Usuario");
+        $my_Select_Statement->execute(['Usuario'=>$usuario]);
+        $lista_usuario = $my_Select_Statement-> fetchAll();
+    }  catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        return $lista_usuario = null;
+    }
+    return $lista_usuario;
+}
+
+/**
+ * Enviar mensajes
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 12/04/2022
+ * @param string conexión
+ * @param string id
+ */
+function EnviarMensaje($my_Db_Connection,$usuario_origen,$usuario_destino,$texto,$fechaenvio,$archivo){ 
+    try {
+        $my_Insert_Statement = 
+        $my_Db_Connection->prepare("INSERT INTO mensajes (Usuario_origen, Usuario_destino, Texto, FechaEnvio, ArchivoAdjunto)".
+        "VALUES (:Usuario_origen, :Usuario_destino,:Texto,:FechaEnvio,:ArchivoAdjunto)");
+        
+        $my_Insert_Statement->bindParam(':Usuario_origen', $usuario_origen);
+        $my_Insert_Statement->bindParam(':Usuario_destino', $usuario_destino);
+        $my_Insert_Statement->bindParam(':Texto', $texto);
+        $my_Insert_Statement->bindParam(':FechaEnvio', $fechaenvio);
+        $my_Insert_Statement->bindParam(':ArchivoAdjunto', $archivo);
+
+        if ($my_Insert_Statement->execute()) {
+            //echo "Nuevo Usuario Creado";
+            return true;
+        }else{
+            //echo "No se pudo crear Usuario";
+            return FALSE;
+        }   
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        // var_dump($th);
+    }
+}
+/**
+ * Listar Mensajes Recibidos
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 12/04/2022
+ * @param string conexión
+ * @param string id
+ */
+function ListarMensajesRecibidos($my_Db_Connection,$usuario_destino){
+    $lista_mensajes = [];
+    try {
+        $my_Select_Statement = 
+        $my_Db_Connection->prepare("SELECT Id, Usuario_origen, Texto, FechaEnvio, ArchivoAdjunto FROM mensajes WHERE Usuario_destino = :Usuario_destino");
+        $my_Select_Statement->execute(['Usuario_destino' => $usuario_destino]);
+        $lista_mensajes = $my_Select_Statement-> fetchAll();
+        ;
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        //throw $th;
+    }
+    return $lista_mensajes;
+}
+
+/**
+ * Listar mensajes enviados
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 12/04/2022
+ * @param string conexión
+ * @param string id
+ */
+function ListarMensajesEnviados($my_Db_Connection,$usuario_origen){
+    $lista_mensajes = [];
+    try {
+        $my_Select_Statement = 
+        $my_Db_Connection->prepare("SELECT Id, Usuario_destino, Texto, FechaEnvio, ArchivoAdjunto FROM mensajes WHERE Usuario_origen = :Usuario_origen");
+        $my_Select_Statement->execute(['Usuario_origen' => $usuario_origen]);
+        $lista_mensajes = $my_Select_Statement-> fetchAll();
+        ;
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        // echo $th;
+    }
+    return $lista_mensajes;
+}
