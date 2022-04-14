@@ -55,6 +55,7 @@
         foreach ($data as $row) {
             if (isset($_SESSION['user'])) {
                 if ($_SESSION['user'] == $row['usuario']) {
+                    $encryptid = encriptarIdTuit($row['idtuit']);
                     $htmlm = '<div style="background-color: ' . $_SESSION['color'] . ' !important;">
                             <form method="POST">
                                 <div style="display: flex; width: 85vw; justify-content: center; align-items: center;">
@@ -80,21 +81,24 @@
                         </div>';
 
                     echo $htmlm;
-                    $_SESSION['idtuit'] = $row['idtuit'];
                 }
+                $_SESSION['idtuit'] = $_POST['idtuit'] ?? '';
                 DespublicarTweet();
                 EliminarT();
                 PublicarTweet();
-            }
+                }
         }
         echo '</div>';
     }
+
+    // echo $_GET['idtuit'];
 
     function PublicarTweet()
     {
         $CONN = ConexionDB();
 
         if (isset($_POST['publicar'])) {
+            $encrypid = encriptarIdTuit($_SESSION['idtuit']);
             $publicar = Publicar($CONN, $_SESSION['idtuit']);
             if ($publicar) {
                 echo '<script>alert("Artículo publicado")</script>';
@@ -110,6 +114,7 @@
         $CONN = ConexionDB();
 
         if (isset($_POST['despublicar'])) {
+            $encrypid = encriptarIdTuit($_SESSION['idtuit']);
             $despublicar = Despublicar($CONN, $_SESSION['idtuit']);
             if ($despublicar) {
                 echo '<script>alert("Artículo despublicado")</script>';
@@ -125,6 +130,7 @@
         $CONN = ConexionDB();
 
         if (isset($_POST['eliminar'])) {
+            $encrypid = encriptarIdTuit($_SESSION['idtuit']);
             $deletetweet =  EliminarTweet($CONN, $_SESSION['idtuit']);
             if ($deletetweet) {
                 echo '<script>alert("Artículo eliminado")</script>';
@@ -148,8 +154,10 @@
 
     <script>
         // function EliminarID(){
-            var tweet = document.getElementById('idtuit');
-            tweet.parentNode.removeChild(tweet);
+            // var tweet = document.getElementById('idtuit');
+            // var idtuit = tweet.value;
+            // tweet.removeAttribute('value');
+            // console.log(idtuit);
         // }
     </script>
 </body>

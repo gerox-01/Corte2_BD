@@ -274,6 +274,34 @@ function encriptarPassword($clave)
 
 
 /**
+ * Encriptar el id del tuit
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 13/04/2022
+ * @param string $idtuit
+ * @return string
+ */
+function encriptarIdTuit($idtuit)
+{
+    $encryptIdTuit = md5($idtuit);
+    $idtuit = crypt($idtuit, $encryptIdTuit);
+    return $idtuit;
+}
+
+/**
+ * desencriptar el id del tuit
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 13/04/2022
+ * @param string $idtuit
+ * @return string
+ */
+function desencriptarIdTuit($idtuit)
+{
+    $decryptIdTuit = md5($idtuit);
+    $idtuit = crypt($idtuit, $decryptIdTuit);
+    return $idtuit;
+}
+
+/**
  * Obtener color del usuario
  * Autor: Alejandro Monroy y Gerónimo Quiroga
  * Fecha: 03/04/2022
