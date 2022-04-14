@@ -196,7 +196,7 @@
                     $canthijos = SeleccionarCanHijos($CONN);
                     foreach ($canthijos as $opciones) {
                     ?>
-                        <option value="<?php echo $opciones['id_cant_hijos'] ?>"><?php echo $opciones['cant_hijos'] ?></option>
+                        <option value="<?php echo $opciones['id_cant_hijos'] ?>" required="required"><?php echo $opciones['cant_hijos'] ?></option>
                     <?php
                     }
                     ?>
@@ -210,7 +210,7 @@
                     $estadocivil = SeleccionarEstadoCivilDB($CONN);
                     foreach ($estadocivil as $opciones) {
                     ?>
-                        <option value="<?php echo $opciones['id_est_civil'] ?>"><?php echo $opciones['est_civil'] ?></option>
+                        <option value="<?php echo $opciones['id_est_civil'] ?>"  required="required"><?php echo $opciones['est_civil'] ?></option>
                     <?php
                     }
                     ?>
@@ -224,7 +224,7 @@
             <!-- Foto -->
             <div style='display: flex; flex-direction: column;'>
                 <label for="archivo">Foto:</label>
-                <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
+                <input type="file" name="archivo" id="archivo" accept="image/*"  required="required" /><br><br>
             </div>
         </div>
         <div style='display:flex; align-items: center; justify-content: start;'>
@@ -332,6 +332,7 @@
             }
         } else {
             echo "<p style='color:red;'>Las contraseñas no coinciden</p>";
+            echo '<script>window.location.href="login.php";</script>';
         }
     }
     ?>

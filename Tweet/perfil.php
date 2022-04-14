@@ -111,7 +111,7 @@
                 <label for="archivo">Foto:</label>
                 <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                     <img src="<?php echo $_SESSION['foto'] ?>" style="width: 5.3rem;" alt="">
-                    <input type="file" name="archivo" id="archivo" accept="image/*" requerid /><br><br>
+                    <input type="file" name="archivo" id="archivo" accept="image/*" /><br><br>
                 </div>
             </div>
             <!-- Fecha de nacimiento -->

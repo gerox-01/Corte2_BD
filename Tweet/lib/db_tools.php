@@ -388,25 +388,47 @@ function ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha, $color, 
  * @param string newclave
  * @return boolean
  */
-function CambiarClave($CONN, $usuario, $clave, $newclave){
+function CambiarClave($CONN, $usuario, $clave, $newclave)
+{
 
     $encryptnew = encriptarPassword($newclave);
     $encryptold = encriptarPassword($clave);
 
-    $sql = "UPDATE usuarios SET clave = :encryptnew WHERE usuario = :usuario and clave = :encryptold";
-    $statement = $CONN->prepare($sql);
-    $statement->bindParam(':usuario', $usuario);
-    $statement->bindParam(':encryptold', $encryptold);
-    $statement->bindParam(':encryptnew', $encryptnew);
-    try {
-        if ($statement->execute()) {
-            return TRUE;
-        } else {
+    if ($encryptnew == $encryptold) {
+        return FALSE;
+    } else {
+        $vsql = "SELECT * FROM usuarios WHERE usuario = :usuario AND clave = :clave";
+        $statement = $CONN->prepare($vsql);
+        $statement->bindParam(':usuario', $usuario);
+        $statement->bindParam(':clave', $encryptold);
+        try {
+            if ($statement->execute()) {
+                $result = $statement->fetchAll();
+                if (count($result) > 0) {
+                    $sql = "UPDATE usuarios SET clave = :newclave WHERE usuario = :usuario";
+                    $statement = $CONN->prepare($sql);
+                    $statement->bindParam(':usuario', $usuario);
+                    $statement->bindParam(':newclave', $encryptnew);
+                    try {
+                        if ($statement->execute()) {
+                            return TRUE;
+                        } else {
+                            return FALSE;
+                        }
+                    } catch (PDOException $e) {
+                        echo 'Error: ' . $e->getMessage();
+                        return FALSE;
+                    }
+                } else {
+                    return FALSE;
+                }
+            } else {
+                return FALSE;
+            }
+        } catch (PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
             return FALSE;
         }
-    } catch (PDOException $e) {
-        echo 'Error: ' . $e->getMessage();
-        return FALSE;
     }
 }
 
@@ -508,7 +530,8 @@ function MostrarTweetU($connection)
  * @param string id
  * @return boolean
  */
-function EliminarTweet($connection, $id){
+function EliminarTweet($connection, $id)
+{
     $sql = "DELETE FROM tuits WHERE id_tuit = :id";
     $statement = $connection->prepare($sql);
     $statement->bindParam(':id', $id);
@@ -533,7 +556,8 @@ function EliminarTweet($connection, $id){
  * @param string id
  * @return boolean
  */
-function Publicar($CONN, $id){
+function Publicar($CONN, $id)
+{
     $sql = "UPDATE tuits SET Estado = 1 WHERE id_tuit = :id";
     $statement = $CONN->prepare($sql);
     $statement->bindParam(':id', $id);
@@ -557,7 +581,8 @@ function Publicar($CONN, $id){
  * @param string conexión
  * @param string id
  */
-function Despublicar($CONN, $id){
+function Despublicar($CONN, $id)
+{
     $sql = "UPDATE tuits SET Estado = 0 WHERE id_tuit = :id";
     $statement = $CONN->prepare($sql);
     $statement->bindParam(':id', $id);
@@ -581,15 +606,16 @@ function Despublicar($CONN, $id){
  * @param string conexión
  * @param string id
  */
-function ListarUsuarios($my_Db_Connection,$usuario){
+function ListarUsuarios($my_Db_Connection, $usuario)
+{
     $lista_usuario = [];
 
     try {
-        $my_Select_Statement = 
-        $my_Db_Connection->prepare("SELECT `usuario`,`nombres`,`apellidos` FROM `usuarios` WHERE `Usuario`!= :Usuario");
-        $my_Select_Statement->execute(['Usuario'=>$usuario]);
-        $lista_usuario = $my_Select_Statement-> fetchAll();
-    }  catch (Exception $e) {
+        $my_Select_Statement =
+            $my_Db_Connection->prepare("SELECT `usuario`,`nombres`,`apellidos` FROM `usuarios` WHERE `Usuario`!= :Usuario");
+        $my_Select_Statement->execute(['Usuario' => $usuario]);
+        $lista_usuario = $my_Select_Statement->fetchAll();
+    } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
         return $lista_usuario = null;
     }
@@ -603,12 +629,13 @@ function ListarUsuarios($my_Db_Connection,$usuario){
  * @param string conexión
  * @param string id
  */
-function EnviarMensaje($my_Db_Connection,$usuario_origen,$usuario_destino,$texto,$fechaenvio,$archivo){ 
+function EnviarMensaje($my_Db_Connection, $usuario_origen, $usuario_destino, $texto, $fechaenvio, $archivo)
+{
     try {
-        $my_Insert_Statement = 
-        $my_Db_Connection->prepare("INSERT INTO mensajes (Usuario_origen, Usuario_destino, Texto, FechaEnvio, ArchivoAdjunto)".
-        "VALUES (:Usuario_origen, :Usuario_destino,:Texto,:FechaEnvio,:ArchivoAdjunto)");
-        
+        $my_Insert_Statement =
+            $my_Db_Connection->prepare("INSERT INTO mensajes (Usuario_origen, Usuario_destino, Texto, FechaEnvio, ArchivoAdjunto)" .
+                "VALUES (:Usuario_origen, :Usuario_destino,:Texto,:FechaEnvio,:ArchivoAdjunto)");
+
         $my_Insert_Statement->bindParam(':Usuario_origen', $usuario_origen);
         $my_Insert_Statement->bindParam(':Usuario_destino', $usuario_destino);
         $my_Insert_Statement->bindParam(':Texto', $texto);
@@ -618,10 +645,10 @@ function EnviarMensaje($my_Db_Connection,$usuario_origen,$usuario_destino,$texto
         if ($my_Insert_Statement->execute()) {
             //echo "Nuevo Usuario Creado";
             return true;
-        }else{
+        } else {
             //echo "No se pudo crear Usuario";
             return FALSE;
-        }   
+        }
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
         // var_dump($th);
@@ -634,14 +661,14 @@ function EnviarMensaje($my_Db_Connection,$usuario_origen,$usuario_destino,$texto
  * @param string conexión
  * @param string id
  */
-function ListarMensajesRecibidos($my_Db_Connection,$usuario_destino){
+function ListarMensajesRecibidos($my_Db_Connection, $usuario_destino)
+{
     $lista_mensajes = [];
     try {
-        $my_Select_Statement = 
-        $my_Db_Connection->prepare("SELECT Id, Usuario_origen, Texto, FechaEnvio, ArchivoAdjunto FROM mensajes WHERE Usuario_destino = :Usuario_destino");
+        $my_Select_Statement =
+            $my_Db_Connection->prepare("SELECT Id, Usuario_origen, Texto, FechaEnvio, ArchivoAdjunto FROM mensajes WHERE Usuario_destino = :Usuario_destino");
         $my_Select_Statement->execute(['Usuario_destino' => $usuario_destino]);
-        $lista_mensajes = $my_Select_Statement-> fetchAll();
-        ;
+        $lista_mensajes = $my_Select_Statement->fetchAll();;
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
         //throw $th;
@@ -656,14 +683,14 @@ function ListarMensajesRecibidos($my_Db_Connection,$usuario_destino){
  * @param string conexión
  * @param string id
  */
-function ListarMensajesEnviados($my_Db_Connection,$usuario_origen){
+function ListarMensajesEnviados($my_Db_Connection, $usuario_origen)
+{
     $lista_mensajes = [];
     try {
-        $my_Select_Statement = 
-        $my_Db_Connection->prepare("SELECT Id, Usuario_destino, Texto, FechaEnvio, ArchivoAdjunto FROM mensajes WHERE Usuario_origen = :Usuario_origen");
+        $my_Select_Statement =
+            $my_Db_Connection->prepare("SELECT Id, Usuario_destino, Texto, FechaEnvio, ArchivoAdjunto FROM mensajes WHERE Usuario_origen = :Usuario_origen");
         $my_Select_Statement->execute(['Usuario_origen' => $usuario_origen]);
-        $lista_mensajes = $my_Select_Statement-> fetchAll();
-        ;
+        $lista_mensajes = $my_Select_Statement->fetchAll();;
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
         // echo $th;

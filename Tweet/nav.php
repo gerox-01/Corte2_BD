@@ -32,6 +32,8 @@
     }
 
     $_SESSION['foto'] = $value['foto'] ?? '';
+    $nombre = $_SESSION['nombre']  ?? '';
+    // echo $nombre; 
     #endregion
     ?>
 
@@ -40,7 +42,7 @@
             <!-- Navigación -->
             <div style="display: flex; flex-direction: row; justify-content: space-around;  align-items: start;">
                 <?php
-                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "") {
+                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "" && $nombre) {
                     echo "<div>
                             <a href='index.php' style='font-weight: bold; font-size: 1.2rem;'>🏠</a>
                         </div>
@@ -72,21 +74,21 @@
             <div style="display: flex; justify-content: space-around; width: 90vw; padding: 0 !important; margin: 0 !important;">
                 <?php
                 // Boton de ver articulos
-                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "") {
+                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "" && $nombre ) {
                     echo "<form method='post' style='margin-top: 0 !important;' >
                             <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='📚 Ver articulos' name='verarticulos' id='verarticulos'>
                         </form>";
                 }
 
                 // Boton de ver mensajes
-                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "") {
+                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "" && $nombre) {
                     echo "<form method='post' style='margin-top: 0 !important;' >
                                 <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='📨 Ver mensajes' name='vermensajes' id='vermensajes'>
                             </form>";
                 }
 
                 // Boton de ver perfil
-                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "") {
+                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "" && $nombre) {
                     echo "<form method='post' style='margin-top: 0 !important;' >
                                 <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='📋 Ver perfil' name='verperfil' id='verperfil'>
                             </form>";
