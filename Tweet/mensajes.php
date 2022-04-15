@@ -99,7 +99,7 @@
                 {
                     $fileTmpPath = $_FILES['fulAdjunto']['tmp_name']; 
                     $fileName = $_FILES['fulAdjunto']['name'];
-                    $files_folder = './files/';
+                    $files_folder = '../uploaded_files/';
                     if(!file_exists($files_folder)) {
                         mkdir($files_folder);
                     }
@@ -116,13 +116,15 @@
                         {
                             echo '<br/>Archivo subido.<br/>';
 
-                            $img = imagecreatefromjpeg($dest_path);
-                            imagejpeg($img, $dest_path, 100);
-                            imagedestroy($img);
+                            $_SESSION['fulAdjunto'] =  $dest_path;
 
-                            echo '<br>INFORMACION EXIF<br>';
-                            $exif2 = exif_read_data($dest_path);
-                            echo '<br><br>';
+                            // $img = imagecreatefromjpeg($dest_path);
+                            // imagejpeg($img, $dest_path, 100);
+                            // imagedestroy($img);
+
+                            // echo '<br>INFORMACION EXIF<br>';
+                            // $exif2 = exif_read_data($dest_path);
+                            // echo '<br><br>';
                             
                             $usuario_origen =  $_SESSION['username'];     
                             $usuario_destino = $_POST['cmbDestino'];   
@@ -150,11 +152,14 @@
                 foreach($mensajes_recibidos as $key =>$value){
                     echo '<b> De ' . $value['Usuario_origen'] . ' : ' . '</b>' . $value['Texto'] . '<br>';
                     echo '<b> De ' . 'Fecha'. '</b>' . $value['FechaEnvio'] . '<br>' ;
-                    echo '<b>' . 'Link: '. '</b>'. $value['ArchivoAdjunto'] . '<br>';
-
-                    $registros=ConexionDB()->query("SELECT  `Foto` FROM `usuarios`WHERE Usuario='".$value['Usuario_origen']."'")->fetchAll(PDO::FETCH_OBJ); 
+                    // echo '<b>' . 'Link: '. '</b>'. $value['ArchivoAdjunto'] . '<br>';
+                    echo '<b>' . 'Archivo: '. '</b>'."<img src='" . $value['ArchivoAdjunto'] . "' style='width: 50px; height: 50px; border-radius: 50%;'>";
+                    echo '<br>';
+                    echo '<b>' . 'Descargar archivo: '. '</b>' . '<a href="'.$value['ArchivoAdjunto'].'" download>Descargar</a>';
+                    echo '<br>';
+                    $registros=ConexionDB()->query("SELECT  `foto` FROM `usuarios`WHERE Usuario='".$value['Usuario_origen']."'")->fetchAll(PDO::FETCH_OBJ); 
                     foreach($registros as $persona){
-                        echo '<b>' . 'Destinatario: '. '</b>' . '<img height=50" src="'.$persona->Foto.' ">.<br><br>';
+                        echo '<b>' . 'Foto del autor: '. '</b>' . '<img height=50" src="'.$persona->foto.' ">.<br><br>';
                     }
                 }
             }
@@ -167,11 +172,15 @@
                     $archivo = $value['ArchivoAdjunto'];
                     echo '<b> Para ' . $value['Usuario_destino'] . ' : ' . '</b>' . $value['Texto'] . '<br>';
                     echo '<b>' . 'Fecha: '. '</b>' . $value['FechaEnvio'] . '<br>' ;
-                    echo '<b>' . 'Link: '. '</b>'. $value['ArchivoAdjunto'] . '<br>';
-                    
-                    $registros=ConexionDB()->query("SELECT  `Foto` FROM `usuarios`WHERE Usuario='".$value['Usuario_destino']."'")->fetchAll(PDO::FETCH_OBJ); 
+                    // echo '<b>' . 'Link: '. '</b>'. $value['ArchivoAdjunto'] . '<br>';
+                    echo '<b>' . 'Archivo: '. '</b>'."<img src='" . $value['ArchivoAdjunto'] . "' style='width: 50px; height: 50px; border-radius: 50%;'>";
+                    echo '<br>';
+                    echo '<b>' . 'Descargar archivo: '. '</b>' . '<a href="'.$value['ArchivoAdjunto'].'" download>Descargar</a>';
+                    echo '<br>';
+                    $registros=ConexionDB()->query("SELECT  `foto` FROM `usuarios`WHERE Usuario='".$value['Usuario_destino']."'")->fetchAll(PDO::FETCH_OBJ); 
                     foreach($registros as $persona){
-                        echo '<b>' . 'Destinatario: '. '</b>' . '<img height=50" src="'.$persona->Foto.' ">.<br><br>';
+                        echo '<b>' . 'Foto del destinatario: '. '</b>' . '<img height=50" src="'.$persona->foto.' ">.<br><br>';
+                             
                     }
                 }
             }
