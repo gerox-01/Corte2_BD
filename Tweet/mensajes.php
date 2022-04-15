@@ -67,90 +67,107 @@ if (isset($_SESSION['username'])) {
         echo "<div class='force-overflow'>";
         $mensajes_recibidos = ListarMensajesRecibidos($CONN, $_SESSION['username']);
         foreach ($mensajes_recibidos as $key => $value) {
-            echo ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw;">';
-            echo '<b> De ' . $value['Usuario_origen'] . ' : ' . '</b>' . $value['Texto'] . '<br>';
-            echo '<b> De ' . 'Fecha' . '</b>' . $value['FechaEnvio'] . '<br>';
-            echo '<b>' . 'Archivo: ' . '</b>' . "<img src='" . $value['ArchivoAdjunto'] . "' style='width: 50px; height: 50px; border-radius: 50%;'>";
-            echo '<br>';
-            echo '<b>' . 'Descargar archivo: ' . '</b>' . '<a href="' . $value['ArchivoAdjunto'] . '" download>Descargar</a>';
-            echo '<br>';
+            echo ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw; display: flex; justify-content: center;">';
             $registros = ConexionDB()->query("SELECT  `foto` FROM `usuarios`WHERE Usuario='" . $value['Usuario_origen'] . "'")->fetchAll(PDO::FETCH_OBJ);
+            echo '<div style="padding-right: 40px;">';
+            echo '<p> ' . 'Nombre del autor: ' . $value['Usuario_origen'] . '</p>';
             foreach ($registros as $persona) {
                 echo '<b>' . 'Foto del autor: ' . '</b>' . '<img height=50" src="' . $persona->foto . ' ">.<br><br>';
             }
+            echo '<b>' . 'VIsta previa del Archivo: ' . '</b>' . "<img src='" . $value['ArchivoAdjunto'] . "' style='width: 50px; height: 50px; border-radius: 50%;'>";
+            echo '</div>';
+
+            echo '<div style="display: flex; flex-direction: column; align-items: space-between;">';
+            echo '<p style="padding: 5px; border: 1px solid #ccc; border-radius: 10%;"> ' . 'Mensaje: ' .  $value['Texto'] . '</p>';
+            echo '<b>' . 'Fecha de envio' . ': ' . '</b>' . $value['FechaEnvio'] . '<br>';
+
+            echo '<b>' . 'Descargar archivo: ' . '</b>' . '<a href="' . $value['ArchivoAdjunto'] . '" download>Descargar</a>';
+            echo '</div>';
             echo '</div>';
         }
 
         echo "</div>";
         echo "</div>";
-    }else if (isset($_POST['msenviados'])) {
+    } else if (isset($_POST['msenviados'])) {
         echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow-x: hidden;" id="style-5">';
         echo "<div class='force-overflow'>";
         $mensajes_enviados = ListarMensajesEnviados($CONN, $_SESSION['username']);
         foreach ($mensajes_enviados as $key => $value) {
-            $archivo = $value['ArchivoAdjunto'];
-            echo ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw;">';
-            echo '<b> Para ' . $value['Usuario_destino'] . ' : ' . '</b>' . $value['Texto'] . '<br>';
-            echo '<b>' . 'Fecha: ' . '</b>' . $value['FechaEnvio'] . '<br>';
-            echo '<b>' . 'Archivo: ' . '</b>' . "<img src='" . $value['ArchivoAdjunto'] . "' style='width: 50px; height: 50px; border-radius: 50%;'>";
-            echo '<br>';
-            echo '<b>' . 'Descargar archivo: ' . '</b>' . '<a href="' . $value['ArchivoAdjunto'] . '" download>Descargar</a>';
-            echo '<br>';
+            echo ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw; display: flex; justify-content: center;">';
             $registros = ConexionDB()->query("SELECT  `foto` FROM `usuarios`WHERE Usuario='" . $value['Usuario_destino'] . "'")->fetchAll(PDO::FETCH_OBJ);
+            echo '<div style="padding-right: 40px;">';
+            echo '<p> ' . 'Nombre del autor: ' . $value['Usuario_destino'] . '</p>';
             foreach ($registros as $persona) {
-                echo '<b>' . 'Foto del destinatario: ' . '</b>' . '<img height=50" src="' . $persona->foto . ' ">.<br><br>';
+                echo '<b>' . 'Foto del autor: ' . '</b>' . '<img height=50" src="' . $persona->foto . ' ">.<br><br>';
             }
+            echo '<b>' . 'VIsta previa del Archivo: ' . '</b>' . "<img src='" . $value['ArchivoAdjunto'] . "' style='width: 50px; height: 50px; border-radius: 50%;'>";
+            echo '</div>';
+
+            echo '<div style="display: flex; flex-direction: column; align-items: space-between;">';
+            echo '<p style="padding: 5px; border: 1px solid #ccc; border-radius: 10%;"> ' . 'Mensaje: ' .  $value['Texto'] . '</p>';
+            echo '<b>' . 'Fecha de envio' . ': ' . '</b>' . $value['FechaEnvio'] . '<br>';
+
+            echo '<b>' . 'Descargar archivo: ' . '</b>' . '<a href="' . $value['ArchivoAdjunto'] . '" download>Descargar</a>';
+            echo '</div>';
             echo '</div>';
         }
-
         echo "</div>";
         echo "</div>";
     } else if (isset($_POST['crearmensaje'])) {
         echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow-x: hidden;" id="style-5">';
-        echo "<div class='force-overflow'>";
+        echo "<div class='force-overflow' style='display: flex; justify-content: center;'>";
     ?>
-        <form method="post" enctype="multipart/form-data">
-            <b> Enviar Mensajes </b><br>
-            <label form="cmbDestino">Destinatario: </label>
-            <select name="cmbDestino" id="cmbDestino">
-                <?php
-                $usuarios = ListarUsuarios($CONN, $_SESSION['username']);
+        <form method="post" enctype="multipart/form-data" display="display:flex; justify-content: center; height: 100%; width: 100%; align-items: center;">
+            <div style="display: flex;">
+                <label form="cmbDestino">Destinatario: </label>
+                <select name="cmbDestino" id="cmbDestino">
+                    <?php
+                    $usuarios = ListarUsuarios($CONN, $_SESSION['username']);
 
-                foreach ($usuarios as $key => $value) {
-                    echo '<option value="' . $value['usuario'] . '">' .
-                        $value['nombres'] . ' ' . $value['apellidos'] . '</option>';
-                }
-                ?>
-            </select>
-            <br><br>
-            <label for="txtMensaje"> Mensaje: </label>
-            <input type="text" name="txtMensaje" id="txtMensaje"><br><br>
+                    foreach ($usuarios as $key => $value) {
+                        echo '<option value="' . $value['usuario'] . '">' .
+                            $value['nombres'] . ' ' . $value['apellidos'] . '</option>';
+                    }
+                    ?>
+                </select>
+            </div>
+            <div style="display: flex;">
+                <label for="txtMensaje"> Mensaje: </label>
+                <input type="text" name="txtMensaje" style="width: 300px; height: 150px;" id="txtMensaje" />
+            </div>
 
-            <label for="fulAdjunto">Archivo:</label>
-            <input type="file" name="fulAdjunto" id="fulAdjunto"><br><br>
+            <div style="display:flex;">
+                <label>Archivo:</label>
+                <input type="file" name="fulAdjunto" id="fulAdjunto">
+            </div>
             <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
-            <input type="submit" name="btnEnviar" value="Enviar" class="btn btn-primary"><br><br>
+            <input type="submit" name="btnEnviar" value="Enviar" class="btn btn-primary">
 
         </form>
     <?php
         echo '</div>';
         echo "</div>";
-    } else{
+    } else {
         echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow-x: hidden;" id="style-5">';
         echo "<div class='force-overflow'>";
         $mensajes_recibidos = ListarMensajesRecibidos($CONN, $_SESSION['username']);
         foreach ($mensajes_recibidos as $key => $value) {
-            echo ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw;">';
-            echo '<b> De ' . $value['Usuario_origen'] . ' : ' . '</b>' . $value['Texto'] . '<br>';
-            echo '<b> De ' . 'Fecha' . '</b>' . $value['FechaEnvio'] . '<br>';
-            echo '<b>' . 'Archivo: ' . '</b>' . "<img src='" . $value['ArchivoAdjunto'] . "' style='width: 50px; height: 50px; border-radius: 50%;'>";
-            echo '<br>';
-            echo '<b>' . 'Descargar archivo: ' . '</b>' . '<a href="' . $value['ArchivoAdjunto'] . '" download>Descargar</a>';
-            echo '<br>';
+            echo ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw; display: flex; justify-content: center;">';
             $registros = ConexionDB()->query("SELECT  `foto` FROM `usuarios`WHERE Usuario='" . $value['Usuario_origen'] . "'")->fetchAll(PDO::FETCH_OBJ);
+            echo '<div style="padding-right: 40px;">';
+            echo '<p> ' . 'Nombre del autor: ' . $value['Usuario_origen'] . '</p>';
             foreach ($registros as $persona) {
                 echo '<b>' . 'Foto del autor: ' . '</b>' . '<img height=50" src="' . $persona->foto . ' ">.<br><br>';
             }
+            echo '<b>' . 'VIsta previa del Archivo: ' . '</b>' . "<img src='" . $value['ArchivoAdjunto'] . "' style='width: 50px; height: 50px; border-radius: 50%;'>";
+            echo '</div>';
+
+            echo '<div style="display: flex; flex-direction: column; align-items: space-between;">';
+            echo '<p style="padding: 5px; border: 1px solid #ccc; border-radius: 10%;"> ' . 'Mensaje: ' .  $value['Texto'] . '</p>';
+            echo '<b>' . 'Fecha de envio' . ': ' . '</b>' . $value['FechaEnvio'] . '<br>';
+
+            echo '<b>' . 'Descargar archivo: ' . '</b>' . '<a href="' . $value['ArchivoAdjunto'] . '" download>Descargar</a>';
+            echo '</div>';
             echo '</div>';
         }
 
