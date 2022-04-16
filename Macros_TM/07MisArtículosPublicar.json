@@ -1,0 +1,50 @@
+{
+  "Name": "07MisArtículosPublicar",
+  "CreationDate": "2022-4-16",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/LineaII/Corte2_BD/Tweet/index.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=misarticulos",
+      "Value": "",
+      "Targets": [
+        "name=misarticulos",
+        "xpath=/html/body/div/form/input[2]",
+        "xpath=//input[@name='misarticulos']",
+        "xpath=//input[2]",
+        "css=body > div:nth-child(7) > form > input:nth-child(2)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "name=publicar",
+      "Value": "",
+      "Targets": [
+        "name=publicar",
+        "xpath=//*[@id=\"style-5\"]/div/form/div/div[2]/div[2]/input",
+        "xpath=//input[@name='publicar']",
+        "xpath=//div[2]/div[2]/input",
+        "css=#style-5 > div:nth-child(1) > form > div > div:nth-child(2) > div:nth-child(4) > input:nth-child(1)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "pause",
+      "Target": "2000",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "XType",
+      "Target": "${KEY_SPACE}",
+      "Value": "",
+      "Description": ""
+    }
+  ]
+}

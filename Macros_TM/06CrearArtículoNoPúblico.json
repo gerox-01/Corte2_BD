@@ -1,0 +1,139 @@
+{
+  "Name": "06CrearArtículoNoPúblico",
+  "CreationDate": "2022-4-16",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/LineaII/Corte2_BD/Tweet/index.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=creararticulo",
+      "Value": "",
+      "Targets": [
+        "name=creararticulo",
+        "xpath=/html/body/div/form/input[3]",
+        "xpath=//input[@name='creararticulo']",
+        "xpath=//input[3]",
+        "css=body > div:nth-child(7) > form > input:nth-child(3)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=tweet",
+      "Value": "",
+      "Targets": [
+        "id=tweet",
+        "name=tweet",
+        "xpath=//*[@id=\"tweet\"]",
+        "xpath=//textarea[@id='tweet']",
+        "xpath=//textarea",
+        "css=#tweet"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=tweet",
+      "Value": "Este es un tweet o artículo no público",
+      "Targets": [
+        "id=tweet",
+        "name=tweet",
+        "xpath=//*[@id=\"tweet\"]",
+        "xpath=//textarea[@id='tweet']",
+        "xpath=//textarea",
+        "css=#tweet"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=checkbox",
+      "Value": "on",
+      "Targets": [
+        "id=checkbox",
+        "name=checkbox",
+        "xpath=//*[@id=\"checkbox\"]",
+        "xpath=//input[@id='checkbox']",
+        "xpath=//div/input",
+        "css=#checkbox"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=checkbox",
+      "Value": "",
+      "Targets": [
+        "id=checkbox",
+        "name=checkbox",
+        "xpath=//*[@id=\"checkbox\"]",
+        "xpath=//input[@id='checkbox']",
+        "xpath=//div/input",
+        "css=#checkbox"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=checkbox",
+      "Value": "on",
+      "Targets": [
+        "id=checkbox",
+        "name=checkbox",
+        "xpath=//*[@id=\"checkbox\"]",
+        "xpath=//input[@id='checkbox']",
+        "xpath=//div/input",
+        "css=#checkbox"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "xpath=/html/body/form/div/div[2]/div",
+      "Value": "",
+      "Targets": [
+        "xpath=/html/body/form/div/div[2]/div",
+        "xpath=//div[2]/div",
+        "css=body > form > div > div:nth-child(4) > div"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=checkbox",
+      "Value": "",
+      "Targets": [
+        "id=checkbox",
+        "name=checkbox",
+        "xpath=//*[@id=\"checkbox\"]",
+        "xpath=//input[@id='checkbox']",
+        "xpath=//div/input",
+        "css=#checkbox"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "name=crearTweet",
+      "Value": "",
+      "Targets": [
+        "name=crearTweet",
+        "xpath=/html/body/form/div/div[2]/input",
+        "xpath=//input[@name='crearTweet']",
+        "xpath=//div[2]/input",
+        "css=body > form > div > div:nth-child(4) > input"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "XType",
+      "Target": "${KEY_SPACE}",
+      "Value": "",
+      "Description": ""
+    }
+  ]
+}
