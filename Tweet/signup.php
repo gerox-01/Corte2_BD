@@ -152,17 +152,17 @@
             <!-- Nombre -->
             <div>
                 <label for="name">Nombre:</label>
-                <input class="r-options" type="text" name="name" id="name" required="required" pattern= "(/^[a-z ,.'-]+{3,30}$/i)"   title="Escriba el nombre">
+                <input class="r-options" type="text" name="name" id="name" required="required" pattern="(/^[a-z ,.'-]+{3,30}$/i)" maxlength=20 title="Escriba el nombre">
             </div>
             <!-- Apellido -->
             <div>
                 <label for="lastname">Apellido:</label>
-                <input class="r-options" type="text" name="lastname" id="lastname" required="required" pattern="(/^[a-z ,.'-]+{3,30}$/i)" title="Escriba apellidos">
+                <input class="r-options" type="text" name="lastname" id="lastname" required="required" pattern="(/^[a-z ,.'-]+{3,30}$/i)" maxlength=20 title="Escriba apellidos">
             </div>
             <!-- Correo -->
             <div>
                 <label for="correo">Correo:</label>
-                <input class="r-options" type="email" name="email" id="email" required="required">
+                <input class="r-options" type="email" name="email" id="email" required="required" pattern="([a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4})" maxlength=20>
             </div>
             <!-- Tipo de documento -->
             <div style='display: flex; flex-direction: column;'>
@@ -178,17 +178,17 @@
                     ?>
                 </select>
             </div>
-                <!-- Numero de documento -->
-                <div>
+            <!-- Numero de documento -->
+            <div>
                 <label for="num">Numero de Documento:</label>
-                <input class="r-options" type="text" name="num_doc" id="num_doc" required="required" pattern="(^[0-9]{8,10}$)" title="Escriba el numero de documento">
+                <input class="r-options" type="text" name="num_doc" id="num_doc" required="required" pattern="(^[0-9]{8,10}$)" maxlength=10 title="Escriba el numero de documento">
             </div>
         </div>
         <div style='display:flex; align-items: center; justify-content: start;'>
             <!-- Direccion -->
             <div>
                 <label for="direccion">Dirección:</label>
-                <input class="r-options" type="text" name="direccion" id="direccion" required="required" pattern="(^[#.0-9a-zA-Z\s,-]+$)" title="Escriba la dirección">
+                <input class="r-options" type="text" name="direccion" id="direccion" required="required" pattern="(^[#.0-9a-zA-Z\s,-]+$)" maxlength=30 title="Escriba la dirección correctamente">
             </div>
             <!-- Numero de hijos -->
             <div style='display: flex; flex-direction: column;'>
@@ -238,17 +238,17 @@
             <!-- usuario -->
             <div>
                 <label for="username">Usuario:</label>
-                <input class="r-options" type="text" name="username" id="username" required="required" pattern="^[a-z0-9_-]{3,16}$" title="Escriba usuario sin espacios y tildes, mas de 3 y menos de 13  caracteres">
+                <input class="r-options" type="text" name="username" id="username" required="required" pattern="^[a-z0-9_-]{3,16}$" maxlength=16 title="Escriba usuario sin espacios y tildes, mas de 3 y menos de 13  caracteres">
             </div>
             <!-- Contraseña -->
             <div>
                 <label for="password">Contraseña:</label>
-                <input class="r-options" type="password" name="password" id="password" required="required" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
+                <input class="r-options" type="password" name="password" id="password" required="required" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" maxlength=20 title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
             </div>
             <!-- Confirmar contraseña -->
             <div>
                 <label for="confirmpassword">Confirmar contraseña:</label>
-                <input class="r-options" type="password" name="confirmpassword" id="confirmpassword" required="required" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
+                <input class="r-options" type="password" name="confirmpassword" id="confirmpassword" required="required" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" maxlength=20 title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
             </div>
         </div>
         <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
@@ -291,7 +291,7 @@
                         $img = imagecreatefromgif($fileDestination);
                         imagejpeg($img, $fileDestination);
                         imagedestroy($img);
-                    } 
+                    }
                 } else {
                     echo '<script>alert("Error. Imagen no subida")</script>';
                 }
@@ -302,54 +302,70 @@
 
 
     #region GuardarDatos
+
     if (isset($_POST['name'])) {
-        $_SESSION['username'] =  $_POST['username'];
-        $_SESSION['password'] =  $_POST['password'];
-        $_SESSION['confirmpassword'] =  $_POST['confirmpassword'];
-        $_SESSION['name'] = $_POST['name'];
-        $_SESSION['lastname'] =  $_POST['lastname'];
-        $_SESSION['fecha_nac'] =  $_POST['fecha_nac'];
-        $_SESSION['color'] =  $_POST['color'];
-        $_SESSION['email'] =  $_POST['email'];
-        $_SESSION['tipDoc'] =  $_POST['tipDoc'];
-        $_SESSION['num_doc'] =  $_POST['num_doc'];
-        $_SESSION['numhijos'] =  $_POST['numhijos'];
-        $_SESSION['direccion'] =  $_POST['direccion'];
-        $_SESSION['estCivil'] =  $_POST['estCivil'];
+        if (
+            preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['password']) &&
+            preg_match("/^[a-z0-9_-]{3,16}$/", $_POST['username']) &&
+            preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['confirmpassword']) &&
+            preg_match("/^[a-zA-Z\s]+$/", $_POST['name']) &&
+            preg_match("/^[a-zA-Z\s]+$/", $_POST['lastname']) &&
+            preg_match("/^[0-9]{8,10}$/", $_POST['num_doc']) &&
+            preg_match("/^[#.0-9a-zA-Z\s,-]+$/", $_POST['direccion']) &&
+            preg_match("/^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4}$/", $_POST['email'])
+        ) {
 
 
-        if ($_POST['password'] == $_POST['confirmpassword']) {
-            loadImage();
-            if ($CONN !== null) {
-                $insertuser = RegistrarUsuarioDB(
-                    $CONN,
-                    $_SESSION['username'],
-                    $_SESSION['password'],
-                    $_SESSION['name'],
-                    $_SESSION['lastname'],
-                    $_SESSION['fecha_nac'],
-                    $_SESSION['color'],
-                    $_SESSION['email'],
-                    $_SESSION['tipDoc'],
-                    $_SESSION['num_doc'],
-                    $_SESSION['numhijos'],
-                    $_SESSION['archivo'],
-                    $_SESSION['direccion'],
-                    $_SESSION['estCivil']
+            $_SESSION['username'] =  $_POST['username'];
+            $_SESSION['password'] =  $_POST['password'];
+            $_SESSION['confirmpassword'] =  $_POST['confirmpassword'];
+            $_SESSION['name'] = $_POST['name'];
+            $_SESSION['lastname'] =  $_POST['lastname'];
+            $_SESSION['fecha_nac'] =  $_POST['fecha_nac'];
+            $_SESSION['color'] =  $_POST['color'];
+            $_SESSION['email'] =  $_POST['email'];
+            $_SESSION['tipDoc'] =  $_POST['tipDoc'];
+            $_SESSION['num_doc'] =  $_POST['num_doc'];
+            $_SESSION['numhijos'] =  $_POST['numhijos'];
+            $_SESSION['direccion'] =  $_POST['direccion'];
+            $_SESSION['estCivil'] =  $_POST['estCivil'];
 
-                );
-                session_destroy();
-                if ($insertuser) {
-                    echo '<script>alert("Usuario Registrado")</script>';
-                    echo '<script>window.location.href="login.php"; </script>';
-                } else {
-                    echo '<script>alert("Error. credenciales incorrectas")</script>';
-                    echo '<script>window.location.href="signup.php"; </script>';
+
+            if ($_POST['password'] == $_POST['confirmpassword']) {
+                loadImage();
+                if ($CONN !== null) {
+                    $insertuser = RegistrarUsuarioDB(
+                        $CONN,
+                        $_SESSION['username'],
+                        $_SESSION['password'],
+                        $_SESSION['name'],
+                        $_SESSION['lastname'],
+                        $_SESSION['fecha_nac'],
+                        $_SESSION['color'],
+                        $_SESSION['email'],
+                        $_SESSION['tipDoc'],
+                        $_SESSION['num_doc'],
+                        $_SESSION['numhijos'],
+                        $_SESSION['archivo'],
+                        $_SESSION['direccion'],
+                        $_SESSION['estCivil']
+
+                    );
+                    session_destroy();
+                    if ($insertuser) {
+                        echo '<script>alert("Usuario Registrado")</script>';
+                        echo '<script>window.location.href="login.php"; </script>';
+                    } else {
+                        echo '<script>alert("Error. credenciales incorrectas")</script>';
+                        echo '<script>window.location.href="signup.php"; </script>';
+                    }
                 }
+            } else {
+                echo "<p style='color:red;'>Las contraseñas no coinciden</p>";
+                echo '<script>window.location.href="login.php";</script>';
             }
         } else {
-            echo "<p style='color:red;'>Las contraseñas no coinciden</p>";
-            echo '<script>window.location.href="login.php";</script>';
+            echo "<p>No coinciden con formato solicitado</p>";
         }
     }
     ?>
@@ -362,7 +378,6 @@
             <p>| Alejandro Monroy</p>
         </div>
     </footer>
-    x
 
 </body>
 

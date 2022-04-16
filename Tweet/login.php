@@ -21,11 +21,12 @@
     GenerarAnctiCSRF();
 
     $CONN = ConexionDB();
+    
 
     #region CodigoRevisar
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-      
+
 
         if (empty($_POST["username"])) {
             $usernameErr = "username is required";
@@ -46,39 +47,48 @@
         return $data;
     }
     #endregion
-    
+
     ?>
 
     <div class="formulario">
         <form method="post" action="">
             <div>
                 <label for="username">Usuario: </label>
-                <input type="text" name="username" id="username" required="required" placeholder="Digite usuario" pattern="^[a-z0-9_-]{3,16}$" title="Escriba usuario sin espacios y tildes, mas de 3 y menos de 13  caracteres">
+                <input type="text" name="username" id="username" required="required" placeholder="Digite usuario" pattern="^[a-z0-9_-]{3,16}$" maxlength=16 title="Escriba usuario sin espacios y tildes, mas de 3 y menos de 13  caracteres">
             </div>
             <div>
                 <label for="password">Contraseña:</label>
-                <input type="password" name="password" id="password" required="required" placeholder="Digite contraseña" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
+                <input type="password" name="password" id="password" required="required" placeholder="Digite contraseña" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" maxlength=20 title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
             </div>
-            <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf'];?>">
+            <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
             <button name="send" value="send">Enviar</button>
         </form>
 
 
         <?php
         #region Validar Inicio de Sesión
+       
         if (isset($_POST['username']) && isset($_POST['password'])) {
-            if($CONN != NULL){
+            if ($CONN != NULL) {
                 $vlogin = ValidarLoginDB($CONN, $_POST['username'], $_POST['password']);
-                if($vlogin){
-                    $_SESSION['username'] = $_POST['username'];
-                    $_SESSION['password'] = $_POST['password'];
-                    header("Location: index.php");
-                }else{
-                    echo "<p>Usuario y clave incorrectos</p>";
+                if (preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['password'])&& 
+                    preg_match("/^[a-z0-9_-]{3,16}$/", $_POST['username'])) {
+                    if ($vlogin) {
+                        $_SESSION['username'] = $_POST['username'];
+                        $_SESSION['password'] = $_POST['password'];
+                        header("Location: index.php");
+                    } else {
+                        echo "<p>Usuario o clave incorrectos</p>";
+                    }
+                } else {
+                    echo "<p>No coinciden con formato solicitado</p>";
                 }
             }
-            LimpiarEntradas();      
+            LimpiarEntradas();
         }
+
+       
+
         #endregion
         ?>
 
