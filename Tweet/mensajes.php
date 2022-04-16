@@ -222,6 +222,8 @@ if (isset($_SESSION['username'])) {
                 } else {
                     echo '<br/>Archivo no se almaceno.<br/>';
                 }
+            } else {
+                echo '<br/>Archivo no permitido.<br/>';
             }
         }
     }
