@@ -9,7 +9,7 @@
 function ConexionDB()
 {
     $servername = "localhost";
-    $database = "corte2bd";
+    $database = "tm";
     $username = "root";
     $password = "";
 
