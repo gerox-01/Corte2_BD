@@ -18,10 +18,13 @@
     require_once('./nav.php');
 
     LimpiarEntradas();
+    require_once "funcionesCSRF.php";
+    GenerarAnctiCSRF();
+
 
     $user = $_SESSION['username'] ?? '';
 
-    if($user == '' || $user == null){
+    if ($user == '' || $user == null) {
         header('Location: login.php');
         die();
     }
@@ -33,12 +36,12 @@
             <!-- Nombre -->
             <div>
                 <label for="name">Nombre:</label>
-                <input class="r-options" type="text" name="name" id="name" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba el nombre" value="<?php echo $_SESSION['nombre']; ?>">
+                <input class="r-options" type="text" name="name" id="name" required="required" pattern="(/^[a-z ,.'-]+{3,30}$/i)" title="Escriba el nombre" value="<?php echo $_SESSION['nombre']; ?>">
             </div>
             <!-- Apellido -->
             <div>
                 <label for="lastname">Apellido:</label>
-                <input class="r-options" type="text" name="lastname" id="lastname" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba apellidos" value="<?php echo $_SESSION['apellido']; ?>">
+                <input class="r-options" type="text" name="lastname" id="lastname" required="required" pattern="(/^[a-z ,.'-]+{3,30}$/i)" title="Escriba apellidos" value="<?php echo $_SESSION['apellido']; ?>">
             </div>
             <!-- Correo -->
             <div>
@@ -64,12 +67,12 @@
             <!-- Numero de documento -->
             <div>
                 <label for="num">Numero de Documento:</label>
-                <input class="r-options" type="text" name="num_doc" id="num_doc" required="required" pattern="([0-9]+)" value="<?php echo $_SESSION['numdoc']; ?>" title="Escriba el numero de documento">
+                <input class="r-options" type="text" name="num_doc" id="num_doc" required="required" pattern="(^[0-9]{8,10}$)" value="<?php echo $_SESSION['numdoc']; ?>" title="Escriba el numero de documento">
             </div>
             <!-- Direccion -->
             <div>
                 <label for="direccion">Dirección:</label>
-                <input class="r-options" type="text" name="direccion" id="direccion" required="required" pattern="([A-Za-z0-9\. -]+)" value="<?php echo $_SESSION['direccion']; ?>" title="Escriba la dirección">
+                <input class="r-options" type="text" name="direccion" id="direccion" required="required" pattern="(^[#.0-9a-zA-Z\s,-]+$)" value="<?php echo $_SESSION['direccion']; ?>" title="Escriba la dirección">
             </div>
             <!-- Numero de hijos -->
             <div style='display: flex; flex-direction: column;'>
@@ -121,6 +124,7 @@
             </div>
         </div>
         <div style="display: flex; justify-content: space-between; width: 30vw;">
+            <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
             <input type="submit" name="actualizar" value="Actualizar" class='button-r'>
             <input type="submit" name="cambiarClave" value="Cambiar clave" class='button-r'>
         </div>
@@ -142,15 +146,34 @@
                 $fileExt = explode('.', $archivo);
                 $fileActualExt = strtolower(end($fileExt));
 
-                if (!((strpos($tipo, "gif") || strpos($tipo, "jpeg") || strpos($tipo, "jpg") || strpos($tipo, "png")) && ($tamano < 2000000))) {
+                if (!((strpos($tipo, "gif") || strpos($tipo, "jpeg") || strpos($tipo, "jpg") || strpos($tipo, "png")) && ($tamano < 8000000))) {
                     echo '<script>alert("Error. La extensión o el tamaño de los archivos no es correcta")</script>';
                 } else {
                     //Imagen concuerda, Entra
                     $fileNameNew = uniqid('', true) . "." . $fileActualExt;
                     $fileDestination = '../uploaded_files/' . $fileNameNew;
+
                     if (move_uploaded_file($temp, $fileDestination)) {
                         //Permisos
                         $_SESSION['foto'] =  $fileDestination;
+                        //remove exif data
+                        if ($fileActualExt == "jpg" || $fileActualExt == "jpeg") {
+                            $img = imagecreatefromjpeg($fileDestination);
+                            imagejpeg($img, $fileDestination, 100);
+                            imagedestroy($img);
+                        } else if ($fileActualExt == "png") {
+                            $img = imagecreatefrompng($fileDestination);
+                            imagejpeg($img, $fileDestination);
+                            imagedestroy($img);
+                        } else if ($fileActualExt == "gif") {
+                            $img = imagecreatefromgif($fileDestination);
+                            imagejpeg($img, $fileDestination);
+                            imagedestroy($img);
+                        } 
+                        // $image = imagecreatefromjpeg($fileDestination);
+                        // imagejpeg($image, $fileDestination, 100);
+                        // imagedestroy($image);
+
                         // echo '<script>alert("Usuario Registrado")</script>';
                         // echo '<script>window.location.href="index.php"; </script>';
                     } else {
@@ -185,7 +208,7 @@
         }
     }
 
-    if(isset($_POST['cambiarClave'])){
+    if (isset($_POST['cambiarClave'])) {
         echo '<script>window.location.href="cambioClave.php"; </script>';
     }
     ?>

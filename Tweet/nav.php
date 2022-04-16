@@ -17,6 +17,8 @@
     require_once './lib/db_tools.php';
 
     IniciarSesionSegura();
+    require_once "funcionesCSRF.php";
+    GenerarAnctiCSRF();
 
     $CONN = ConexionDB();
     $usuario = $_SESSION['username'] ?? '';
@@ -50,9 +52,11 @@
                         <div style='display: flex; align-items: start;'>
                                 <p style='font-weight: bold; text-transform: uppercase;'>" . $_SESSION['nombre'] . '  ' . $_SESSION['apellido'] . "</p>
                             <form method='post' style='margin-top: 0 !important;' >
+                            
                                 <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='🔓 Cerrar sesión' name='exit' id='exit'>
                             </form>
                         </div>";
+                        
                 } else {
                     echo "
                     <div>
@@ -68,7 +72,7 @@
                     header("Location: index.php");
                 }
                 ?>
-
+            <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
             </div>
             <!-- Datos Usuario -->
             <div style="display: flex; justify-content: space-around; width: 90vw; padding: 0 !important; margin: 0 !important;">

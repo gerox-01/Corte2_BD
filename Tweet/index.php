@@ -10,7 +10,8 @@
 
 header('Content-Type: text/html; charset=UTF-8');
 require_once('./nav.php');
-
+require_once "funcionesCSRF.php";
+GenerarAnctiCSRF();
 
 if (isset($_SESSION['username'])) {
     $user = $_SESSION['username'];

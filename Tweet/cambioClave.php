@@ -16,10 +16,13 @@
     <?php
     require_once('././nav.php');
     require_once('./../Tweet/lib/db_tools.php');
+    LimpiarEntradas();
+    require_once "funcionesCSRF.php";
+    GenerarAnctiCSRF();
 
     $user = $_SESSION['username'] ?? '';
 
-    if($user == '' || $user == null){
+    if ($user == '' || $user == null) {
         header('Location: login.php');
         die();
     }
@@ -44,6 +47,7 @@
                 <input type="password" name="confirmpassword" required="required" id="confirmpassword" placeholder="Confirmar contraseña" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
             </div>
             <div>
+                <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
                 <input type="submit" class='button-r' name="cambiarClave" value="Actualizar contraseña">
             </div>
     </form>

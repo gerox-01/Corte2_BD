@@ -18,6 +18,8 @@
     require_once "./lib/db_tools.php";
     require_once './nav.php';
     LimpiarEntradas();
+    require_once "funcionesCSRF.php";
+    GenerarAnctiCSRF();
 
 
     // $user = $_SESSION['username'] ?? '';
@@ -27,7 +29,7 @@
     //     die();
     // }
 
-    
+
     $CONN = ConexionDB();
     ?>
 
@@ -150,12 +152,12 @@
             <!-- Nombre -->
             <div>
                 <label for="name">Nombre:</label>
-                <input class="r-options" type="text" name="name" id="name" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba el nombre">
+                <input class="r-options" type="text" name="name" id="name" required="required" pattern= "(/^[a-z ,.'-]+{3,30}$/i)"   title="Escriba el nombre">
             </div>
             <!-- Apellido -->
             <div>
                 <label for="lastname">Apellido:</label>
-                <input class="r-options" type="text" name="lastname" id="lastname" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba apellidos">
+                <input class="r-options" type="text" name="lastname" id="lastname" required="required" pattern="(/^[a-z ,.'-]+{3,30}$/i)" title="Escriba apellidos">
             </div>
             <!-- Correo -->
             <div>
@@ -176,17 +178,17 @@
                     ?>
                 </select>
             </div>
-            <!-- Numero de documento -->
-            <div>
+                <!-- Numero de documento -->
+                <div>
                 <label for="num">Numero de Documento:</label>
-                <input class="r-options" type="text" name="num_doc" id="num_doc" required="required" pattern="([0-9]+)" title="Escriba el numero de documento">
+                <input class="r-options" type="text" name="num_doc" id="num_doc" required="required" pattern="(^[0-9]{8,10}$)" title="Escriba el numero de documento">
             </div>
         </div>
         <div style='display:flex; align-items: center; justify-content: start;'>
             <!-- Direccion -->
             <div>
                 <label for="direccion">Dirección:</label>
-                <input class="r-options" type="text" name="direccion" id="direccion" required="required" pattern="([A-Za-z0-9\. -]+)" title="Escriba la dirección">
+                <input class="r-options" type="text" name="direccion" id="direccion" required="required" pattern="(^[#.0-9a-zA-Z\s,-]+$)" title="Escriba la dirección">
             </div>
             <!-- Numero de hijos -->
             <div style='display: flex; flex-direction: column;'>
@@ -210,7 +212,7 @@
                     $estadocivil = SeleccionarEstadoCivilDB($CONN);
                     foreach ($estadocivil as $opciones) {
                     ?>
-                        <option value="<?php echo $opciones['id_est_civil'] ?>"  required="required"><?php echo $opciones['est_civil'] ?></option>
+                        <option value="<?php echo $opciones['id_est_civil'] ?>" required="required"><?php echo $opciones['est_civil'] ?></option>
                     <?php
                     }
                     ?>
@@ -219,12 +221,12 @@
             <!-- Color favorito del usuario -->
             <div>
                 <label for='color'>Color favorito:</label>
-                <input class="r-options" type='color' name='color' id='color' required='required'>
+                <input class="r-options" type='color' name='color' style="height: 40px;" id='color' required='required'>
             </div>
             <!-- Foto -->
             <div style='display: flex; flex-direction: column;'>
                 <label for="archivo">Foto:</label>
-                <input type="file" name="archivo" id="archivo" accept="image/*"  required="required" /><br><br>
+                <input type="file" name="archivo" id="archivo" accept="image/*" required="required" /><br><br>
             </div>
         </div>
         <div style='display:flex; align-items: center; justify-content: start;'>
@@ -249,6 +251,7 @@
                 <input class="r-options" type="password" name="confirmpassword" id="confirmpassword" required="required" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
             </div>
         </div>
+        <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
         <input type="submit" name="btnRegistrar" value="Registrarse" class='button-r'>
     </form>
 
@@ -266,7 +269,7 @@
             $fileExt = explode('.', $archivo);
             $fileActualExt = strtolower(end($fileExt));
 
-            if (!((strpos($tipo, "gif") || strpos($tipo, "jpeg") || strpos($tipo, "jpg") || strpos($tipo, "png")) && ($tamano < 2000000))) {
+            if (!((strpos($tipo, "gif") || strpos($tipo, "jpeg") || strpos($tipo, "jpg") || strpos($tipo, "png")) && ($tamano < 8000000))) {
                 echo '<script>alert("Error. La extensión o el tamaño de los archivos no es correcta")</script>';
             } else {
                 //Imagen concuerda, Entra
@@ -275,6 +278,20 @@
                 if (move_uploaded_file($temp, $fileDestination)) {
                     //Permisos
                     $_SESSION['archivo'] =  $fileDestination;
+                    //remove exif data
+                    if ($fileActualExt == "jpg" || $fileActualExt == "jpeg") {
+                        $img = imagecreatefromjpeg($fileDestination);
+                        imagejpeg($img, $fileDestination, 100);
+                        imagedestroy($img);
+                    } else if ($fileActualExt == "png") {
+                        $img = imagecreatefrompng($fileDestination);
+                        imagejpeg($img, $fileDestination);
+                        imagedestroy($img);
+                    } else if ($fileActualExt == "gif") {
+                        $img = imagecreatefromgif($fileDestination);
+                        imagejpeg($img, $fileDestination);
+                        imagedestroy($img);
+                    } 
                 } else {
                     echo '<script>alert("Error. Imagen no subida")</script>';
                 }
@@ -312,7 +329,7 @@
                     $_SESSION['lastname'],
                     $_SESSION['fecha_nac'],
                     $_SESSION['color'],
-                    $_SESSION['email'], 
+                    $_SESSION['email'],
                     $_SESSION['tipDoc'],
                     $_SESSION['num_doc'],
                     $_SESSION['numhijos'],

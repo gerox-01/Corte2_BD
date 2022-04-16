@@ -17,7 +17,8 @@
     require_once './nav.php';
     require_once './lib/tools.php';
     require_once './lib/db_tools.php';
-
+    require_once "funcionesCSRF.php";
+    GenerarAnctiCSRF();
 
     $user = $_SESSION['username'] ?? '';
 
@@ -64,6 +65,7 @@
                     <span class="text" style="padding-right: 30px;">Es público: </span>
                     <input type="checkbox" name="checkbox" id="checkbox" style="width: 20px; height: 20px; cursor: pointer;">
                 </div>
+                <input type='hidden' name='anticsrf' value=".$_SESSION['anticsrf'].">
                 <input type="submit" name="crearTweet" style="color: white; background-color: purple; width: 10rem; cursor: pointer;" value="Crear">
             </div>
         </div>

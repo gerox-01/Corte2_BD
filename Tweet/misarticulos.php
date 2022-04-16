@@ -16,6 +16,8 @@
     require_once './nav.php';
     require_once('./lib/tools.php');
     require_once './lib/db_tools.php';
+    require_once "funcionesCSRF.php";
+    GenerarAnctiCSRF();   
 
     $user = $_SESSION['username'] ?? '';
 
@@ -31,6 +33,7 @@
     echo '<input type="submit" name="todosarticulos" value="Todos los artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
     echo '<input type="submit" name="misarticulos" value="Mis artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
     echo '<input type="submit" name="creararticulo" value="Crear artículo" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
+    
     echo '</form>';
     echo '</div>';
 

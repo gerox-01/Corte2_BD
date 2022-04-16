@@ -96,9 +96,9 @@ if (isset($_SESSION['username'])) {
             echo ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw; display: flex; justify-content: center;">';
             $registros = ConexionDB()->query("SELECT  `foto` FROM `usuarios`WHERE Usuario='" . $value['Usuario_destino'] . "'")->fetchAll(PDO::FETCH_OBJ);
             echo '<div style="padding-right: 40px;">';
-            echo '<p> ' . 'Nombre del autor: ' . $value['Usuario_destino'] . '</p>';
+            echo '<p> ' . 'Nombre del destinatario: ' . $value['Usuario_destino'] . '</p>';
             foreach ($registros as $persona) {
-                echo '<b>' . 'Foto del autor: ' . '</b>' . '<img height=50" src="' . $persona->foto . ' ">.<br><br>';
+                echo '<b>' . 'Foto del destinatario: ' . '</b>' . '<img height=50" src="' . $persona->foto . ' ">.<br><br>';
             }
             echo '<b>' . 'VIsta previa del Archivo: ' . '</b>' . "<img src='" . $value['ArchivoAdjunto'] . "' style='width: 50px; height: 50px; border-radius: 50%;'>";
             echo '</div>';
@@ -195,8 +195,20 @@ if (isset($_SESSION['username'])) {
 
                 if (move_uploaded_file($fileTmpPath, $dest_path)) {
                     echo '<br/>Archivo subido.<br/>';
-
-                    $_SESSION['fulAdjunto'] =  $dest_path;
+                    if ($fileExtension == 'jpg' || $fileExtension == 'jpeg') {
+                        $img = imagecreatefromjpeg($dest_path);
+                        imagejpeg($img, $dest_path, 100);
+                        imagedestroy($img);
+                    } else if ($fileExtension == 'png') {
+                        $img = imagecreatefrompng($dest_path);
+                        imagejpeg($img, $dest_path, 100);
+                        imagedestroy($img);
+                    } else if ($fileExtension == 'gif') {
+                        $img = imagecreatefromgif($dest_path);
+                        imagejpeg($img, $dest_path, 100);
+                        imagedestroy($img);
+                    } 
+                   
 
                     $usuario_origen =  $_SESSION['username'];
                     $usuario_destino = $_POST['cmbDestino'];
@@ -205,6 +217,7 @@ if (isset($_SESSION['username'])) {
                     date_default_timezone_set('America/Bogota');
                     $fechaenvio = date('m-d-Y h:i:s a', time());
 
+                   
                     EnviarMensaje($CONN, $usuario_origen, $usuario_destino, $texto, $fechaenvio, $archivo);
                 } else {
                     echo '<br/>Archivo no se almaceno.<br/>';

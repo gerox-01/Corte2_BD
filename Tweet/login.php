@@ -17,11 +17,15 @@
     require_once('./nav.php');
 
     LimpiarEntradas();
+    require_once "funcionesCSRF.php";
+    GenerarAnctiCSRF();
 
     $CONN = ConexionDB();
 
     #region CodigoRevisar
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+      
 
         if (empty($_POST["username"])) {
             $usernameErr = "username is required";
@@ -55,6 +59,7 @@
                 <label for="password">Contraseña:</label>
                 <input type="password" name="password" id="password" required="required" placeholder="Digite contraseña" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
             </div>
+            <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf'];?>">
             <button name="send" value="send">Enviar</button>
         </form>
 
