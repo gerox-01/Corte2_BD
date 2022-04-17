@@ -1,0 +1,222 @@
+{
+  "Name": "14CambioClaveExito",
+  "CreationDate": "2022-4-16",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/LineaII/Corte2_BD/Tweet/index.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "id=verperfil",
+      "Value": "",
+      "Targets": [
+        "id=verperfil",
+        "name=verperfil",
+        "xpath=//*[@id=\"verperfil\"]",
+        "xpath=//input[@id='verperfil']",
+        "xpath=//form[3]/input",
+        "css=#verperfil"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=cambiarClave",
+      "Value": "",
+      "Targets": [
+        "name=cambiarClave",
+        "xpath=//*[@id=\"style-5\"]/div[4]/input[2]",
+        "xpath=//input[@name='cambiarClave']",
+        "xpath=//input[2]",
+        "css=#style-5 > div:nth-child(4) > input:nth-child(2)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=password",
+      "Value": "",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=password",
+      "Value": "*Abc123+",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=passwordn",
+      "Value": "*123Abc+",
+      "Targets": [
+        "id=passwordn",
+        "name=passwordn",
+        "xpath=//*[@id=\"passwordn\"]",
+        "xpath=//input[@id='passwordn']",
+        "xpath=//div[2]/input",
+        "css=#passwordn"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=confirmpassword",
+      "Value": "*123Abc+",
+      "Targets": [
+        "id=confirmpassword",
+        "name=confirmpassword",
+        "xpath=//*[@id=\"confirmpassword\"]",
+        "xpath=//input[@id='confirmpassword']",
+        "xpath=//div[3]/input",
+        "css=#confirmpassword"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "pause",
+      "Target": "2000",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "name=cambiarClave",
+      "Value": "",
+      "Targets": [
+        "name=cambiarClave",
+        "xpath=/html/body/form/div/div[4]/input",
+        "xpath=//input[@name='cambiarClave']",
+        "xpath=//div[4]/input",
+        "css=body > form > div > div:nth-child(5) > input"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "xpath=/html/body/form/div/p",
+      "Value": "",
+      "Targets": [
+        "xpath=/html/body/form/div/p",
+        "xpath=//form/div/p",
+        "css=body > form > div > p"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=exit",
+      "Value": "",
+      "Targets": [
+        "id=exit",
+        "name=exit",
+        "xpath=//*[@id=\"exit\"]",
+        "xpath=//input[@id='exit']",
+        "xpath=//input",
+        "css=#exit"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=username",
+      "Value": "",
+      "Targets": [
+        "id=username",
+        "name=username",
+        "xpath=//*[@id=\"username\"]",
+        "xpath=//input[@id='username']",
+        "xpath=//input",
+        "css=#username"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=username",
+      "Value": "maria",
+      "Targets": [
+        "id=username",
+        "name=username",
+        "xpath=//*[@id=\"username\"]",
+        "xpath=//input[@id='username']",
+        "xpath=//input",
+        "css=#username"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=password",
+      "Value": "",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div[2]/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=password",
+      "Value": "*123Abc+",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div[2]/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=password",
+      "Value": "*123Abc+",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div[2]/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=send",
+      "Value": "",
+      "Targets": [
+        "name=send",
+        "xpath=/html/body/div/form/button",
+        "xpath=//button[@name='send']",
+        "xpath=//button",
+        "css=body > div > form > button"
+      ],
+      "Description": ""
+    }
+  ]
+}

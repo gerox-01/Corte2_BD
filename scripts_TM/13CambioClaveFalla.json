@@ -1,0 +1,285 @@
+{
+  "Name": "13CambioClaveFalla",
+  "CreationDate": "2022-4-16",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/LineaII/Corte2_BD/Tweet/index.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "id=verperfil",
+      "Value": "",
+      "Targets": [
+        "id=verperfil",
+        "name=verperfil",
+        "xpath=//*[@id=\"verperfil\"]",
+        "xpath=//input[@id='verperfil']",
+        "xpath=//form[3]/input",
+        "css=#verperfil"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=cambiarClave",
+      "Value": "",
+      "Targets": [
+        "name=cambiarClave",
+        "xpath=//*[@id=\"style-5\"]/div[4]/input[2]",
+        "xpath=//input[@name='cambiarClave']",
+        "xpath=//input[2]",
+        "css=#style-5 > div:nth-child(4) > input:nth-child(2)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=password",
+      "Value": "",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=password",
+      "Value": "Prueba123.",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=passwordn",
+      "Value": "Prueba123.",
+      "Targets": [
+        "id=passwordn",
+        "name=passwordn",
+        "xpath=//*[@id=\"passwordn\"]",
+        "xpath=//input[@id='passwordn']",
+        "xpath=//div[2]/input",
+        "css=#passwordn"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=confirmpassword",
+      "Value": "Prueba123.",
+      "Targets": [
+        "id=confirmpassword",
+        "name=confirmpassword",
+        "xpath=//*[@id=\"confirmpassword\"]",
+        "xpath=//input[@id='confirmpassword']",
+        "xpath=//div[3]/input",
+        "css=#confirmpassword"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "name=cambiarClave",
+      "Value": "",
+      "Targets": [
+        "name=cambiarClave",
+        "xpath=/html/body/form/div/div[4]/input",
+        "xpath=//input[@name='cambiarClave']",
+        "xpath=//div[4]/input",
+        "css=body > form > div > div:nth-child(5) > input"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "xpath=/html/body/form/div/p",
+      "Value": "",
+      "Targets": [
+        "xpath=/html/body/form/div/p",
+        "xpath=//form/div/p",
+        "css=body > form > div > p"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=password",
+      "Value": "",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=password",
+      "Value": "Actualizar123.",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=passwordn",
+      "Value": "Prueba12.",
+      "Targets": [
+        "id=passwordn",
+        "name=passwordn",
+        "xpath=//*[@id=\"passwordn\"]",
+        "xpath=//input[@id='passwordn']",
+        "xpath=//div[2]/input",
+        "css=#passwordn"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=confirmpassword",
+      "Value": "Prueba123.",
+      "Targets": [
+        "id=confirmpassword",
+        "name=confirmpassword",
+        "xpath=//*[@id=\"confirmpassword\"]",
+        "xpath=//input[@id='confirmpassword']",
+        "xpath=//div[3]/input",
+        "css=#confirmpassword"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "name=cambiarClave",
+      "Value": "",
+      "Targets": [
+        "name=cambiarClave",
+        "xpath=/html/body/form/div/div[4]/input",
+        "xpath=//input[@name='cambiarClave']",
+        "xpath=//div[4]/input",
+        "css=body > form > div > div:nth-child(5) > input"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "xpath=/html/body/form/div/p",
+      "Value": "",
+      "Targets": [
+        "xpath=/html/body/form/div/p",
+        "xpath=//form/div/p",
+        "css=body > form > div > p"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=password",
+      "Value": "",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=password",
+      "Value": "Actualizar123.",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=passwordn",
+      "Value": "Prueba",
+      "Targets": [
+        "id=passwordn",
+        "name=passwordn",
+        "xpath=//*[@id=\"passwordn\"]",
+        "xpath=//input[@id='passwordn']",
+        "xpath=//div[2]/input",
+        "css=#passwordn"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=confirmpassword",
+      "Value": "Prueba123.",
+      "Targets": [
+        "id=confirmpassword",
+        "name=confirmpassword",
+        "xpath=//*[@id=\"confirmpassword\"]",
+        "xpath=//input[@id='confirmpassword']",
+        "xpath=//div[3]/input",
+        "css=#confirmpassword"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "name=cambiarClave",
+      "Value": "",
+      "Targets": [
+        "name=cambiarClave",
+        "xpath=/html/body/form/div/div[4]/input",
+        "xpath=//input[@name='cambiarClave']",
+        "xpath=//div[4]/input",
+        "css=body > form > div > div:nth-child(5) > input"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "xpath=/html/body/form/div/p",
+      "Value": "",
+      "Targets": [
+        "xpath=/html/body/form/div/p",
+        "xpath=//form/div/p",
+        "css=body > form > div > p"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "open",
+      "Target": "http://localhost/LineaII/Corte2_BD/Tweet/cambioClave.php",
+      "Value": "",
+      "Description": ""
+    }
+  ]
+}
