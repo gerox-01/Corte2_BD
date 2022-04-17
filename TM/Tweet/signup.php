@@ -162,7 +162,7 @@
             <!-- Correo -->
             <div>
                 <label for="correo">Correo:</label>
-                <input class="r-options" type="email" name="email" id="email" required="required" pattern="([a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4})" maxlength=20>
+                <input class="r-options" type="email" name="email" id="email" required="required" pattern="([a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4})" maxlength=40>
             </div>
             <!-- Tipo de documento -->
             <div style='display: flex; flex-direction: column;'>

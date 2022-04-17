@@ -46,7 +46,7 @@
             <!-- Correo -->
             <div>
                 <label for="correo">Correo:</label>
-                <input class="r-options" type="email" name="email" id="email" maxlength=20 required="required"  pattern ="([a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4})" value="<?php echo $_SESSION['email']; ?>">
+                <input class="r-options" type="email" name="email" id="email" maxlength=20 required="required"  pattern ="([a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,4})" maxlength= 40 value="<?php echo $_SESSION['email']; ?>">
             </div>
             <!-- Tipo de documento -->
             <div style='display: flex; flex-direction: column;'>
