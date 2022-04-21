@@ -393,3 +393,19 @@ function cerrarSesion()
 {
     session_destroy();
 }
+
+
+//retorna el usuario que inicio sesion con el token
+function getUserByToken($token){
+    $file = "usuario.txt";
+    $fp = fopen($file, "r");
+    $texto = fread($fp, filesize($file));
+    $usuarios = explode("\n", $texto);
+    foreach ($usuarios as $u) {
+        $usuS = explode(":", $u);
+        $username = $usuS[7] ?? "";
+        if ($username == $token) {
+            return $usuS[7] ?? "";
+        }
+    }
+}

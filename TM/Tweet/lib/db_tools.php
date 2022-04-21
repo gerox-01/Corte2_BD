@@ -9,9 +9,11 @@
 function ConexionDB()
 {
     $servername = "localhost";
-    $database = "corte2bd";
+    // $database = "corte2bd";
+    // $password = "123456";
     $username = "root";
-    $password = "";
+    $database = "tm";
+    $password = "123456";
 
     $sql = "mysql:host=$servername; dbname=$database;";
     $dsn_Options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
