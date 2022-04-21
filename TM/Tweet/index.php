@@ -77,7 +77,7 @@ if (isset($_SESSION['username'])) {
                             <h2 style="text-transform: uppercase;">' . $row['usuario'] . ':' . '</h2> 
                           </div>
                           <div class="col">
-                            <img weight="100px" height="100px" class="" src="' . $row['foto'] . '" alt="User Image">
+                            <img weight="100px" height="100px" src="' . $row['foto'] . '" alt="User Image">
                           </div>
                         </div>
                         <div style="padding-left: 5.5rem; display:flex; flex-direction: column; width: 70%; justify-content: space-around; align-items: center;">
