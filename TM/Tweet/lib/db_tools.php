@@ -1,5 +1,9 @@
 <?php
 
+//libreria de jwt
+use Firebase\JWT\JWT;
+
+
 /**
  * Conexión a la base de datos
  * Autor: Alejandro Monroy y Gerónimo Quiroga
@@ -9,11 +13,11 @@
 function ConexionDB()
 {
     $servername = "localhost";
-    // $database = "corte2bd";
-    // $password = "123456";
+    $database = "corte2bd";
+    $password = "";
     $username = "root";
-    $database = "tm";
-    $password = "123456";
+    // $database = "tm";
+    // $password = "123456";
 
     $sql = "mysql:host=$servername; dbname=$database;";
     $dsn_Options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
@@ -353,7 +357,18 @@ function color($conexion, $usuario)
  */
 function ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha, $color, $email, $tipodoc, $numdoc, $hijos, $foto, $direccion, $estadociv)
 {
-    $sql = "UPDATE usuarios SET nombres = :nombre, apellidos = :apellido, fecha_nac = :fecha, color = :color, correo = :email, id_tip_doc = :tipodoc, num_doc = :numdoc, id_num_hijos = :hijos, foto = :foto, direccion = :direccion, id_est_civil = :estadociv WHERE usuario = :usuario";
+    $sql = "UPDATE usuarios SET nombres = case when :nombre is null then nombres else :nombre end,
+                apellidos = case when :apellido is null then apellidos else :apellido end, 
+                fecha_nac = case when :fecha is null then fecha_nac else :fecha end, 
+                color = case when :color is null then color else :color end,
+                correo = case when :email is null then correo else :email end, 
+                id_tip_doc = case when :tipodoc is null then id_tip_doc else :tipodoc end, 
+                num_doc = case when :numdoc is null then num_doc else :numdoc end, 
+                id_num_hijos = case when :hijos is null then id_num_hijos else :hijos end, 
+                foto = case when :foto is null then foto else :foto end, 
+                direccion = case when :direccion is null then direccion else :direccion end, 
+                id_est_civil = case when :estadociv is null then id_est_civil else :estadociv end, 
+                WHERE usuario = :usuario";
     $statement = $CONN->prepare($sql);
     $statement->bindParam(':usuario', $usuario);
     $statement->bindParam(':nombre', $nombre);
@@ -698,4 +713,30 @@ function ListarMensajesEnviados($my_Db_Connection, $usuario_origen)
         // echo $th;
     }
     return $lista_mensajes;
+}
+
+
+/**
+ * Función que retorna el usuario Actual consumiendo la API con Token 
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 25/04/2022
+ * @return string
+ */
+function UsuarioActual(){
+    $jwt = $_SERVER['HTTP_AUTHORIZATION'];
+    $key = 'my_secret_key';
+
+    if(substr($jwt,0,6) == "Bearer "){
+        $jwt = str_replace('Bearer ','',$jwt);
+        try{
+            $decoded = JWT::decode($jwt, $key, array('HS256'));
+            $datos = $decoded->decoded;
+            return $datos->usuario;
+        }catch(Exception $e){
+            echo 'Credenciales incorrectas del usuario actualizar';
+            echo $e->getMessage();
+            http_response_code(401);
+            exit();
+        }
+    }
 }
