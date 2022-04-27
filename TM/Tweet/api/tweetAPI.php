@@ -30,6 +30,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     echo json_encode($datos);
 }
 
+/**
+ * Actualizar los tweets desde la API con un GET request
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 20/04/2022
+ */
+if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+    $CONN = ConexionDB();
+    $datos = Actualizar($CONN, $_GET['id']);
+    header('HTTP/1.1 200 OK');
+    echo json_encode($datos);
+}
+
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['mensaje'])) {
@@ -165,4 +178,3 @@ function UsuarioActualId()
 // }
 
 
-?>

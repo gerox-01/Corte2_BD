@@ -182,6 +182,31 @@ function SeleccionarCanHijos($my_Db_Connection)
         return NULL;
     }
 }
+/**
+ * Obtener los datos del usuario
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 28/03/2022
+ * @param string $connection
+ * @param string $usuario
+ * @return array
+ */
+function ObtenerDatosUsuarioDB($my_Db_Connection, $usuario)
+{
+    $lista_usuario = [];
+    $sql = "SELECT * FROM usuarios WHERE usuario = :usuario";
+    $statement = $my_Db_Connection->prepare($sql);
+    $statement->bindParam(':usuario', $usuario);
+    try {
+        if ($statement->execute()) {
+            $result = $statement->fetchAll();
+            return $result;
+        }
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        return NULL;
+    }
+    return $lista_usuario;
+}
 
 
 /**
@@ -192,8 +217,9 @@ function SeleccionarCanHijos($my_Db_Connection)
  * @param string $usuario
  * @return array
  */
-function ObtenerUsuarioDB($my_Db_Connection, $usuario)
+function ObtenerUsuarioDB($usuario)
 {
+    $my_Db_Connection = ConexionDB();
     $datos = [];
     $sql = "SELECT `id_usuario`, `usuario`, `clave`, `nombres`, `apellidos`, `fecha_nac`, `color`, `correo`, TP.tip_doc as `tipodoc`, `num_doc`, NH.cant_hijos as `cant_hijos`, `foto`, `direccion`, EC.est_civil as `est_civil` FROM `usuarios` U 
     INNER join tipdoc TP on TP.id_tipdoc = U.id_tip_doc
@@ -209,7 +235,7 @@ function ObtenerUsuarioDB($my_Db_Connection, $usuario)
                 return $datos;
             }
         } else {
-            return NULL;
+            return $datos;
         }
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
@@ -334,8 +360,6 @@ function color($conexion, $usuario)
         return NULL;
     }
 }
-
-
 /**
  * Actualizar el usuario de la sesión
  * Autor: Alejandro Monroy y Gerónimo Quiroga
@@ -357,18 +381,13 @@ function color($conexion, $usuario)
  */
 function ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha, $color, $email, $tipodoc, $numdoc, $hijos, $foto, $direccion, $estadociv)
 {
-    $sql = "UPDATE usuarios SET nombres = case when :nombre is null then nombres else :nombre end,
-                apellidos = case when :apellido is null then apellidos else :apellido end, 
-                fecha_nac = case when :fecha is null then fecha_nac else :fecha end, 
-                color = case when :color is null then color else :color end,
-                correo = case when :email is null then correo else :email end, 
-                id_tip_doc = case when :tipodoc is null then id_tip_doc else :tipodoc end, 
-                num_doc = case when :numdoc is null then num_doc else :numdoc end, 
-                id_num_hijos = case when :hijos is null then id_num_hijos else :hijos end, 
-                foto = case when :foto is null then foto else :foto end, 
-                direccion = case when :direccion is null then direccion else :direccion end, 
-                id_est_civil = case when :estadociv is null then id_est_civil else :estadociv end, 
-                WHERE usuario = :usuario";
+    $sql = "UPDATE `usuarios` SET `nombres`= case WHEN :nombre IS NULL THEN `nombres` ELSE :nombre END, `apellidos`= case WHEN :apellido IS NULL THEN `apellidos` ELSE :apellido END,
+    `fecha_nac`= case WHEN :fecha IS NULL THEN `fecha_nac` ELSE :fecha END, `color`= case WHEN :color IS NULL THEN `color` ELSE :color END,
+    `correo`= case WHEN :email IS NULL THEN `correo` ELSE :email END, `id_tip_doc`= case WHEN :tipodoc IS NULL THEN `id_tip_doc` ELSE :tipodoc END,
+    `num_doc`= case WHEN :numdoc IS NULL THEN `num_doc` ELSE :numdoc END, `id_num_hijos`= case WHEN :hijos IS NULL THEN `id_num_hijos` ELSE :hijos END,
+    `foto`= case WHEN :foto IS NULL THEN `foto` ELSE :foto END, `direccion`= case WHEN :direccion IS NULL THEN `direccion` ELSE :direccion END, 
+    `id_est_civil`= case WHEN :estadociv IS NULL THEN `id_est_civil` ELSE :estadociv END WHERE `usuario`= :usuario";
+    
     $statement = $CONN->prepare($sql);
     $statement->bindParam(':usuario', $usuario);
     $statement->bindParam(':nombre', $nombre);
@@ -578,6 +597,31 @@ function Publicar($CONN, $id)
     $sql = "UPDATE tuits SET Estado = 1 WHERE id_tuit = :id";
     $statement = $CONN->prepare($sql);
     $statement->bindParam(':id', $id);
+    try {
+        if ($statement->execute()) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    } catch (PDOException $e) {
+        echo 'Error: ' . $e->getMessage();
+        return FALSE;
+    }
+}
+/**
+ * Actualizar el tweet
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 12/04/2022
+ * @param string conexión
+ * @param string id
+ * @return boolean
+ */
+function Actualizar($CONN, $id)
+{
+    $sql = "UPDATE tuits SET mensaje_tuit = :tweet WHERE id_tuit = :id";
+    $statement = $CONN->prepare($sql);
+    $statement->bindParam(':id', $id);
+    // $statement->bindParam(':tweet', $tweet);
     try {
         if ($statement->execute()) {
             return TRUE;

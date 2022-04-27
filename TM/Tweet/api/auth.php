@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $contrasena = $_POST['clave'];
     $usuarioDB = ValidarLoginDB($CONN, $usuario, $contrasena);
     if ($usuarioDB != FALSE) {
-        $usuarioDB = ObtenerUsuarioDB($CONN, $usuario);
+        $usuarioDB = ObtenerUsuarioDB( $usuario);
         if ($usuarioDB != NULL) {
             foreach ($usuarioDB as $key => $value) {
                 $usuarioDB[$key] = $value;
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $token = $_GET['token'];
     $decoded = JWT::decode($token, $key, array('HS256'));
     $usuario = $decoded->data->usuario;
-    $usuarioDB = ObtenerUsuarioDB($CONN, $usuario);
+    $usuarioDB = ObtenerUsuarioDB($usuario);
     if ($usuarioDB != NULL) {
         foreach ($usuarioDB as $key => $value) {
             $usuarioDB[$key] = $value;
