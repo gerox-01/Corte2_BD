@@ -51,11 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("HTTP/1.1 401 Unauthorized");
         exit();
     }
-}
 
-//Trae el usuario de la base de datos
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $CONN = ConexionDB();
 
     $token = $_GET['token'];
     $decoded = JWT::decode($token, $key, array('HS256'));

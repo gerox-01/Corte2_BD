@@ -2,6 +2,7 @@
 
 require_once('./../lib/db_tools.php');
 require_once('./../lib/tools.php');
+require_once('./../api/token.php');
 
 require_once('./../../../vendor/autoload.php');
 
@@ -41,6 +42,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('HTTP/1.1 400 Bad Request');
     }
 }
+// if($_SERVER['REQUEST_METHOD'] == 'GET'){
+//     if(isset($_GET['username'])){
+//         $datos = ListarMensajesRecibidos($CONN, $_GET['username']);
+//         header('HTTP/1.1 200 OK');
+//         echo json_encode($datos);
+//         exit();
+//     }else{
+//         header('HTTP/1.1 400 Bad Request');
+//     }
+// }
 
 // /**
 //  * Borrar un tweet con la API
@@ -56,6 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
         header('HTTP/1.1 400 Bad Request');
     }
 }
+// if($_SERVER['REQUEST_METHOD'] == 'POST'){
+//     if(isset($_POST['mensaje']) && isset($_POST['iduser'])){
+//         $datos = GuardarTweet($CONN, $_POST['mensaje'], $_POST['iduser'], $_POST['estado']);
+//         header('HTTP/1.1 200 OK');
+//         echo json_encode($datos);
+//     }else{
+//         header('HTTP/1.1 400 Bad Request');
+//     }
+// }
+
 
 
 /**
@@ -133,6 +154,15 @@ function UsuarioActualId()
     }
     return "";
 }
+// if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
+//     if(isset($_GET['id'])){
+//         $datos = EliminarTweet($CONN, $_GET['id']);
+//         header('HTTP/1.1 200 OK');
+//         echo json_encode($datos);
+//     }else{
+//         header('HTTP/1.1 400 Bad Request');
+//     }
+// }
 
 
 ?>

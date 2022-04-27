@@ -13,11 +13,11 @@ use Firebase\JWT\JWT;
 function ConexionDB()
 {
     $servername = "localhost";
-    $database = "corte2bd";
-    $password = "";
+    // $database = "corte2bd";
+    // $password = "";
     $username = "root";
-    // $database = "tm";
-    // $password = "123456";
+    $database = "tm";
+    $password = "123456";
 
     $sql = "mysql:host=$servername; dbname=$database;";
     $dsn_Options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
