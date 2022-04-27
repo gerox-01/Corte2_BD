@@ -14,26 +14,39 @@ $time = time();
 
 //Método POST para autenticar camster.com
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // $credenciales = json_decode(file_get_contents("php://input"), true);
     $usuario = $_POST['usuario'];
     $contrasena = $_POST['clave'];
-    $usuarioDB = ObtenerUsuarioDB($CONN, $usuario);
-    if ($usuarioDB != NULL) {
-        // if($usuarioDB['clave'] == $contrasena){
-        $token = array(
-            'data' => ['usuario' => $usuario], //datos del usuario
-            'iat' => $time, //Tiempo inicio del token
-            'exp' => $time + (60 * 60) //Tiempo de expiración del token
-        );
-        $jwt = JWT::encode($token, $key);
-        $datos = ['token' => $jwt];
-        header("HTTP/1.1 200 OK");
-        echo json_encode($datos);
-        exit();
-        // }else{
-        //     header("HTTP/1.1 401 Unauthorized");
-        //     exit();
-        // }
+    $usuarioDB = ValidarLoginDB($CONN, $usuario, $contrasena);
+    if ($usuarioDB != FALSE) {
+        $usuarioDB = ObtenerUsuarioDB($CONN, $usuario);
+        if ($usuarioDB != NULL) {
+            foreach ($usuarioDB as $key => $value) {
+                $usuarioDB[$key] = $value;
+                $data = $value;
+            }
+
+            // $iduser = encriptarPassword($value['id_usuario']);
+            $iduser = $value['id_usuario'];
+
+            $token = array(
+                'iat' => $time, //Tiempo inicio del token
+                'exp' => $time + (60 * 60), //Tiempo de expiración del token
+                'data' => ['usuario' => $usuario, 'iduser' => $iduser] //datos del usuario
+            );
+            $jwt = JWT::encode($token, $key, 'HS256');
+
+            // $data = JWT::decode($jwt, $key, array('HS256'));
+
+            // var_dump($data);
+
+            $datos = ['token' => $jwt];
+            header("HTTP/1.1 200 OK");
+            echo json_encode($datos);
+            exit();
+        } else {
+            header("HTTP/1.1 401 Unauthorized");
+            exit();
+        }
     } else {
         header("HTTP/1.1 401 Unauthorized");
         exit();
@@ -49,13 +62,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $usuario = $decoded->data->usuario;
     $usuarioDB = ObtenerUsuarioDB($CONN, $usuario);
     if ($usuarioDB != NULL) {
+        foreach ($usuarioDB as $key => $value) {
+            $usuarioDB[$key] = $value;
+            $data = $value;
+            global $usuariot;
+            $usuariot = $value['usuario'];
+        }
         header("HTTP/1.1 200 OK");
-        echo json_encode($usuarioDB);
+        echo json_encode($data);
         exit();
     } else {
         header("HTTP/1.1 401 Unauthorized");
         exit();
     }
 }
+
 
 header("HTTP/1.1 400 Bad Request");

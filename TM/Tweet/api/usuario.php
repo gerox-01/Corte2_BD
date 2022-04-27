@@ -39,7 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $tipDoc = $_POST['tipDoc'];
         $num_doc = $_POST['num_doc'];
         $numhijos = $_POST['numhijos'];
-        $archivo = $_POST['archivo'];
+
+        $archivo = base64_to_jpeg($_POST['archivo'], 't.jpg');
+
         $direccion = $_POST['direccion'];
         $estCivil = $_POST['estCivil'];
         $datos = RegistrarUsuarioDB($CONN, $username, $password, $name, $lastname, $fecha_nac, $color, $email, $tipDoc, $num_doc, $numhijos, $archivo, $direccion, $estCivil);
@@ -51,24 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("HTTP/1.1 400 Bad Request");
     }
 }
-
-// // Borrar
-// if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
-//     if (isset($_GET['id'])) {
-//         $id = $_GET['id'];
-//         $datos = BorrarUsuarioDB($CONN, $id);
-//         if ($datos == 1) {
-//             header("HTTP/1.1 200 OK");
-//             echo json_encode($datos);
-//             exit();
-//         } else {
-//             header("HTTP/1.1 400 Bad Request");
-//             exit();
-//         }
-//     } else {
-//         header("HTTP/1.1 400 Bad Request");
-//     }
-// }
 
 // Actualizar
 if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
@@ -99,4 +83,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     } else {
         header("HTTP/1.1 400 Bad Request");
     }
+}
+
+function base64_to_jpeg($base64_string, $output_file) {
+    $ifp = fopen($output_file, "wb");
+    $data = explode(',', $base64_string);
+    fwrite($ifp, base64_decode($data[1]));
+    fclose($ifp);
+    return $output_file;
 }

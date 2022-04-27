@@ -16,20 +16,14 @@ $CONN = ConexionDB();
  */
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-    // var_dump($_GET);
-
-    if (isset($_GET['username'])) {
-        $id = $_GET['username'];
-        $datos = ObtenerUsuarioDB($CONN, $id);
-        if ($datos != NULL) {
-            foreach ($datos as $key => $value) {
-                header("HTTP/1.1 200 OK");
-                echo json_encode($datos);
-                exit();
-            }
+    $id = $_GET['username'];
+    $datos = ObtenerUsuarioDB($CONN, $id);
+    if ($datos != NULL) {
+        foreach ($datos as $key => $value) {
+            header("HTTP/1.1 200 OK");
+            echo json_encode($datos);
+            exit();
         }
-    } else {
-        header("HTTP/1.1 400 Bad Request");
     }
 }
 
@@ -67,21 +61,84 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     }
 }
 
+
 /**
- * Borrar un usuario con la API
+ * Función que retorna el usuario Actual consumiendo la API con Token 
  * Autor: Alejandro Monroy y Gerónimo Quiroga
- * Fecha: 18/04/2022
+ * Fecha: 25/04/2022
+ * @return string
  */
-// if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
-//     if (isset($_GET['id'])) {
-//         // $datos = BorrarUsuario($CONN, $_GET['id']);
-//         header("HTTP/1.1 200 OK");
-//         echo json_encode($datos);
-//         exit();
-//     } else {
-//         header("HTTP/1.1 400 Bad Request");
-//     }
-// }
+function UsuarioActual()
+{
+    $jwt = $_SERVER['HTTP_AUTHORIZATION'];
+    $key = 'my_secret_key';
+
+    if (substr($jwt, 0, 6) == "Bearer") {
+        $jwte = str_replace("Bearer ", "", $jwt);
+        try {
+            // echo $jwte;
+            $data = Firebase\JWT\JWT::decode($jwte, $key, array('HS256'));
+            // echo $data;
+            // Serializar data
+            $datas = (array)$data;
+            foreach ($datas as $key => $value) {
+                $usuario = $value;
+            }
+            // var_dump($usuario);
+            $json_data  = json_encode((array)$usuario->usuario);
+            // print_r($json_data);
+            $json_data = str_replace('[', "", $json_data);
+            $json_data = str_replace(']', "", $json_data);
+            return $json_data;
+        } catch (Exception $e) {
+            echo 'Credenciales incorrectas del usuario actualizar';
+            echo $e->getMessage();
+            http_response_code(404);
+            exit();
+        }
+    }
+    return "";
+}
+
+
+
+/**
+ * Función que retorna el idusuario Actual consumiendo la API con Token
+ * Autor: Alejandro Monroy y Gerónimo Quiroga
+ * Fecha: 25/04/2022
+ * @return string
+ */
+function UsuarioActualId()
+{
+    $jwt = $_SERVER['HTTP_AUTHORIZATION'];
+    $key = 'my_secret_key';
+
+    if (substr($jwt, 0, 6) == "Bearer") {
+        $jwte = str_replace("Bearer ", "", $jwt);
+        try {
+            // echo $jwte;
+            $data = Firebase\JWT\JWT::decode($jwte, $key, array('HS256'));
+            // echo $data;
+            // Serializar data
+            $datas = (array)$data;
+            foreach ($datas as $key => $value) {
+                $usuario = $value;
+            }
+            // var_dump($usuario);
+            $json_data  = json_encode((array)$usuario->iduser);
+            // print_r($json_data);
+            $json_data = str_replace('[', "", $json_data);
+            $json_data = str_replace(']', "", $json_data);
+            return $json_data;
+        } catch (Exception $e) {
+            echo 'Credenciales incorrectas del usuario actualizar';
+            echo $e->getMessage();
+            http_response_code(404);
+            exit();
+        }
+    }
+    return "";
+}
 
 /**
  * En caso de que ninguna de las opciones anteriores se haya ejecutado

@@ -722,21 +722,21 @@ function ListarMensajesEnviados($my_Db_Connection, $usuario_origen)
  * Fecha: 25/04/2022
  * @return string
  */
-function UsuarioActual(){
-    $jwt = $_SERVER['HTTP_AUTHORIZATION'];
-    $key = 'my_secret_key';
+// function UsuarioActual(){
+//     $jwt = $_SERVER['HTTP_AUTHORIZATION'];
+//     $key = 'my_secret_key';
 
-    if(substr($jwt,0,6) == "Bearer "){
-        $jwt = str_replace('Bearer ','',$jwt);
-        try{
-            $decoded = JWT::decode($jwt, $key, array('HS256'));
-            $datos = $decoded->decoded;
-            return $datos->usuario;
-        }catch(Exception $e){
-            echo 'Credenciales incorrectas del usuario actualizar';
-            echo $e->getMessage();
-            http_response_code(401);
-            exit();
-        }
-    }
-}
+//     if(substr($jwt,0,6) == "Bearer "){
+//         $jwt = str_replace('Bearer ','',$jwt);
+//         try{
+//             $decoded = JWT::decode($jwt, $key, array('HS256'));
+//             $datos = $decoded->decoded;
+//             return $datos->usuario;
+//         }catch(Exception $e){
+//             echo 'Credenciales incorrectas del usuario actualizar';
+//             echo $e->getMessage();
+//             http_response_code(401);
+//             exit();
+//         }
+//     }
+// }
