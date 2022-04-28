@@ -54,7 +54,7 @@ function ConexionDB()
  * @return boolean
  */
 function RegistrarUsuarioDB(
-    $my_Db_Connection,
+    
     $usuario,
     $clave,
     $nombre,
@@ -69,7 +69,7 @@ function RegistrarUsuarioDB(
     $dir,
     $id_est_civ
 ) {
-
+    $my_Db_Connection = ConexionDB();
     $encryptPass = encriptarPassword($clave);
 
     $sql = "SELECT * FROM usuarios WHERE usuario = :usuario";
