@@ -8,9 +8,6 @@ require_once('./../api/token.php');
 
 LimpiarEntradas();
 $CONN = ConexionDB();
-
-
-
 /**
  * Obetener usuarios con el token de autenticación
  * Autor: Alejandro Monroy y Gerónimo Quiroga
@@ -28,8 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         exit();
     }
 }
-
-
 /**
  * Crear un usuario con el token de autenticación
  * Autor: Alejandro Monroy y Gerónimo Quiroga
@@ -62,27 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 }
-// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//     if (isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['email']) && isset($_POST['password'])) {
-//         $_SESSION['estCivil'] =  $_POST['estCivil'];
-//         $datos = RegistrarUsuarioDB($CONN, $_POST['username'], $_POST['password'], $_POST['name'], $_POST['lastname'], $_POST['fecha_nac'], $_POST['color'], $_POST['email'], $_POST['tipDoc'], $_POST['num_doc'], $_POST['numhijos'], $_POST['archivo'], $_POST['direccion'], $_POST['estCivil']);
-//         $datos = ['id' => $datos];
-//         header("HTTP/1.1 200 OK");
-//         echo json_encode($datos);
-//         exit();
-//     } else {
-//         header("HTTP/1.1 400 Bad Request");
-//     }
-// }
 
 /**
- * PENDIENTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * Actualizar un usuario con el token de autenticación
  * Autor: Alejandro Monroy y Gerónimo Quiroga
  * Fecha: 18/04/2022
  * 
-
-  
  */
 if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $usuario = token();
@@ -98,9 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $id_num_hijos = isset($_PUT['id_num_hijos']) ? $_PUT['id_num_hijos'] : NULL;
     $direccion = isset($_PUT['direccion']) ? $_PUT['direccion'] : NULL;
     $id_est_civil = isset($_PUT['id_est_civil']) ? $_PUT['id_est_civil'] : NULL;
-    // $foto = isset($_PUT['archivo']) ? base64_to_jpeg($_PUT['archivo'], 't.jpg') : NULL;
-    // $foto = isset($_PUT['archivo']) ? $_PUT['archivo'] : NULL;
-    // $foto = NULL;
     if (isset($_PUT['archivo'])) {
         $data = explode(';', $_PUT['archivo']);
         if ($data[0] == 'data:image/jpeg') {
