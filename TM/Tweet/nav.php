@@ -24,7 +24,7 @@
     $usuario = $_SESSION['username'] ?? '';
 
     if ($CONN != NULL) {
-        $datosuser = ObtenerUsuarioDB($CONN, $usuario);
+        $datosuser = ObtenerUsuarioDB($usuario);
         if ($datosuser != NULL) {
             foreach ($datosuser as $key => $value) {
                 global $colorr;

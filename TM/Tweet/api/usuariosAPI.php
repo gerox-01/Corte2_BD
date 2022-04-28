@@ -18,7 +18,7 @@ $CONN = ConexionDB();
  */
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $usuario = token();
-    $mensajes = ObtenerUsuarioDB( $usuario);
+    $mensajes = ObtenerUsuarioDB($usuario);
     if ($mensajes != NULL) {
         header("HTTP/1.1 200 OK");
         echo json_encode($mensajes);
@@ -36,20 +36,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
  * Fecha: 18/04/2022
  */
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $mensajes = RegistrarUsuarioDB($CONN, 
-    $_POST['usuario'],    
-    $_POST['clave'],
-    $_POST['nombres'],
-    $_POST['apellidos'],
-    $_POST['fecha_nac'],
-    $_POST['color'],
-    $_POST['correo'],
-    $_POST['id_tip_doc'],
-    $_POST['num_doc'],
-    $_POST['id_num_hijos'],
-    $_POST['foto'],
-    $_POST['direccion'],
-    $_POST['id_est_civil']);
+    $mensajes = RegistrarUsuarioDB(
+        $CONN,
+        $_POST['usuario'],
+        $_POST['clave'],
+        $_POST['nombres'],
+        $_POST['apellidos'],
+        $_POST['fecha_nac'],
+        $_POST['color'],
+        $_POST['correo'],
+        $_POST['id_tip_doc'],
+        $_POST['num_doc'],
+        $_POST['id_num_hijos'],
+        $_POST['foto'],
+        $_POST['direccion'],
+        $_POST['id_est_civil']
+    );
 
     if ($mensajes != NULL) {
         header("HTTP/1.1 200 OK");
@@ -78,146 +80,79 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
  * Actualizar un usuario con el token de autenticación
  * Autor: Alejandro Monroy y Gerónimo Quiroga
  * Fecha: 18/04/2022
+ * 
+
+  
  */
 if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $usuario = token();
-    if (
-        isset($usuario) &&
-        isset($_POST['usuario']) &&
-        isset($_POST['clave']) &&
-        isset($_POST['nombres']) &&
-        isset($_POST['apellidos']) &&
-        isset($_POST['fecha_nac']) &&
-        isset($_POST['color']) &&
-        isset($_POST['correo']) &&
-        isset($_POST['id_tip_doc']) &&
-        isset($_POST['num_doc']) &&
-        isset($_POST['id_num_hijos']) &&
-        isset($_POST['foto']) &&
-        isset($_POST['direccion']) &&
-        isset($_POST['id_est_civil'])
-    ) {
-        $fileTmpPath = $_FILES['foto']['tmp_name']; 
-            $fileName = $_FILES['foto']['name'];
-            $files_folder = '../files/';
-            if(!file_exists($files_folder)) {
-                mkdir($files_folder);
+    $_PUT = array();
+    parse_str(file_get_contents('php://input'), $_PUT);
+    $nombre = isset($_PUT['nombres']) ? $_PUT['nombres'] : NULL;
+    $apellido = isset($_PUT['apellidos']) ? $_PUT['apellidos'] : NULL;
+    $fecha_nac = isset($_PUT['fecha_nac']) ? $_PUT['fecha_nac'] : NULL;
+    $color = isset($_PUT['color']) ? $_PUT['color'] : NULL;
+    $correo = isset($_PUT['correo']) ? $_PUT['correo'] : NULL;
+    $id_tip_doc = isset($_PUT['id_tip_doc']) ? $_PUT['id_tip_doc'] : NULL;
+    $num_doc = isset($_PUT['num_doc']) ? $_PUT['num_doc'] : NULL;
+    $id_num_hijos = isset($_PUT['id_num_hijos']) ? $_PUT['id_num_hijos'] : NULL;
+    $direccion = isset($_PUT['direccion']) ? $_PUT['direccion'] : NULL;
+    $id_est_civil = isset($_PUT['id_est_civil']) ? $_PUT['id_est_civil'] : NULL;
+    // $foto = isset($_PUT['archivo']) ? base64_to_jpeg($_PUT['archivo'], 't.jpg') : NULL;
+    // $foto = isset($_PUT['archivo']) ? $_PUT['archivo'] : NULL;
+    // $foto = NULL;
+    if (isset($_PUT['archivo'])) {
+        $data = explode(';', $_PUT['archivo']);
+        if ($data[0] == 'data:image/jpeg') {
+            echo $data[0];
+            $foto = base64_to_jpeg($data[1], 't.jpg');
+            ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+            if ($mensajes != NULL) {
+                header("HTTP/1.1 200 OK");
+                echo json_encode($mensajes);
+                exit();
+            } else {
+                header("HTTP/1.1 401 Unauthorized");
+                exit();
             }
-
-            $fileNameCmps = explode(".", $fileName);
-            $fileExtension = strtolower(end($fileNameCmps));
-            $permitidas = ['jpg','gif','png','jpeg'];
-            if(in_array($fileExtension, $permitidas)){
-
-                $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
-                $dest_path = $files_folder . $newFileName;
-
-                if(move_uploaded_file($fileTmpPath, $dest_path)){
-
-                    $img = imagecreatefromjpeg($dest_path);
-                    imagejpeg($img, $dest_path, 100);
-                    imagedestroy($img);
-
-                    $exif2 = exif_read_data($dest_path);
-                    
-                    $foto = $dest_path;
-                    
-                    $CONN=ConexionDB();
-                    if ($CONN !=NULL)
-                    {
-                        ActualizarUsuario(
-                            ConexionDB(),     
-                            $usuario,
-                            $_POST['usuario'],
-                            $_POST['clave'],
-                            $_POST['nombres'],
-                            $_POST['apellidos'],
-                            $_POST['fecha_nac'],
-                            $_POST['color'],
-                            $_POST['correo'],
-                            $_POST['id_tip_doc'],
-                            $_POST['num_doc'],
-                            $_POST['id_num_hijos'],
-                            $foto,
-                            $_POST['direccion'],
-                            $_POST['id_est_civil']
-                        );
-                        header("HTTP/1.1 200 OK");
-                        echo json_encode($_POST);
-                        exit();
-
-                    }
-                    else
-                    {
-                        header("HTTP/1.1 500 Internal Server Error");
-                        exit();
-                    }
-                }
-            } 
+        } else if ($data[0] == 'data:image/png') {
+            $foto = base64_to_jpeg($data[1], 't.png');
+            ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+            if ($mensajes != NULL) {
+                header("HTTP/1.1 200 OK");
+                echo json_encode($mensajes);
+                exit();
+            } else {
+                header("HTTP/1.1 401 Unauthorized");
+                exit();
+            }
+        } elseif ($data[0] == 'data:image/gif') {
+            $foto = base64_to_jpeg($data[1], 't.gif');
+            ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+            if ($mensajes != NULL) {
+                header("HTTP/1.1 200 OK");
+                echo json_encode($mensajes);
+                exit();
+            } else {
+                header("HTTP/1.1 401 Unauthorized");
+                exit();
+            }
+        } elseif ($data[0] == 'data:image/bmp') {
+            $foto = base64_to_jpeg($data[1], 't.bmp');
+            $mensajes = ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+            if ($mensajes != NULL) {
+                header("HTTP/1.1 200 OK");
+                echo json_encode($mensajes);
+                exit();
+            } else {
+                header("HTTP/1.1 401 Unauthorized");
+                exit();
+            }
+        } else {
+            $foto = NULL;
         }
-    
+    }
 }
-/**
- * Actualizar un usuario con el token de autenticación
- * Autor: Alejandro Monroy y Gerónimo Quiroga
- * Fecha: 18/04/2022
- */
-// if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
-//     if ($_POST['nombres'] != NULL) {
-//         echo "hola";
-//     }
-//     else {
-//         $_POST['nombres'] =NULL;
-//         echo $_POST['nombres'];
-//     }
-    // $nombre = $_POST['nombres']??null;
-    // $apellido = $_POST['apellidos']??null;
-    // $fecha_nac = $_POST['fecha_nac']??null;
-    // $color = $_POST['color']??null;
-    // $correo = $_POST['correo']??null;
-    // $id_tip_doc = $_POST['id_tip_doc']??null;
-    // $num_doc = $_POST['num_doc']??null;
-    // $id_num_hijos = $_POST['id_num_hijos']??null;
-    // $foto = $_POST['foto']??null;
-    // $direccion = $_POST['direccion']??null;
-    // $id_est_civil = $_POST['id_est_civil']??null;
-
-    // // $usuario = token();
-    // echo $apellido;
-    // $mensajes = ActualizarUsuario($CONN, 
-    // $usuario, 
-    // $nombre,
-    // $apellido,
-    // $fecha_nac,
-    // $color,
-    // $correo,
-    // $id_tip_doc,
-    // $num_doc,
-    // $id_num_hijos,
-    // $foto,
-    // $direccion,
-    // $id_est_civil
-    // );
-
-    // if ($mensajes != NULL) {
-    //     header("HTTP/1.1 200 OK");
-    //     echo json_encode($mensajes);
-    //     exit();
-    // } else {
-    //     header("HTTP/1.1 401 Unauthorized");
-    //     exit();
-    // }
-// }
-// if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
-//     if (isset($_GET['id']) && isset($_GET['uid'])) {
-//         // $datos = ActualizarUsuario($CONN,);
-//         $datosd = ['id' => $datos];
-//         header("HTTP/1.1 200 OK");
-//         echo json_encode($datos);
-//         exit();
-//     }
-// }
-
 
 /**
  * Función que retorna el usuario Actual consumiendo la API con Token 
@@ -295,6 +230,15 @@ function UsuarioActualId()
         }
     }
     return "";
+}
+
+function base64_to_jpeg($base64_string, $output_file)
+{
+    $ifp = fopen($output_file, "wb");
+    $data = explode(',', $base64_string);
+    fwrite($ifp, base64_decode($data[1]));
+    fclose($ifp);
+    return $output_file;
 }
 
 
