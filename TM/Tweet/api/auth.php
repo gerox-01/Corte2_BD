@@ -3,7 +3,6 @@
 require_once('./../../../vendor/autoload.php');
 require_once('./../lib/db_tools.php');
 
-$CONN = ConexionDB();
 
 //libreria de jwt
 use Firebase\JWT\JWT;
@@ -16,7 +15,7 @@ $time = time();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario = $_POST['usuario'];
     $contrasena = $_POST['clave'];
-    $usuarioDB = ValidarLoginDB($CONN, $usuario, $contrasena);
+    $usuarioDB = ValidarLoginDB($usuario, $contrasena);
     if ($usuarioDB != FALSE) {
         $usuarioDB = ObtenerUsuarioDB( $usuario);
         if ($usuarioDB != NULL) {

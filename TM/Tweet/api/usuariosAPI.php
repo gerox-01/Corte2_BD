@@ -7,7 +7,6 @@ require_once('./../../../vendor/autoload.php');
 require_once('./../api/token.php');
 
 LimpiarEntradas();
-$CONN = ConexionDB();
 /**
  * Obetener usuarios con el token de autenticación
  * Autor: Alejandro Monroy y Gerónimo Quiroga
@@ -122,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
         if ($data[0] == 'data:image/jpeg') {
             echo $data[0];
             $foto = base64_to_jpeg($data[1], 't.jpg');
-            ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+            ActualizarUsuario($usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
             if ($mensajes != NULL) {
                 header("HTTP/1.1 200 OK");
                 echo json_encode($mensajes);
@@ -133,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
             }
         } else if ($data[0] == 'data:image/png') {
             $foto = base64_to_jpeg($data[1], 't.png');
-            ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+            ActualizarUsuario($usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
             if ($mensajes != NULL) {
                 header("HTTP/1.1 200 OK");
                 echo json_encode($mensajes);
@@ -144,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
             }
         } elseif ($data[0] == 'data:image/gif') {
             $foto = base64_to_jpeg($data[1], 't.gif');
-            ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+            ActualizarUsuario($usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
             if ($mensajes != NULL) {
                 header("HTTP/1.1 200 OK");
                 echo json_encode($mensajes);
@@ -155,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
             }
         } elseif ($data[0] == 'data:image/bmp') {
             $foto = base64_to_jpeg($data[1], 't.bmp');
-            $mensajes = ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+            $mensajes = ActualizarUsuario($usuario, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
             if ($mensajes != NULL) {
                 header("HTTP/1.1 200 OK");
                 echo json_encode($mensajes);

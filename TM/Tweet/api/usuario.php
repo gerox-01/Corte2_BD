@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
         $archivo = $_GET['archivo'];
         $direccion = $_GET['direccion'];
         $estCivil = $_GET['estCivil'];
-        $datos = ActualizarUsuario($CONN, $id, $username, $password, $name, $lastname, $fecha_nac, $color, $email, $tipDoc, $num_doc, $numhijos, $archivo, $direccion, $estCivil);
+        $datos = ActualizarUsuario($id, $username, $password, $name, $lastname, $fecha_nac, $color, $email, $tipDoc, $num_doc, $numhijos, $archivo, $direccion, $estCivil);
         if ($datos == 1) {
             header("HTTP/1.1 200 OK");
             echo json_encode($datos);

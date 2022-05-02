@@ -6,14 +6,13 @@ require_once('./../lib/tools.php');
 require_once('./../api/token.php');
 
 LimpiarEntradas();
-$CONN = ConexionDB();
 //libreria de jwt
 use Firebase\JWT\JWT;
 
 //listar mensajes recibidos con el token de autenticación
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $usuario = token();
-    $mensajes = ListarMensajesRecibidos($CONN, $usuario);
+    $mensajes = ListarMensajesRecibidos($usuario);
     if ($mensajes != NULL) {
         header("HTTP/1.1 200 OK");
         echo json_encode($mensajes);
@@ -27,8 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $usuario = token();
-    $mensajesRecibidos = ListarMensajesRecibidos($CONN, $usuario);
-    $mensajesEnviados = ListarMensajesEnviados($CONN, $usuario);
+    $mensajesRecibidos = ListarMensajesRecibidos($usuario);
+    $mensajesEnviados = ListarMensajesEnviados($usuario);
 
     if ($mensajesRecibidos != NULL) {
         header("HTTP/1.1 200 OK");
@@ -61,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // $mensaje = $_POST['mensaje'];
     // $destinatario = $_POST['destinatario'];
     // $fecha = date('Y-m-d H:i:s');
-    $mensajeDB = EnviarMensaje($CONN, $_POST['Usuario_Origen'], $_POST['Usuario_Destino'], $_POST['Texto'], $_POST['FechaEnvio'], $_POST['ArchivoAdjunto']);
+    $mensajeDB = EnviarMensaje($_POST['Usuario_Origen'], $_POST['Usuario_Destino'], $_POST['Texto'], $_POST['FechaEnvio'], $_POST['ArchivoAdjunto']);
     if ($mensajeDB != NULL) {
         header("HTTP/1.1 200 OK");
         echo json_encode($mensajeDB);

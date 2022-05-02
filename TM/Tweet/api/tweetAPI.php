@@ -9,7 +9,6 @@ require_once('./../../../vendor/autoload.php');
 
 
 LimpiarEntradas();
-$CONN = ConexionDB();
 
 
 
@@ -24,8 +23,7 @@ $CONN = ConexionDB();
  * Fecha: 20/04/2022
  */
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $CONN = ConexionDB();
-    $datos = MostrarTweet($CONN);
+    $datos = MostrarTweet();
     header('HTTP/1.1 200 OK');
     echo json_encode($datos);
 }
@@ -36,8 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
  * Fecha: 20/04/2022
  */
 if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
-    $CONN = ConexionDB();
-    $datos = Actualizar($CONN, $_GET['id']);
+    $datos = Actualizar($_GET['id']);
     header('HTTP/1.1 200 OK');
     echo json_encode($datos);
 }
@@ -46,9 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['mensaje'])) {
-        $CONN = ConexionDB();
         $usuarioActual = UsuarioActualId();
-        $datos = GuardarTweet($CONN, $_POST['mensaje'], $usuarioActual, $_POST['estado']);
+        $datos = GuardarTweet($_POST['mensaje'], $usuarioActual, $_POST['estado']);
         header('HTTP/1.1 200 OK');
         echo json_encode($datos);
     } else {
@@ -73,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //  */
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     if (isset($_GET['id'])) {
-        $datos = EliminarTweet($CONN, $_GET['id']);
+        $datos = EliminarTweet($_GET['id']);
         header('HTTP/1.1 200 OK');
         echo json_encode($datos);
     } else {
