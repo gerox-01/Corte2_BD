@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $direccion = $_POST['direccion'];
         $estCivil = $_POST['estCivil'];
-        $datos = RegistrarUsuarioDB($CONN, $username, $password, $name, $lastname, $fecha_nac, $color, $email, $tipDoc, $num_doc, $numhijos, $archivo, $direccion, $estCivil);
+        $datos = RegistrarUsuarioDB($username, $password, $name, $lastname, $fecha_nac, $color, $email, $tipDoc, $num_doc, $numhijos, $archivo, $direccion, $estCivil);
         $datos = ['id' => $datos];
         header("HTTP/1.1 200 OK");
         echo json_encode($datos);

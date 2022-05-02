@@ -52,7 +52,7 @@
             <div style='display: flex; flex-direction: column;'>
                 <label for="tipodoc">Tipo de Documento:</label>
                 <select name="tipDoc" required="required">
-                    <?php $tiposdoc = SeleccionarTipoDocDB($CONN);
+                    <?php $tiposdoc = SeleccionarTipoDocDB();
                     foreach ($tiposdoc as $opciones) {
                     ?>
                         <option value="<?php echo $opciones['id_tipdoc'] ?>"><?php echo $opciones['tip_doc'] ?></option>
@@ -80,7 +80,7 @@
                 <label for="numhijos">Numero de hijos:</label>
                 <select name="numhijos" id="numhijos">
                     <?php
-                    $canthijos = SeleccionarCanHijos($CONN);
+                    $canthijos = SeleccionarCanHijos();
                     foreach ($canthijos as $opciones) {
                     ?>
                         <option value="<?php echo $opciones['id_cant_hijos'] ?>"><?php echo $opciones['cant_hijos'] ?></option>
@@ -94,7 +94,7 @@
                 <label for="estadocivil">Estado civil:</label>
                 <select name="estCivil" id="estCivil" required="required">
                     <?php
-                    $estadocivil = SeleccionarEstadoCivilDB($CONN);
+                    $estadocivil = SeleccionarEstadoCivilDB();
                     foreach ($estadocivil as $opciones) {
                     ?>
                         <option value="<?php echo $opciones['id_est_civil'] ?>"><?php echo $opciones['est_civil'] ?></option>
@@ -209,7 +209,7 @@
             #endregion
             loadImage();
 
-            $actualizar = ActualizarUsuario($CONN, $_SESSION['username'], $_SESSION['nombre'], $_SESSION['apellido'], $_SESSION['fecha'], $_SESSION['color'], $_SESSION['email'], $_SESSION['tipodoc'], $_SESSION['numdoc'], $_SESSION['hijos'], $_SESSION['foto'], $_SESSION['direccion'], $_SESSION['estcivil']);
+            $actualizar = ActualizarUsuario($_SESSION['username'], $_SESSION['nombre'], $_SESSION['apellido'], $_SESSION['fecha'], $_SESSION['color'], $_SESSION['email'], $_SESSION['tipodoc'], $_SESSION['numdoc'], $_SESSION['hijos'], $_SESSION['foto'], $_SESSION['direccion'], $_SESSION['estcivil']);
 
             if ($actualizar) {
                 echo '<p>Usuario Actualizado</p>';

@@ -45,7 +45,6 @@ if (isset($_SESSION['username'])) {
 
     GenerarAnctiCSRF();
 
-    $CONN = ConexionDB();
 
     if (!isset($_SESSION['username'])) {
         header("Location: login.php");
@@ -65,7 +64,7 @@ if (isset($_SESSION['username'])) {
     if (isset($_POST['msrecibidos'])) {
         echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow-x: hidden;" id="style-5">';
         echo "<div class='force-overflow'>";
-        $mensajes_recibidos = ListarMensajesRecibidos($CONN, $_SESSION['username']);
+        $mensajes_recibidos = ListarMensajesRecibidos($_SESSION['username']);
         foreach ($mensajes_recibidos as $key => $value) {
             echo ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw; display: flex; justify-content: center;">';
             $registros = ConexionDB()->query("SELECT  `foto` FROM `usuarios`WHERE Usuario='" . $value['Usuario_origen'] . "'")->fetchAll(PDO::FETCH_OBJ);
@@ -91,7 +90,7 @@ if (isset($_SESSION['username'])) {
     } else if (isset($_POST['msenviados'])) {
         echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow-x: hidden;" id="style-5">';
         echo "<div class='force-overflow'>";
-        $mensajes_enviados = ListarMensajesEnviados($CONN, $_SESSION['username']);
+        $mensajes_enviados = ListarMensajesEnviados($_SESSION['username']);
         foreach ($mensajes_enviados as $key => $value) {
             echo ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw; display: flex; justify-content: center;">';
             $registros = ConexionDB()->query("SELECT  `foto` FROM `usuarios`WHERE Usuario='" . $value['Usuario_destino'] . "'")->fetchAll(PDO::FETCH_OBJ);
@@ -122,7 +121,7 @@ if (isset($_SESSION['username'])) {
                 <label form="cmbDestino">Destinatario: </label>
                 <select name="cmbDestino" id="cmbDestino">
                     <?php
-                    $usuarios = ListarUsuarios($CONN, $_SESSION['username']);
+                    $usuarios = ListarUsuarios($_SESSION['username']);
 
                     foreach ($usuarios as $key => $value) {
                         echo '<option value="' . $value['usuario'] . '">' .
@@ -150,7 +149,7 @@ if (isset($_SESSION['username'])) {
     } else {
         echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow-x: hidden;" id="style-5">';
         echo "<div class='force-overflow'>";
-        $mensajes_recibidos = ListarMensajesRecibidos($CONN, $_SESSION['username']);
+        $mensajes_recibidos = ListarMensajesRecibidos($_SESSION['username']);
         foreach ($mensajes_recibidos as $key => $value) {
             echo ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw; display: flex; justify-content: center;">';
             $registros = ConexionDB()->query("SELECT  `foto` FROM `usuarios`WHERE Usuario='" . $value['Usuario_origen'] . "'")->fetchAll(PDO::FETCH_OBJ);
@@ -217,7 +216,7 @@ if (isset($_SESSION['username'])) {
                     $fechaenvio = date('m-d-Y h:i:s a', time());
 
                    
-                    EnviarMensaje($CONN, $usuario_origen, $usuario_destino, $texto, $fechaenvio, $archivo);
+                    EnviarMensaje($usuario_origen, $usuario_destino, $texto, $fechaenvio, $archivo);
                 } else {
                     echo '<br/>Archivo no se almaceno.<br/>';
                 }

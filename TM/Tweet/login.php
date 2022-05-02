@@ -20,9 +20,6 @@
     require_once "funcionesCSRF.php";
     GenerarAnctiCSRF();
 
-    $CONN = ConexionDB();
-    
-
     #region CodigoRevisar
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -67,27 +64,25 @@
 
         <?php
         #region Validar Inicio de Sesión
-       
+
         if (isset($_POST['username']) && isset($_POST['password'])) {
-            if ($CONN != NULL) {
-                $vlogin = ValidarLoginDB($CONN, $_POST['username'], $_POST['password']);
-                if (preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['password'])&& 
-                    preg_match("/^[a-z0-9_-]{3,16}$/", $_POST['username'])) {
-                    if ($vlogin) {
-                        $_SESSION['username'] = $_POST['username'];
-                        $_SESSION['password'] = $_POST['password'];
-                        header("Location: index.php");
-                    } else {
-                        echo "<p>Usuario o clave incorrectos</p>";
-                    }
+            $vlogin = ValidarLoginDB($_POST['username'], $_POST['password']);
+            if (
+                preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['password']) &&
+                preg_match("/^[a-z0-9_-]{3,16}$/", $_POST['username'])
+            ) {
+                if ($vlogin) {
+                    $_SESSION['username'] = $_POST['username'];
+                    $_SESSION['password'] = $_POST['password'];
+                    header("Location: index.php");
                 } else {
-                    echo "<p>No coinciden con formato solicitado</p>";
+                    echo "<p>Usuario o clave incorrectos</p>";
                 }
+            } else {
+                echo "<p>No coinciden con formato solicitado</p>";
             }
             LimpiarEntradas();
         }
-
-       
 
         #endregion
         ?>

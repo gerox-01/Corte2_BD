@@ -27,7 +27,6 @@
         die();
     }
     
-    $CONN = ConexionDB();
 
     LimpiarEntradas();
     $tweet = $_POST['tweet'] ?? '';
@@ -88,7 +87,7 @@
             }
 
 
-            $savet = GuardarTweet($CONN, $tweet, $_SESSION['iduser'], $estado);
+            $savet = GuardarTweet($tweet, $_SESSION['iduser'], $estado);
             if ($savet) {
                 echo '<script>alert("Tweet creado")</script>';
                 echo '<script>window.location.href="index.php"; </script>';

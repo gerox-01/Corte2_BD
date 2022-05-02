@@ -13,11 +13,11 @@ use Firebase\JWT\JWT;
 function ConexionDB()
 {
     $servername = "localhost";
-    // $database = "corte2bd";
-    // $password = "";
+    $database = "corte2bd";
+    $password = "";
     $username = "root";
-    $database = "tm";
-    $password = "123456";
+    // $database = "tm";
+    // $password = "123456";
 
     $sql = "mysql:host=$servername; dbname=$database;";
     $dsn_Options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
@@ -54,7 +54,6 @@ function ConexionDB()
  * @return boolean
  */
 function RegistrarUsuarioDB(
-    
     $usuario,
     $clave,
     $nombre,
@@ -124,8 +123,9 @@ function RegistrarUsuarioDB(
  * @param string $connection
  * @return array
  */
-function SeleccionarTipoDocDB($my_Db_Connection)
+function SeleccionarTipoDocDB()
 {
+    $my_Db_Connection = ConexionDB();
     $sql = "SELECT `id_tipdoc`, `tip_doc` FROM `tipdoc`";
     $statement = $my_Db_Connection->prepare($sql);
     try {
@@ -146,8 +146,9 @@ function SeleccionarTipoDocDB($my_Db_Connection)
  * @param string $connection
  * @return array
  */
-function SeleccionarEstadoCivilDB($my_Db_Connection)
+function SeleccionarEstadoCivilDB()
 {
+    $my_Db_Connection = ConexionDB();
     $sql = "SELECT `id_est_civil`, `est_civil` FROM `estadocivil`";
     $statement = $my_Db_Connection->prepare($sql);
     try {
@@ -168,8 +169,9 @@ function SeleccionarEstadoCivilDB($my_Db_Connection)
  * @param string $connection
  * @return array
  */
-function SeleccionarCanHijos($my_Db_Connection)
+function SeleccionarCanHijos()
 {
+    $my_Db_Connection = ConexionDB();
     $sql = "SELECT `id_cant_hijos`, `cant_hijos` FROM `cantidadhijos`";
     $statement = $my_Db_Connection->prepare($sql);
     try {
@@ -253,9 +255,9 @@ function ObtenerUsuarioDB($usuario)
  * @param string $clave
  * @return boolean
  */
-function ValidarLoginDB($my_Db_Connection, $usuario, $clave)
+function ValidarLoginDB($usuario, $clave)
 {
-
+    $my_Db_Connection = ConexionDB();
     try {
         $clavecryp = encriptarPassword($clave);
         $my_Select_Statement =
@@ -379,8 +381,9 @@ function color($conexion, $usuario)
  * @param string estadociv
  * @return boolean
  */
-function ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha, $color, $email, $tipodoc, $numdoc, $hijos, $foto, $direccion, $estadociv)
+function ActualizarUsuario($usuario, $nombre, $apellido, $fecha, $color, $email, $tipodoc, $numdoc, $hijos, $foto, $direccion, $estadociv)
 {
+    $CONN = ConexionDB();
     $sql = "UPDATE `usuarios` SET `nombres`= case WHEN :nombre IS NULL THEN `nombres` ELSE :nombre END, `apellidos`= case WHEN :apellido IS NULL THEN `apellidos` ELSE :apellido END,
     `fecha_nac`= case WHEN :fecha IS NULL THEN `fecha_nac` ELSE :fecha END, `color`= case WHEN :color IS NULL THEN `color` ELSE :color END,
     `correo`= case WHEN :email IS NULL THEN `correo` ELSE :email END, `id_tip_doc`= case WHEN :tipodoc IS NULL THEN `id_tip_doc` ELSE :tipodoc END,
@@ -424,9 +427,9 @@ function ActualizarUsuario($CONN, $usuario, $nombre, $apellido, $fecha, $color, 
  * @param string newclave
  * @return boolean
  */
-function CambiarClave($CONN, $usuario, $clave, $newclave)
+function CambiarClave($usuario, $clave, $newclave)
 {
-
+    $CONN = ConexionDB();
     $encryptnew = encriptarPassword($newclave);
     $encryptold = encriptarPassword($clave);
 
@@ -482,8 +485,9 @@ function CambiarClave($CONN, $usuario, $clave, $newclave)
  * @param string $fecha
  * @return boolean
  */
-function GuardarTweet($connection, $tweet, $usuario, $estado)
+function GuardarTweet($tweet, $usuario, $estado)
 {
+    $connection = ConexionDB();
     $sql = "INSERT INTO tuits (mensaje_tuit, id_usuario_tuit, Estado) VALUES (:tweet, :usuario, :estado)";
     $statement = $connection->prepare($sql);
     $statement->bindParam(':tweet', $tweet);
@@ -508,10 +512,10 @@ function GuardarTweet($connection, $tweet, $usuario, $estado)
  * @param string conexión
  * @return array
  */
-function MostrarTweet($connection)
+function MostrarTweet()
 {
     $datostweets = [];
-
+    $$connection = ConexionDB();
     $sql = "SELECT tuits.id_tuit as 'idtuit', tuits.mensaje_tuit as 'mensaje', tuits.fecha_tuit as 'fecha', usuarios.usuario as 'usuario', usuarios.foto as 'foto', tuits.Estado as 'estado' FROM tuits INNER JOIN usuarios ON tuits.id_usuario_tuit = usuarios.id_usuario WHERE tuits.Estado = 1 ORDER BY tuits.fecha_tuit DESC";
     $statement = $connection->prepare($sql);
     try {
@@ -536,10 +540,10 @@ function MostrarTweet($connection)
  * @param string conexión
  * @return array
  */
-function MostrarTweetU($connection)
+function MostrarTweetU()
 {
     $datostweets = [];
-
+    $$connection = ConexionDB();
     $sql = "SELECT tuits.id_tuit as 'idtuit', tuits.mensaje_tuit as 'mensaje', tuits.fecha_tuit as 'fecha', usuarios.usuario as 'usuario', usuarios.foto as 'foto', tuits.Estado as 'estado' FROM tuits INNER JOIN usuarios ON tuits.id_usuario_tuit = usuarios.id_usuario ORDER BY tuits.fecha_tuit DESC";
     $statement = $connection->prepare($sql);
     try {
@@ -566,8 +570,9 @@ function MostrarTweetU($connection)
  * @param string id
  * @return boolean
  */
-function EliminarTweet($connection, $id)
+function EliminarTweet($id)
 {
+    $connection = ConexionDB();
     $sql = "DELETE FROM tuits WHERE id_tuit = :id";
     $statement = $connection->prepare($sql);
     $statement->bindParam(':id', $id);
@@ -592,8 +597,9 @@ function EliminarTweet($connection, $id)
  * @param string id
  * @return boolean
  */
-function Publicar($CONN, $id)
+function Publicar($id)
 {
+    $CONN = ConexionDB();
     $sql = "UPDATE tuits SET Estado = 1 WHERE id_tuit = :id";
     $statement = $CONN->prepare($sql);
     $statement->bindParam(':id', $id);
@@ -616,8 +622,9 @@ function Publicar($CONN, $id)
  * @param string id
  * @return boolean
  */
-function Actualizar($CONN, $id)
+function Actualizar($id)
 {
+    $CONN = ConexionDB();
     $sql = "UPDATE tuits SET mensaje_tuit = :tweet WHERE id_tuit = :id";
     $statement = $CONN->prepare($sql);
     $statement->bindParam(':id', $id);
@@ -642,8 +649,9 @@ function Actualizar($CONN, $id)
  * @param string conexión
  * @param string id
  */
-function Despublicar($CONN, $id)
+function Despublicar($id)
 {
+    $CONN = ConexionDB();
     $sql = "UPDATE tuits SET Estado = 0 WHERE id_tuit = :id";
     $statement = $CONN->prepare($sql);
     $statement->bindParam(':id', $id);
@@ -667,10 +675,10 @@ function Despublicar($CONN, $id)
  * @param string conexión
  * @param string id
  */
-function ListarUsuarios($my_Db_Connection, $usuario)
+function ListarUsuarios($usuario)
 {
     $lista_usuario = [];
-
+    $my_Db_Connection = ConexionDB();
     try {
         $my_Select_Statement =
             $my_Db_Connection->prepare("SELECT `usuario`,`nombres`,`apellidos` FROM `usuarios` WHERE `Usuario`!= :Usuario");
@@ -690,8 +698,9 @@ function ListarUsuarios($my_Db_Connection, $usuario)
  * @param string conexión
  * @param string id
  */
-function EnviarMensaje($my_Db_Connection, $usuario_origen, $usuario_destino, $texto, $fechaenvio, $archivo)
+function EnviarMensaje($usuario_origen, $usuario_destino, $texto, $fechaenvio, $archivo)
 {
+    $my_Db_Connection = ConexionDB();
     try {
         $my_Insert_Statement =
             $my_Db_Connection->prepare("INSERT INTO mensajes (Usuario_origen, Usuario_destino, Texto, FechaEnvio, ArchivoAdjunto)" .
@@ -722,8 +731,9 @@ function EnviarMensaje($my_Db_Connection, $usuario_origen, $usuario_destino, $te
  * @param string conexión
  * @param string id
  */
-function ListarMensajesRecibidos($my_Db_Connection, $usuario_destino)
+function ListarMensajesRecibidos($usuario_destino)
 {
+    $my_Db_Connection = ConexionDB();
     $lista_mensajes = [];
     try {
         $my_Select_Statement =
@@ -744,8 +754,9 @@ function ListarMensajesRecibidos($my_Db_Connection, $usuario_destino)
  * @param string conexión
  * @param string id
  */
-function ListarMensajesEnviados($my_Db_Connection, $usuario_origen)
+function ListarMensajesEnviados($usuario_origen)
 {
+    $my_Db_Connection = ConexionDB();
     $lista_mensajes = [];
     try {
         $my_Select_Statement =
