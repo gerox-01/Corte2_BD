@@ -10,18 +10,18 @@ LimpiarEntradas();
 use Firebase\JWT\JWT;
 
 //listar mensajes recibidos con el token de autenticación
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $usuario = token();
-    $mensajes = ListarMensajesRecibidos($usuario);
-    if ($mensajes != NULL) {
-        header("HTTP/1.1 200 OK");
-        echo json_encode($mensajes);
-        exit();
-    } else {
-        header("HTTP/1.1 401 Unauthorized");
-        exit();
-    }
-}
+// if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+//     $usuario = token();
+//     $mensajes = ListarMensajesRecibidos($usuario);
+//     if ($mensajes != NULL) {
+//         header("HTTP/1.1 200 OK");
+//         echo json_encode($mensajes);
+//         exit();
+//     } else {
+//         header("HTTP/1.1 401 Unauthorized");
+//         exit();
+//     }
+// }
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {

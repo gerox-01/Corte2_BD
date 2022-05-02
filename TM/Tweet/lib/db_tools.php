@@ -390,7 +390,7 @@ function ActualizarUsuario($usuario, $nombre, $apellido, $fecha, $color, $email,
     `num_doc`= case WHEN :numdoc IS NULL THEN `num_doc` ELSE :numdoc END, `id_num_hijos`= case WHEN :hijos IS NULL THEN `id_num_hijos` ELSE :hijos END,
     `foto`= case WHEN :foto IS NULL THEN `foto` ELSE :foto END, `direccion`= case WHEN :direccion IS NULL THEN `direccion` ELSE :direccion END, 
     `id_est_civil`= case WHEN :estadociv IS NULL THEN `id_est_civil` ELSE :estadociv END WHERE `usuario`= :usuario";
-    
+
     $statement = $CONN->prepare($sql);
     $statement->bindParam(':usuario', $usuario);
     $statement->bindParam(':nombre', $nombre);
@@ -620,15 +620,18 @@ function Publicar($id)
  * Fecha: 12/04/2022
  * @param string conexión
  * @param string id
+ * @param string mensaje_tuit
+ * @param boolean estado
  * @return boolean
  */
-function Actualizar($id)
+function Actualizar($id, $tweet, $estado)
 {
     $CONN = ConexionDB();
-    $sql = "UPDATE tuits SET mensaje_tuit = :tweet WHERE id_tuit = :id";
+    $sql = "UPDATE tuits SET mensaje_tuit = case when :tweet is null then mensaje_tuit else :tweet end, Estado = case when :estado is null then Estado else :estado end WHERE id_tuit = :id";
     $statement = $CONN->prepare($sql);
     $statement->bindParam(':id', $id);
-    // $statement->bindParam(':tweet', $tweet);
+    $statement->bindParam(':tweet', $tweet);
+    $statement->bindParam(':estado', $estado);
     try {
         if ($statement->execute()) {
             return TRUE;

@@ -34,9 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
  * Fecha: 20/04/2022
  */
 if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
-    $datos = Actualizar($_GET['id']);
-    header('HTTP/1.1 200 OK');
-    echo json_encode($datos);
+
+    $tweet = $_PUT['tweet'] ?? NULL;
+    $estado = $_PUT['estado'] ?? NULL;
+
+    $usuario = token();
+    if ($usuario != NULL) {
+        $datos = Actualizar($_GET['id'], $tweet, $estado);
+        header('HTTP/1.1 200 OK');
+        echo json_encode($datos);
+    }else{
+        header('HTTP/1.1 401 Unauthorized');
+        exit();
+    }
 }
 
 
@@ -172,5 +182,3 @@ function UsuarioActualId()
 //         header('HTTP/1.1 400 Bad Request');
 //     }
 // }
-
-
