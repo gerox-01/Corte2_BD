@@ -17,36 +17,35 @@
     require_once('./lib/tools.php');
     require_once './lib/db_tools.php';
     require_once "funcionesCSRF.php";
-    GenerarAnctiCSRF();   
+    GenerarAnctiCSRF();
 
     $user = $_SESSION['username'] ?? '';
 
-    if($user == '' || $user == null){
+    if ($user == '' || $user == null) {
         header('Location: login.php');
         die();
     }
 
-    $CONN = ConexionDB();
 
     echo '<div style="width: 90vw; display: flex; justify-content: space-around; padding: 0 !important; margin-bottom: 0 !important;">';
     echo '<form method="post" style="display: flex; flex-direction: row !important; width: 98vw; justify-content: space-around !important;">';
     echo '<input type="submit" name="todosarticulos" value="Todos los artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
     echo '<input type="submit" name="misarticulos" value="Mis artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
     echo '<input type="submit" name="creararticulo" value="Crear artículo" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
-    
+
     echo '</form>';
     echo '</div>';
 
 
-    if(isset($_POST['todosarticulos'])){
+    if (isset($_POST['todosarticulos'])) {
         echo '<script>window.location.href = "index.php";</script>';
-    }else if (isset($_POST['misarticulos'])){
+    } else if (isset($_POST['misarticulos'])) {
         echo '<script>window.location.href = "misarticulos.php";</script>';
-    } else if(isset($_POST['creararticulo'])){
+    } else if (isset($_POST['creararticulo'])) {
         echo '<script>window.location.href="tweet.php";</script>';
     }
 
-    $data = MostrarTweetU($CONN);
+    $data = MostrarTweetU();
     if ($data == null) {
         echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #cccc !important; height: 50vh !important; width: 98vw; overflow: hidden;" id="style-5">';
         echo "<div class='force-overflow'>";
@@ -89,7 +88,7 @@
                 DespublicarTweet();
                 EliminarT();
                 PublicarTweet();
-                }
+            }
         }
         echo '</div>';
     }
@@ -98,11 +97,9 @@
 
     function PublicarTweet()
     {
-        $CONN = ConexionDB();
-
         if (isset($_POST['publicar'])) {
             $encrypid = encriptarIdTuit($_SESSION['idtuit']);
-            $publicar = Publicar($CONN, $_SESSION['idtuit']);
+            $publicar = Publicar($_SESSION['idtuit']);
             if ($publicar) {
                 echo '<script>alert("Artículo publicado")</script>';
                 echo '<script>window.location.href="index.php"; </script>';
@@ -114,11 +111,10 @@
 
     function DespublicarTweet()
     {
-        $CONN = ConexionDB();
 
         if (isset($_POST['despublicar'])) {
             $encrypid = encriptarIdTuit($_SESSION['idtuit']);
-            $despublicar = Despublicar($CONN, $_SESSION['idtuit']);
+            $despublicar = Despublicar($_SESSION['idtuit']);
             if ($despublicar) {
                 echo '<script>alert("Artículo despublicado")</script>';
                 echo '<script>window.location.href="index.php"; </script>';
@@ -130,11 +126,9 @@
 
     function EliminarT()
     {
-        $CONN = ConexionDB();
-
         if (isset($_POST['eliminar'])) {
             $encrypid = encriptarIdTuit($_SESSION['idtuit']);
-            $deletetweet =  EliminarTweet($CONN, $_SESSION['idtuit']);
+            $deletetweet =  EliminarTweet($_SESSION['idtuit']);
             if ($deletetweet) {
                 echo '<script>alert("Artículo eliminado")</script>';
                 echo '<script>window.location.href="index.php"; </script>';
@@ -157,10 +151,10 @@
 
     <script>
         // function EliminarID(){
-            // var tweet = document.getElementById('idtuit');
-            // var idtuit = tweet.value;
-            // tweet.removeAttribute('value');
-            // console.log(idtuit);
+        // var tweet = document.getElementById('idtuit');
+        // var idtuit = tweet.value;
+        // tweet.removeAttribute('value');
+        // console.log(idtuit);
         // }
     </script>
 </body>

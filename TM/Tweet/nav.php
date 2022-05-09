@@ -20,16 +20,13 @@
     require_once "funcionesCSRF.php";
     GenerarAnctiCSRF();
 
-    $CONN = ConexionDB();
     $usuario = $_SESSION['username'] ?? '';
 
-    if ($CONN != NULL) {
-        $datosuser = ObtenerUsuarioDB($CONN, $usuario);
-        if ($datosuser != NULL) {
-            foreach ($datosuser as $key => $value) {
-                global $colorr;
-                $colorr = $value["color"];
-            }
+    $datosuser = ObtenerUsuarioDB($usuario);
+    if ($datosuser != NULL) {
+        foreach ($datosuser as $key => $value) {
+            global $colorr;
+            $colorr = $value["color"];
         }
     }
 
@@ -56,7 +53,6 @@
                                 <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='🔓 Cerrar sesión' name='exit' id='exit'>
                             </form>
                         </div>";
-                        
                 } else {
                     echo "
                     <div>
@@ -72,13 +68,13 @@
                     header("Location: index.php");
                 }
                 ?>
-            <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
+                <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
             </div>
             <!-- Datos Usuario -->
             <div style="display: flex; justify-content: space-around; width: 90vw; padding: 0 !important; margin: 0 !important;">
                 <?php
                 // Boton de ver articulos
-                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "" && $nombre ) {
+                if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "" && $nombre) {
                     echo "<form method='post' style='margin-top: 0 !important;' >
                             <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='📚 Ver articulos' name='verarticulos' id='verarticulos'>
                         </form>";
@@ -99,7 +95,7 @@
                 }
                 ?>
 
-                <?php 
+                <?php
 
                 if (isset($_POST['verarticulos'])) {
                     header("Location: index.php");

@@ -76,79 +76,58 @@ class JWT
      * @uses jsonDecode
      * @uses urlsafeB64Decode
      */
-    public static function decode($jwt, $key, array $allowed_algs = array())
+    public static function decode($jwt, $key, $allowed_algs = array())
     {
-        $timestamp = \is_null(static::$timestamp) ? \time() : static::$timestamp;
-
         if (empty($key)) {
             throw new InvalidArgumentException('Key may not be empty');
         }
-        $tks = \explode('.', $jwt);
-        if (\count($tks) != 3) {
+        $tks = explode('.', $jwt);
+        if (count($tks) != 3) {
             throw new UnexpectedValueException('Wrong number of segments');
         }
         list($headb64, $bodyb64, $cryptob64) = $tks;
-        if (null === ($header = static::jsonDecode(static::urlsafeB64Decode($headb64)))) {
+        if (null === ($header = JWT::jsonDecode(JWT::urlsafeB64Decode($headb64)))) {
             throw new UnexpectedValueException('Invalid header encoding');
         }
-        if (null === $payload = static::jsonDecode(static::urlsafeB64Decode($bodyb64))) {
+        if (null === ($payload = JWT::jsonDecode(JWT::urlsafeB64Decode($bodyb64)))) {
             throw new UnexpectedValueException('Invalid claims encoding');
         }
-        if (false === ($sig = static::urlsafeB64Decode($cryptob64))) {
-            throw new UnexpectedValueException('Invalid signature encoding');
-        }
+        $sig = JWT::urlsafeB64Decode($cryptob64);
         if (empty($header->alg)) {
-            throw new UnexpectedValueException('Empty algorithm');
+            throw new DomainException('Empty algorithm');
         }
-        if (empty(static::$supported_algs[$header->alg])) {
-            throw new UnexpectedValueException('Algorithm not supported');
+        if (empty(self::$supported_algs[$header->alg])) {
+            throw new DomainException('Algorithm not supported');
         }
-        if (!\in_array($header->alg, $allowed_algs)) {
-            throw new UnexpectedValueException('Algorithm not allowed');
+        if (!is_array($allowed_algs) || !in_array($header->alg, $allowed_algs)) {
+            throw new DomainException('Algorithm not allowed');
         }
-        if ($header->alg === 'ES256' || $header->alg === 'ES384') {
-            // OpenSSL expects an ASN.1 DER sequence for ES256/ES384 signatures
-            $sig = self::signatureToDER($sig);
-        }
-
-        if (\is_array($key) || $key instanceof \ArrayAccess) {
+        if (is_array($key) || $key instanceof \ArrayAccess) {
             if (isset($header->kid)) {
-                if (!isset($key[$header->kid])) {
-                    throw new UnexpectedValueException('"kid" invalid, unable to lookup correct key');
-                }
                 $key = $key[$header->kid];
             } else {
-                throw new UnexpectedValueException('"kid" empty, unable to lookup correct key');
+                throw new DomainException('"kid" empty, unable to lookup correct key');
             }
         }
-
         // Check the signature
-        if (!static::verify("$headb64.$bodyb64", $sig, $key, $header->alg)) {
-            throw new SignatureInvalidException('Signature verification failed');
-        }
-
-        // Check the nbf if it is defined. This is the time that the
+        // if (!JWT::verify("{$headb64}.{$bodyb64}", $sig, $key, $header->alg)) {
+        //     throw new SignatureInvalidException('Signature verification failed');
+        // }
+        // Check if the nbf if it is defined. This is the time that the
         // token can actually be used. If it's not yet that time, abort.
-        if (isset($payload->nbf) && $payload->nbf > ($timestamp + static::$leeway)) {
-            throw new BeforeValidException(
-                'Cannot handle token prior to ' . \date(DateTime::ISO8601, $payload->nbf)
-            );
+        if (isset($payload->nbf) && $payload->nbf > time() + self::$leeway) {
+            throw new BeforeValidException('Cannot handle token prior to ' . date(DateTime::ISO8601, $payload->nbf));
         }
-
         // Check that this token has been created before 'now'. This prevents
         // using tokens that have been created for later use (and haven't
         // correctly used the nbf claim).
-        if (isset($payload->iat) && $payload->iat > ($timestamp + static::$leeway)) {
-            throw new BeforeValidException(
-                'Cannot handle token prior to ' . \date(DateTime::ISO8601, $payload->iat)
-            );
+        if (isset($payload->iat) && $payload->iat > time() + self::$leeway) {
+            throw new BeforeValidException('Cannot handle token prior to ' . date(DateTime::ISO8601, $payload->iat));
         }
-
         // Check if this token has expired.
-        if (isset($payload->exp) && ($timestamp - static::$leeway) >= $payload->exp) {
+        if (isset($payload->exp) && time() - self::$leeway >= $payload->exp) {
             throw new ExpiredException('Expired token');
         }
-
         return $payload;
     }
 
@@ -271,17 +250,17 @@ class JWT
                     'OpenSSL error: ' . \openssl_error_string()
                 );
             case 'sodium_crypto':
-              if (!function_exists('sodium_crypto_sign_verify_detached')) {
-                  throw new DomainException('libsodium is not available');
-              }
-              try {
-                  // The last non-empty line is used as the key.
-                  $lines = array_filter(explode("\n", $key));
-                  $key = base64_decode(end($lines));
-                  return sodium_crypto_sign_verify_detached($signature, $msg, $key);
-              } catch (Exception $e) {
-                  throw new DomainException($e->getMessage(), 0, $e);
-              }
+                if (!function_exists('sodium_crypto_sign_verify_detached')) {
+                    throw new DomainException('libsodium is not available');
+                }
+                try {
+                    // The last non-empty line is used as the key.
+                    $lines = array_filter(explode("\n", $key));
+                    $key = base64_decode(end($lines));
+                    return sodium_crypto_sign_verify_detached($signature, $msg, $key);
+                } catch (Exception $e) {
+                    throw new DomainException($e->getMessage(), 0, $e);
+                }
             case 'hash_hmac':
             default:
                 $hash = \hash_hmac($algorithm, $msg, $key, true);
@@ -323,7 +302,7 @@ class JWT
              *them to strings) before decoding, hence the preg_replace() call.
              */
             $max_int_length = \strlen((string) PHP_INT_MAX) - 1;
-            $json_without_bigints = \preg_replace('/:\s*(-?\d{'.$max_int_length.',})/', ': "$1"', $input);
+            $json_without_bigints = \preg_replace('/:\s*(-?\d{' . $max_int_length . ',})/', ': "$1"', $input);
             $obj = \json_decode($json_without_bigints);
         }
 
@@ -402,8 +381,8 @@ class JWT
         );
         throw new DomainException(
             isset($messages[$errno])
-            ? $messages[$errno]
-            : 'Unknown JSON error: ' . $errno
+                ? $messages[$errno]
+                : 'Unknown JSON error: ' . $errno
         );
     }
 
@@ -449,7 +428,7 @@ class JWT
         return self::encodeDER(
             self::ASN1_SEQUENCE,
             self::encodeDER(self::ASN1_INTEGER, $r) .
-            self::encodeDER(self::ASN1_INTEGER, $s)
+                self::encodeDER(self::ASN1_INTEGER, $s)
         );
     }
 

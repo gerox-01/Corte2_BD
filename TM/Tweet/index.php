@@ -44,7 +44,6 @@ if (isset($_SESSION['username'])) {
 
     $user = $_SESSION['username'] ?? '';
 
-    $CONN = ConexionDB();
 
     if($user == '' || $user == null){
         header('Location: login.php');
@@ -60,7 +59,7 @@ if (isset($_SESSION['username'])) {
     echo '</div>';
 
     if (isset($_POST['todosarticulos'])) {
-        $data = MostrarTweet($CONN);
+        $data = MostrarTweet();
         if ($data == null) {
             echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow: hidden;" id="style-5">';
             echo "<div class='force-overflow'>";
@@ -101,7 +100,7 @@ if (isset($_SESSION['username'])) {
     } else if (isset($_POST['creararticulo'])) {
         echo '<script>window.location.href="tweet.php"; </script>';
     } else {
-        $data = MostrarTweet($CONN);
+        $data = MostrarTweet();
         if ($data == null) {
             echo '<div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow: hidden;" id="style-5">';
             echo "<div class='force-overflow'>";
