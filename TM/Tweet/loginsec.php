@@ -22,7 +22,7 @@
     GenerarAnctiCSRF();
 
     $CONN = ConexionDB();
-    
+
 
     #region CodigoRevisar
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -53,8 +53,8 @@
 
     <h3>
         <?php
-            $Captcha = rand(1000, 9999);
-            echo 'Captcha generado:' . $Captcha;
+        // $Captcha = rand(1000, 9999);
+        // echo 'Captcha generado:' . $Captcha;
         ?>
     </h3>
 
@@ -69,9 +69,7 @@
                 <input type="password" name="password" id="password" required="required" placeholder="Digite contraseña" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" maxlength=20 title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
             </div>
             <!-- Captcha -->
-            <div data-sitekey="6LeJHckfAAAAAG2c6hio14S_Y9vObuxd2Gvb3Mz3">
-                <input name="g-recaptcha-response" id="g-recaptcha-response" type="text">
-            </div>
+            <div class="g-recaptcha" name="g-recaptcha" data-sitekey="6LeJHckfAAAAAG2c6hio14S_Y9vObuxd2Gvb3Mz3"></div>
             <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
             <button name="send" type="submit" value="send">Enviar</button>
         </form>
@@ -79,16 +77,16 @@
 
         <?php
         #region Validar Inicio de Sesión
-       
-        if(isset($_POST['send'])){
+
+        if (isset($_POST['send'])) {
             echo '<br>Validando Captcha...<br>';
             $secretKey = '6LeJHckfAAAAAAmlCL4cRhGSWEkVqt_ifM6-Nrmy';
-            $captcha = $_POST['g-recaptcha-response'];
+            $captcha = $_POST['g-recaptcha'];
             $ip = $_SERVER['REMOTE_ADDR'];
 
             var_dump($ip);
             // Chequear captcha en Google
-            $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $secretKey . "&response=". $captcha . "&remoteip=" . $ip);
+            $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $secretKey . "&response=" . $captcha . "&remoteip=" . $ip);
             $responseKeys = json_decode($response, true);
             // echo '<br>Respuesta de Google: ' . $responseKeys['success'];
             var_dump($responseKeys);
@@ -118,7 +116,7 @@
             // }
         }
 
-       
+
 
         #endregion
         ?>

@@ -13,7 +13,7 @@ use Firebase\JWT\JWT;
 function ConexionDB()
 {
     $servername = "localhost";
-    $database = "corte2bd";
+    $database = "tm";
     $password = "";
     $username = "root";
     // $database = "tm";
