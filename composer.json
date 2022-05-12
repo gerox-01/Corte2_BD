@@ -1,5 +1,6 @@
 {
-    "require": {
-        "firebase/php-jwt": "5.4"
-    }
+  "require": {
+    "firebase/php-jwt": "5.4",
+    "google/recaptcha": "^1.2"
+  }
 }

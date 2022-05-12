@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="./css/styles.css">
-    <script src="https://google.com/recaptcha/api.js" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js?hl=es" async defer></script>
 
     <title>Log in</title>
 </head>
@@ -16,6 +16,7 @@
     <?php
     require_once('./lib/db_tools.php');
     require_once('./nav.php');
+    require_once './../../vendor/autoload.php';
 
     LimpiarEntradas();
     require_once "funcionesCSRF.php";
@@ -69,51 +70,74 @@
                 <input type="password" name="password" id="password" required="required" placeholder="Digite contraseña" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" maxlength=20 title="más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial">
             </div>
             <!-- Captcha -->
-            <div class="g-recaptcha" name="g-recaptcha" data-sitekey="6LeJHckfAAAAAG2c6hio14S_Y9vObuxd2Gvb3Mz3"></div>
+            <div class="g-recaptcha" data-sitekey="6LeJHckfAAAAAG2c6hio14S_Y9vObuxd2Gvb3Mz3"></div>
             <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
             <button name="send" type="submit" value="send">Enviar</button>
         </form>
 
 
         <?php
+
+
+        // foreach ($_POST as $key => $value) {
+        //     echo '<p><strong>' . $key . ':</strong> ' . $value . '</p>';
+        // }
         #region Validar Inicio de Sesión
 
         if (isset($_POST['send'])) {
-            echo '<br>Validando Captcha...<br>';
             $secretKey = '6LeJHckfAAAAAAmlCL4cRhGSWEkVqt_ifM6-Nrmy';
-            $captcha = $_POST['g-recaptcha'];
-            $ip = $_SERVER['REMOTE_ADDR'];
+            $response = null;
+            // comprueba la clave secreta
+            $recaptcha = new \ReCaptcha\ReCaptcha($secretKey);
+            $resp = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
+                ->verify($_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR']);
+            if ($resp->isSuccess()) :
+                // If the response is a success, that's it!
+        ?>
+                <!-- <h2>Success!</h2> -->
+                <!-- <kbd>
+                    <pre><?php 
+                    // var_export($resp); 
+                    if (isset($_POST['username']) && isset($_POST['password'])) {
+                        $vlogin = ValidarLoginDB($_POST['username'], $_POST['password']);
+                        if (
+                            preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['password']) &&
+                            preg_match("/^[a-z0-9_-]{3,16}$/", $_POST['username'])
+                        ) {
+                            if ($vlogin) {
+                                $_SESSION['username'] = $_POST['username'];
+                                $_SESSION['password'] = $_POST['password'];
+                                header("Location: index.php");
+                            } else {
+                                echo "<p>Usuario o clave incorrectos</p>";
+                            }
+                        } else {
+                            echo "<p>No coinciden con formato solicitado</p>";
+                        }
+                        LimpiarEntradas();
+                    }
+                    ?></pre>
+                </kbd> -->
+                
+                <!-- <p>That's it. Everything is working. Go integrate this into your real project.</p> -->
+                <!-- <p><a href="/login.php">⤴️ ENTRAR</a></p> -->
 
-            var_dump($ip);
-            // Chequear captcha en Google
-            $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $secretKey . "&response=" . $captcha . "&remoteip=" . $ip);
-            $responseKeys = json_decode($response, true);
-            // echo '<br>Respuesta de Google: ' . $responseKeys['success'];
-            var_dump($responseKeys);
-
-            // Si la captcha es correcta que escriba lo siguiente
-            // if(intval($responseKeys['success'])==1){
-            //     if (isset($_POST['username']) && isset($_POST['password'])) {
-            //         if ($CONN != NULL) {
-            //             $vlogin = ValidarLoginDB($CONN, $_POST['username'], $_POST['password']);
-            //             if (preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['password'])&& 
-            //                 preg_match("/^[a-z0-9_-]{3,16}$/", $_POST['username'])) {
-            //                 if ($vlogin) {
-            //                     $_SESSION['username'] = $_POST['username'];
-            //                     $_SESSION['password'] = $_POST['password'];
-            //                     header("Location: index.php");
-            //                 } else {
-            //                     echo "<p>Usuario o clave incorrectos</p>";
-            //                 }
-            //             } else {
-            //                 echo "<p>No coinciden con formato solicitado</p>";
-            //             }
-            //         }
-            //         LimpiarEntradas();
-            //     }
-            // }else{
-            //     echo "<p>Captcha incorrecto</p>";
-            // }
+                
+            <?php
+            else :
+                // If it's not successful, then one or more error codes will be returned.
+            ?>
+                <h2>ReCaptcha no valido</h2>
+                <!-- <kbd>
+                    <pre><?php 
+                    // var_export($resp); 
+                    ?></pre>
+                </kbd> -->
+                <!-- <p>Check the error code reference at <kbd><a href="https://developers.google.com/recaptcha/docs/verify#error-code-reference">https://developers.google.com/recaptcha/docs/verify#error-code-reference</a></kbd>. -->
+                <!-- <p><strong>Note:</strong> Error code <kbd>missing-input-response</kbd> may mean the user just didn't complete the reCAPTCHA.</p> -->
+                <!-- <p><a href="/signup.php">⤴️ REGISTRESE</a></p> -->
+        <?php
+            endif;
         }
 
 
