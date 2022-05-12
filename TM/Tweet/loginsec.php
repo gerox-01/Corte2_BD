@@ -137,37 +137,6 @@
                 <!-- <p><a href="/signup.php">⤴️ REGISTRESE</a></p> -->
         <?php
             endif;
-
-            // var_dump($ip);
-            // // Chequear captcha en Google
-            // $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=" . $secretKey . "&response=" . $captcha . "&remoteip=" . $ip);
-            // $responseKeys = json_decode($response, true);
-            // // echo '<br>Respuesta de Google: ' . $responseKeys['success'];
-            // var_dump($responseKeys);
-
-            // Si la captcha es correcta que escriba lo siguiente
-            // if(intval($responseKeys['success'])==1){
-            //     if (isset($_POST['username']) && isset($_POST['password'])) {
-            //         if ($CONN != NULL) {
-            //             $vlogin = ValidarLoginDB($CONN, $_POST['username'], $_POST['password']);
-            //             if (preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['password'])&& 
-            //                 preg_match("/^[a-z0-9_-]{3,16}$/", $_POST['username'])) {
-            //                 if ($vlogin) {
-            //                     $_SESSION['username'] = $_POST['username'];
-            //                     $_SESSION['password'] = $_POST['password'];
-            //                     header("Location: index.php");
-            //                 } else {
-            //                     echo "<p>Usuario o clave incorrectos</p>";
-            //                 }
-            //             } else {
-            //                 echo "<p>No coinciden con formato solicitado</p>";
-            //             }
-            //         }
-            //         LimpiarEntradas();
-            //     }
-            // }else{
-            //     echo "<p>Captcha incorrecto</p>";
-            // }
         }
 
 
