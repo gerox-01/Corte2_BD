@@ -52,8 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['mensaje'])) {
+    if (isset($_POST['mensaje'])) {        
         $usuarioActual = UsuarioActualId();
+        echo 'usuarioActual: ' . $usuarioActual;
         $datos = GuardarTweet($_POST['mensaje'], $usuarioActual, $_POST['estado']);
         header('HTTP/1.1 200 OK');
         echo json_encode($datos);
@@ -150,17 +151,17 @@ function UsuarioActualId()
     if (substr($jwt, 0, 6) == "Bearer") {
         $jwte = str_replace("Bearer ", "", $jwt);
         try {
-            // echo $jwte;
+            echo $jwte;
             $data = Firebase\JWT\JWT::decode($jwte, $key, array('HS256'));
-            // echo $data;
+            echo $data;
             // Serializar data
             $datas = (array)$data;
             foreach ($datas as $key => $value) {
                 $usuario = $value;
             }
-            // var_dump($usuario);
+            var_dump($usuario);
             $json_data  = json_encode((array)$usuario->iduser);
-            // print_r($json_data);
+            print_r($json_data);
             $json_data = str_replace('[', "", $json_data);
             $json_data = str_replace(']', "", $json_data);
             return $json_data;

@@ -13,11 +13,11 @@ use Firebase\JWT\JWT;
 function ConexionDB()
 {
     $servername = "localhost";
-    $database = "corte2bd";
-    $password = "";
+    // $database = "corte2bd";
+    // $password = "";
     $username = "root";
-    // $database = "tm";
-    // $password = "123456";
+    $database = "tm";
+    $password = "123456";
 
     $sql = "mysql:host=$servername; dbname=$database;";
     $dsn_Options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
@@ -280,8 +280,9 @@ function ValidarLoginDB($usuario, $clave)
             $_SESSION['hijos'] = $user['cant_hijos'];
             $_SESSION['foto'] = $user['foto'];
             $_SESSION['direccion'] = $user['direccion'];
-            $_SESSION['estadociv'] = $user['estcivil'];
+            $_SESSION['estadociv'] = $user['estcivil'];           
             return TRUE;
+            
         } else {
             return FALSE;
         }
@@ -305,6 +306,14 @@ function encriptarPassword($clave)
     $password = crypt($clave, $encryptPass);
     return $password;
 }
+
+// //encrypt password with crypt()
+// function encriptarPassword($clave)
+// {
+//     $encryptPass = crypt($clave, '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
+//     return $encryptPass;
+// }
+
 
 
 /**
