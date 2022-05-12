@@ -269,7 +269,7 @@ function IniciarSesionSegura()
     $path = $cookieParams['path'];
 
     //Inicio y control de la sesión
-    $secure = true;
+    $secure = false;
     $httponly = true;
     $samesite = 'strict';
 

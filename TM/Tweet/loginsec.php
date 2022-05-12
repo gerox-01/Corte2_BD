@@ -94,23 +94,47 @@
             if ($resp->isSuccess()) :
                 // If the response is a success, that's it!
         ?>
-                <h2>Success!</h2>
+                <!-- <h2>Success!</h2> -->
                 <!-- <kbd>
-                    <pre><?php var_export($resp); ?></pre>
+                    <pre><?php 
+                    // var_export($resp); 
+                    if (isset($_POST['username']) && isset($_POST['password'])) {
+                        $vlogin = ValidarLoginDB($_POST['username'], $_POST['password']);
+                        if (
+                            preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['password']) &&
+                            preg_match("/^[a-z0-9_-]{3,16}$/", $_POST['username'])
+                        ) {
+                            if ($vlogin) {
+                                $_SESSION['username'] = $_POST['username'];
+                                $_SESSION['password'] = $_POST['password'];
+                                header("Location: index.php");
+                            } else {
+                                echo "<p>Usuario o clave incorrectos</p>";
+                            }
+                        } else {
+                            echo "<p>No coinciden con formato solicitado</p>";
+                        }
+                        LimpiarEntradas();
+                    }
+                    ?></pre>
                 </kbd> -->
                 <!-- <p>That's it. Everything is working. Go integrate this into your real project.</p> -->
-                <p><a href="/login.php">⤴️ ENTRAR</a></p>
+                <!-- <p><a href="/login.php">⤴️ ENTRAR</a></p> -->
+
+                
             <?php
             else :
                 // If it's not successful, then one or more error codes will be returned.
             ?>
-                <h2>Something went wrong</h2>
+                <h2>ReCaptcha no valido</h2>
                 <!-- <kbd>
-                    <pre><?php var_export($resp); ?></pre>
+                    <pre><?php 
+                    // var_export($resp); 
+                    ?></pre>
                 </kbd> -->
-                <p>Check the error code reference at <kbd><a href="https://developers.google.com/recaptcha/docs/verify#error-code-reference">https://developers.google.com/recaptcha/docs/verify#error-code-reference</a></kbd>.
+                <!-- <p>Check the error code reference at <kbd><a href="https://developers.google.com/recaptcha/docs/verify#error-code-reference">https://developers.google.com/recaptcha/docs/verify#error-code-reference</a></kbd>. -->
                 <!-- <p><strong>Note:</strong> Error code <kbd>missing-input-response</kbd> may mean the user just didn't complete the reCAPTCHA.</p> -->
-                <p><a href="/signup.php">⤴️ REGISTRESE</a></p>
+                <!-- <p><a href="/signup.php">⤴️ REGISTRESE</a></p> -->
         <?php
             endif;
 
