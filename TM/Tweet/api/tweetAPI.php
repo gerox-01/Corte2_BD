@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['mensaje'])) {
+    if (isset($_POST['mensaje'])) {        
         $usuarioActual = UsuarioActualId();
         $datos = GuardarTweet($_POST['mensaje'], $usuarioActual, $_POST['estado']);
         header('HTTP/1.1 200 OK');
@@ -160,9 +160,9 @@ function UsuarioActualId()
             }
             // var_dump($usuario);
             $json_data  = json_encode((array)$usuario->iduser);
-            // print_r($json_data);
-            $json_data = str_replace('[', "", $json_data);
-            $json_data = str_replace(']', "", $json_data);
+            print_r($json_data);
+            $json_data = str_replace('["', "", $json_data);
+            $json_data = str_replace('"]', "", $json_data);
             return $json_data;
         } catch (Exception $e) {
             echo 'Credenciales incorrectas del usuario actualizar';
