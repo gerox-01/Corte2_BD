@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         header("HTTP/1.1 200 OK");
         echo json_encode($mensajesRecibidos);
         exit();
-    }   elseif ($mensajesEnviados != NULL) {
+    } elseif ($mensajesEnviados != NULL) {
         header("HTTP/1.1 200 OK");
         echo json_encode($mensajesEnviados);
         exit();
@@ -60,7 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // $mensaje = $_POST['mensaje'];
     // $destinatario = $_POST['destinatario'];
     // $fecha = date('Y-m-d H:i:s');
-    $mensajeDB = EnviarMensaje($_POST['Usuario_Origen'], $_POST['Usuario_Destino'], $_POST['Texto'], $_POST['FechaEnvio'], $_POST['ArchivoAdjunto']);
+    date_default_timezone_set('America/Bogota');
+    $fechaenvio = date('m-d-Y h:i:s a', time());
+    $mensajeDB = EnviarMensaje($usuario, $_POST['Usuario_Destino'], $_POST['Texto'], $fechaenvio, $_POST['ArchivoAdjunto']);
     if ($mensajeDB != NULL) {
         header("HTTP/1.1 200 OK");
         echo json_encode($mensajeDB);
@@ -69,7 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("HTTP/1.1 401 Unauthorized");
         exit();
     }
-   
 }
 
 // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
