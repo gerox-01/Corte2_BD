@@ -14,10 +14,10 @@ function ConexionDB()
 {
     $servername = "localhost";
     // $database = "corte2bd";
-    // $password = "";
+    $password = "";
     $username = "root";
     $database = "tm";
-    $password = "123456";
+    // $password = "123456";
 
     $sql = "mysql:host=$servername; dbname=$database;";
     $dsn_Options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
@@ -807,3 +807,18 @@ function ListarMensajesEnviados($usuario_origen)
 //         }
 //     }
 // }
+
+function cleanString(string $value): string {
+    $value = preg_replace('/<script>.*<\/script>/is', '', $value);
+    $value = trim($value);
+    // $value = stripslashes($value);
+    $value = htmlspecialchars($value);
+    return $value;
+}
+
+function ArrayCleaner (array $stringArray) {
+    foreach ($stringArray as $key => $value) {
+        $stringArray[$key] = cleanString($value);
+    }
+    return $stringArray;
+}

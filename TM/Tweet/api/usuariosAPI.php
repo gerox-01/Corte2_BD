@@ -2,6 +2,7 @@
 
 
 require_once('./../lib/db_tools.php');
+require_once('./../lib/regex.php');
 require_once('./../lib/tools.php');
 require_once('./../../../vendor/autoload.php');
 require_once('./../api/token.php');
@@ -14,87 +15,119 @@ LimpiarEntradas();
  */
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $usuario = token();
-    $mensajes = ObtenerUsuarioDB($usuario);
-    if ($mensajes != NULL) {
+    $userdata = ObtenerUsuarioDB($usuario);
+    if ($userdata != NULL) {
         header("HTTP/1.1 200 OK");
-        echo json_encode($mensajes);
+        echo json_encode($userdata);
         exit();
     } else {
         header("HTTP/1.1 401 Unauthorized");
         exit();
     }
 }
+
 /**
  * Crear un usuario con el token de autenticación
  * Autor: Alejandro Monroy y Gerónimo Quiroga
  * Fecha: 18/04/2022
  */
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $usuario= $_POST['usuario'];
-        $clave= $_POST['clave'];
-        $nombre = $_POST['nombres'];
-        $apellido = $_POST['apellidos'];
-        $fecha_nac = $_POST['fecha'];
+
+    //Limpia las entradas por el método POST
+    $_POST = ArrayCleaner($_POST);
+
+    //Campos obligatorios
+    $userRegex = validateUser($_POST['user']);
+    $passwordRegex = validatePassword($_POST['password']);
+    $nameRegex = validateName($_POST['name']);
+    $lastNameRegex = validateLastName($_POST['lastName']);
+    $dateRegex = validateDate($_POST['date']);
+    $emailRegex = validateEmail($_POST['email']);
+    $idTipDocRegex = validateID($_POST['id_tip_doc']);
+    $numDocRegex = validateNumberDocument($_POST['num_doc']);
+    $idChildrenRegex = validateID($_POST['id_num_hijos']);
+    $addressesRegex = validateAddresses($_POST['addresses']);
+    $idEstCivilRegex = validateID($_POST['id_est_civil']);
+
+    if ($userRegex && $passwordRegex && $nameRegex && $lastNameRegex && $dateRegex && $emailRegex && $idTipDocRegex && $numDocRegex && $idChildrenRegex && $addressesRegex && $idEstCivilRegex ) {
+        echo 'Cumple con el formato';
+
+        //Definimos variables
+        $usuario = $_POST['user'];
+        $clave = $_POST['password'];
+        $nombre = $_POST['name'];
+        $apellido = $_POST['lastName'];
+        $fecha_nac = $_POST['date'];
         $color = $_POST['color'];
-        $correo = $_POST['correo'];
+        $correo = $_POST['email'];
         $id_tip_doc = $_POST['id_tip_doc'];
         $num_doc = $_POST['num_doc'];
         $id_num_hijos = $_POST['id_num_hijos'];
-        $direccion = $_POST['direccion'];
+        $direccion = $_POST['addresses'];
         $id_est_civil = $_POST['id_est_civil'];
 
-    if (isset($_POST['archivo'])) {
-        $data = explode(';', $_POST['archivo']);
-        if ($data[0] == 'data:image/jpeg') {
-            echo $data[0];
-            $foto = base64_to_jpeg($data[1], 't.jpg');
-            RegistrarUsuarioDB( $usuario, $clave, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
-            if ($mensajes != NULL) {
-                header("HTTP/1.1 200 OK");
-                echo json_encode($mensajes);
-                exit();
+        #region InsertUser
+        if (isset($_POST['file'])) {
+            $data = explode(';', $_POST['file']);
+            if ($data[0] == 'data:image/jpeg') {
+                echo $data[0];
+                $foto = base64_to_jpeg($data[1], 't.jpg');
+                RegistrarUsuarioDB($usuario, $clave, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+                if ($mensajes != NULL) {
+                    header("HTTP/1.1 200 OK");
+                    echo json_encode($mensajes);
+                    exit();
+                } else {
+                    header("HTTP/1.1 401 Unauthorized");
+                    exit();
+                }
+            } else if ($data[0] == 'data:image/png') {
+                $foto = base64_to_jpeg($data[1], 't.png');
+                RegistrarUsuarioDB($usuario, $clave, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+                if ($mensajes != NULL) {
+                    header("HTTP/1.1 200 OK");
+                    echo json_encode($mensajes);
+                    exit();
+                } else {
+                    header("HTTP/1.1 401 Unauthorized");
+                    exit();
+                }
+            } elseif ($data[0] == 'data:image/gif') {
+                $foto = base64_to_jpeg($data[1], 't.gif');
+                RegistrarUsuarioDB($usuario, $clave, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+                if ($mensajes != NULL) {
+                    header("HTTP/1.1 200 OK");
+                    echo json_encode($mensajes);
+                    exit();
+                } else {
+                    header("HTTP/1.1 401 Unauthorized");
+                    exit();
+                }
+            } elseif ($data[0] == 'data:image/bmp') {
+                $foto = base64_to_jpeg($data[1], 't.bmp');
+                $mensajes = RegistrarUsuarioDB($usuario, $clave, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
+                if ($mensajes != NULL) {
+                    header("HTTP/1.1 200 OK");
+                    echo json_encode($mensajes);
+                    exit();
+                } else {
+                    header("HTTP/1.1 401 Unauthorized");
+                    exit();
+                }
             } else {
-                header("HTTP/1.1 401 Unauthorized");
-                exit();
-            }
-        } else if ($data[0] == 'data:image/png') {
-            $foto = base64_to_jpeg($data[1], 't.png');
-            RegistrarUsuarioDB( $usuario,$clave, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
-            if ($mensajes != NULL) {
-                header("HTTP/1.1 200 OK");
-                echo json_encode($mensajes);
-                exit();
-            } else {
-                header("HTTP/1.1 401 Unauthorized");
-                exit();
-            }
-        } elseif ($data[0] == 'data:image/gif') {
-            $foto = base64_to_jpeg($data[1], 't.gif');
-            RegistrarUsuarioDB( $usuario, $clave, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
-            if ($mensajes != NULL) {
-                header("HTTP/1.1 200 OK");
-                echo json_encode($mensajes);
-                exit();
-            } else {
-                header("HTTP/1.1 401 Unauthorized");
-                exit();
-            }
-        } elseif ($data[0] == 'data:image/bmp') {
-            $foto = base64_to_jpeg($data[1], 't.bmp');
-            $mensajes = RegistrarUsuarioDB( $usuario, $clave, $nombre, $apellido, $fecha_nac, $color, $correo, $id_tip_doc, $num_doc, $id_num_hijos, $foto, $direccion, $id_est_civil);
-            if ($mensajes != NULL) {
-                header("HTTP/1.1 200 OK");
-                echo json_encode($mensajes);
-                exit();
-            } else {
-                header("HTTP/1.1 401 Unauthorized");
-                exit();
+                $foto = NULL;
             }
         } else {
-            $foto = NULL;
+            echo "<p>No coinciden con el formato solicitado</p>";
         }
+        #endregion
+
+    } else {
+        echo 'No cumple con el formato de texto solicitado';
+        exit();
     }
 }
+
 
 /**
  * Actualizar un usuario con el token de autenticación
@@ -116,8 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $id_num_hijos = isset($_PUT['id_num_hijos']) ? $_PUT['id_num_hijos'] : NULL;
     $direccion = isset($_PUT['direccion']) ? $_PUT['direccion'] : NULL;
     $id_est_civil = isset($_PUT['id_est_civil']) ? $_PUT['id_est_civil'] : NULL;
-    if (isset($_PUT['archivo'])) {
-        $data = explode(';', $_PUT['archivo']);
+    if (isset($_PUT['file'])) {
+        $data = explode(';', $_PUT['file']);
         if ($data[0] == 'data:image/jpeg') {
             echo $data[0];
             $foto = base64_to_jpeg($data[1], 't.jpg');
@@ -258,10 +291,10 @@ function base64_to_jpeg($base64_string, $output_file)
 
 
 
-
 /**
  * En caso de que ninguna de las opciones anteriores se haya ejecutado
  * Autor: Alejandro Monroy y Gerónimo Quiroga
  * Fecha: 18/04/2022
  */
 header("HTTP/1.1 400 Bad Request");
+echo 'Esta mal todo :/';
