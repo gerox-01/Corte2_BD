@@ -49,7 +49,7 @@
                         <div style='display: flex; align-items: start;'>
                                 <p style='font-weight: bold; text-transform: uppercase;'>" . $_SESSION['nombre'] . '  ' . $_SESSION['apellido'] . "</p>
                             <form method='post' style='margin-top: 0 !important;' >
-                            
+                                <input type='hidden' name='anticsrf' value=" . $_SESSION['anticsrf'] . ">
                                 <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='🔓 Cerrar sesión' name='exit' id='exit'>
                             </form>
                         </div>";
@@ -63,12 +63,14 @@
                     </div>";
                 }
 
-                if (isset($_POST['exit'])) {
-                    session_destroy();
-                    header("Location: index.php");
+                if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
+                    if (isset($_POST['exit'])) {
+                        session_destroy();
+                        header('Location: login.php');
+                    }
                 }
                 ?>
-                <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf']; ?>">
+                
             </div>
             <!-- Datos Usuario -->
             <div style="display: flex; justify-content: space-around; width: 90vw; padding: 0 !important; margin: 0 !important;">
@@ -76,6 +78,7 @@
                 // Boton de ver articulos
                 if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "" && $nombre) {
                     echo "<form method='post' style='margin-top: 0 !important;' >
+                            <input type='hidden' name='anticsrf' value=" . $_SESSION['anticsrf'] . ">
                             <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='📚 Ver articulos' name='verarticulos' id='verarticulos'>
                         </form>";
                 }
@@ -83,6 +86,7 @@
                 // Boton de ver mensajes
                 if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "" && $nombre) {
                     echo "<form method='post' style='margin-top: 0 !important;' >
+                            <input type='hidden' name='anticsrf' value=" . $_SESSION['anticsrf'] . ">
                                 <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='📨 Ver mensajes' name='vermensajes' id='vermensajes'>
                             </form>";
                 }
@@ -90,6 +94,7 @@
                 // Boton de ver perfil
                 if (isset($_SESSION['username']) && isset($_SESSION['password']) && $_SESSION['username'] != "" && $nombre) {
                     echo "<form method='post' style='margin-top: 0 !important;' >
+                            <input type='hidden' name='anticsrf' value=" . $_SESSION['anticsrf'] . ">
                                 <input type='submit' style='border: 5px solid #0000; cursor: pointer; ' value='📋 Ver perfil' name='verperfil' id='verperfil'>
                             </form>";
                 }
@@ -97,14 +102,16 @@
 
                 <?php
 
-                if (isset($_POST['verarticulos'])) {
-                    header("Location: index.php");
-                }
-                if (isset($_POST['vermensajes'])) {
-                    header("Location: mensajes.php");
-                }
-                if (isset($_POST['verperfil'])) {
-                    header("Location: perfil.php");
+                if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
+                    if (isset($_POST['verarticulos'])) {
+                        header('Location: articulos.php');
+                    }
+                    if (isset($_POST['vermensajes'])) {
+                        header('Location: mensajes.php');
+                    }
+                    if (isset($_POST['verperfil'])) {
+                        header('Location: perfil.php');
+                    }
                 }
                 ?>
 
