@@ -12,6 +12,8 @@ if (isset($_POST['submit'])){
     $fileActualExt = strtolower(end($fileExt));
 
     $allowed = array('jpg', 'jpeg', 'png');
+    // $ C:\Users\alejo\Desktop\Archivos\UniServerZ\core\php74\php /bin/obfuscate obfuscate  C:\Users\alejo\Desktop\Archivos\UniServerZ\www\Corte2_BD C:\Users\alejo\Desktop\Archivos\UniServerZ\www\OFUSCADO
+
 // buscar como mostrar la imagen en nav
 // guardar ruta de image en usuariotxt
     if  (in_array($fileActualExt, $allowed)){

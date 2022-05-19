@@ -54,11 +54,19 @@ if (isset($_SESSION['username'])) {
     <?php
     echo '<div style="width: 90vw; display: flex; justify-content: space-around; padding: 0 !important; margin-bottom: 0 !important;">';
     echo '<form method="post" style="display: flex; flex-direction: row !important; width: 98vw; justify-content: space-around !important;">';
+    echo '<input type="hidden" name="anticsrf" value="' . $_SESSION['anticsrf'] . '">';
     echo '<input type="submit" name="msrecibidos" value="Mensajes recibidos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
     echo '<input type="submit" name="msenviados" value="Mensaje enviados" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
     echo '<input type="submit" name="crearmensaje" value="Crear mensaje" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
     echo '</form>';
     echo '</div>';
+
+    if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
+        if (isset($_POST['exit'])) {
+          session_destroy();
+          header('Location: mensajes.php');
+        }
+      }
 
 
     if (isset($_POST['msrecibidos'])) {

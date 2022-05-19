@@ -84,6 +84,13 @@
         // }
         #region Validar Inicio de Sesión
 
+        if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
+            if (isset($_POST['exit'])) {
+              session_destroy();
+              header('Location: loginsec.php');
+            }
+          }
+
         if (isset($_POST['send'])) {
             $secretKey = '6LeJHckfAAAAAAmlCL4cRhGSWEkVqt_ifM6-Nrmy';
             $response = null;
