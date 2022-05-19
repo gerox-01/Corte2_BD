@@ -33,11 +33,19 @@
 
     echo '<div style="width: 90vw; display: flex; justify-content: space-around; padding: 0 !important; margin-bottom: 0 !important;">';
     echo '<form method="post" style="display: flex; flex-direction: row !important; width: 98vw; justify-content: space-around !important;">';
+    echo '<input type="hidden" name="anticsrf" value="' . $_SESSION['anticsrf'] . '">';
     echo '<input type="submit" name="todosarticulos" value="Todos los artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
     echo '<input type="submit" name="misarticulos" value="Mis artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
     echo '<input type="submit" name="creararticulo" value="Crear artículo" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
     echo '</form>';
     echo '</div>';
+
+    if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
+        if (isset($_POST['exit'])) {
+          session_destroy();
+          header('Location: tweet.php');
+        }
+      }
 
 
     if (isset($_POST['todosarticulos'])) {

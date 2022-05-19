@@ -14,10 +14,10 @@ require_once "funcionesCSRF.php";
 GenerarAnctiCSRF();
 
 if (isset($_SESSION['username'])) {
-    $user = $_SESSION['username'];
+  $user = $_SESSION['username'];
 } else {
-    header('Location: login.php');
-    die();
+  header('Location: login.php');
+  die();
 }
 ?>
 
@@ -26,50 +26,58 @@ if (isset($_SESSION['username'])) {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css">
 
-    <title>T1</title>
+  <title>T1</title>
 </head>
 
 <body>
 
-    <?php
-    require_once('./lib/tools.php');
-    require_once('./lib/db_tools.php');
-    LimpiarEntradas();
+  <?php
+  require_once('./lib/tools.php');
+  require_once('./lib/db_tools.php');
+  LimpiarEntradas();
 
-    $user = $_SESSION['username'] ?? '';
+  $user = $_SESSION['username'] ?? '';
 
 
-    if($user == '' || $user == null){
-        header('Location: login.php');
-        die();
+  if ($user == '' || $user == null) {
+    header('Location: login.php');
+    die();
+  }
+
+  echo '<div style="width: 90vw; display: flex; justify-content: space-around; padding: 0 !important; margin-bottom: 0 !important;">';
+  echo '<form method="post" style="display: flex; flex-direction: row !important; width: 98vw; justify-content: space-around !important;">';
+  echo '<input type="hidden" name="anticsrf" value="' . $_SESSION['anticsrf'] . '">';
+  echo '<input type="submit" name="todosarticulos" value="Todos los artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
+  echo '<input type="submit" name="misarticulos" value="Mis artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
+  echo '<input type="submit" name="creararticulo" value="Crear artículo" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
+  echo '</form>';
+  echo '</div>';
+
+  if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
+    if (isset($_POST['exit'])) {
+      session_destroy();
+      header('Location: index.php');
     }
-    
-    echo '<div style="width: 90vw; display: flex; justify-content: space-around; padding: 0 !important; margin-bottom: 0 !important;">';
-    echo '<form method="post" style="display: flex; flex-direction: row !important; width: 98vw; justify-content: space-around !important;">';
-    echo '<input type="submit" name="todosarticulos" value="Todos los artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
-    echo '<input type="submit" name="misarticulos" value="Mis artículos" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
-    echo '<input type="submit" name="creararticulo" value="Crear artículo" style="background-color: #61C1EB; color: white; padding: 5px; cursor: pointer;">';
-    echo '</form>';
-    echo '</div>';
+  }
 
-    if (isset($_POST['todosarticulos'])) {
-        $data = MostrarTweet();
-        if ($data == null) {
-            echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow: hidden;" id="style-5">';
-            echo "<div class='force-overflow'>";
-            echo "<h1>No hay Tweets</h1>";
-            echo "</div>";
-            echo "</div>";
-        } else {
-            echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw;" id="style-5">';
-            foreach ($data as $row) {
-                $html = ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw;">
+  if (isset($_POST['todosarticulos'])) {
+    $data = MostrarTweet();
+    if ($data == null) {
+      echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow: hidden;" id="style-5">';
+      echo "<div class='force-overflow'>";
+      echo "<h1>No hay Tweets</h1>";
+      echo "</div>";
+      echo "</div>";
+    } else {
+      echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw;" id="style-5">';
+      foreach ($data as $row) {
+        $html = ' <div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw;">
                         <div style="display: flex; justify-content: center; align-items: center;">
                         <div style="display: flex; flex-direction: column;">
                           <div class="col">
@@ -90,27 +98,27 @@ if (isset($_SESSION['username'])) {
                         </div>
                         <br>
                         ';
-                echo $html;
-                echo '</div>';
-            }
-            echo '</div>';
-        }
-    } else if (isset($_POST['misarticulos'])) {
-        echo "<script>window.location.href='misarticulos.php'; </script>";
-    } else if (isset($_POST['creararticulo'])) {
-        echo '<script>window.location.href="tweet.php"; </script>';
+        echo $html;
+        echo '</div>';
+      }
+      echo '</div>';
+    }
+  } else if (isset($_POST['misarticulos'])) {
+    echo "<script>window.location.href='misarticulos.php'; </script>";
+  } else if (isset($_POST['creararticulo'])) {
+    echo '<script>window.location.href="tweet.php"; </script>';
+  } else {
+    $data = MostrarTweet();
+    if ($data == null) {
+      echo '<div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow: hidden;" id="style-5">';
+      echo "<div class='force-overflow'>";
+      echo "<h1>No hay Tweets</h1>";
+      echo "</div>";
+      echo "</div>";
     } else {
-        $data = MostrarTweet();
-        if ($data == null) {
-            echo '<div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw; overflow: hidden;" id="style-5">';
-            echo "<div class='force-overflow'>";
-            echo "<h1>No hay Tweets</h1>";
-            echo "</div>";
-            echo "</div>";
-        } else {
-            echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw;" id="style-5">';
-            foreach ($data as $row) {
-                $html = '<div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw;">
+      echo ' <div class="i-tweet" style="margin-top: 0 !important; background-color: #ccc !important; height: 50vh !important; width: 98vw;" id="style-5">';
+      foreach ($data as $row) {
+        $html = '<div style="background-color: ' . $_SESSION['color'] . ' !important; width: 95vw;">
                         <div style="display: flex; justify-content: center; align-items: center;">
                         <div style="display: flex; flex-direction: column;">
                           <div class="col">
@@ -132,23 +140,23 @@ if (isset($_SESSION['username'])) {
                         </div>
                         <br>
                         ';
-                echo $html;
-                echo '</div>';
-            }
-            echo '</div>';
-        }
+        echo $html;
+        echo '</div>';
+      }
+      echo '</div>';
     }
+  }
 
-    ?>
+  ?>
 
-    <footer class="i-footer">
-        <p>&copy; T1</p>
-        <div class="i-divfotter">
-            <p class="i-integrantes">Integrantes: </p>
-            <p>David Quiroga |</p>
-            <p>| Alejandro Monroy</p>
-        </div>
-    </footer>
+  <footer class="i-footer">
+    <p>&copy; T1</p>
+    <div class="i-divfotter">
+      <p class="i-integrantes">Integrantes: </p>
+      <p>David Quiroga |</p>
+      <p>| Alejandro Monroy</p>
+    </div>
+  </footer>
 
 
 </body>
