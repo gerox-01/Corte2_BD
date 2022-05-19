@@ -63,14 +63,12 @@
                     </div>";
                 }
 
-                if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
-                    if (isset($_POST['exit'])) {
-                        session_destroy();
-                        header('Location: login.php');
-                    }
+                if (isset($_POST['exit'])) {
+                    session_destroy();
+                    header('Location: login.php');
                 }
                 ?>
-                
+
             </div>
             <!-- Datos Usuario -->
             <div style="display: flex; justify-content: space-around; width: 90vw; padding: 0 !important; margin: 0 !important;">
@@ -102,16 +100,14 @@
 
                 <?php
 
-                if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
-                    if (isset($_POST['verarticulos'])) {
-                        header('Location: articulos.php');
-                    }
-                    if (isset($_POST['vermensajes'])) {
-                        header('Location: mensajes.php');
-                    }
-                    if (isset($_POST['verperfil'])) {
-                        header('Location: perfil.php');
-                    }
+                if (isset($_POST['verarticulos'])) {
+                    header('Location: tweet.php');
+                }
+                if (isset($_POST['vermensajes'])) {
+                    header('Location: mensajes.php');
+                }
+                if (isset($_POST['verperfil'])) {
+                    header('Location: perfil.php');
                 }
                 ?>
 
