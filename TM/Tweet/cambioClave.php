@@ -71,7 +71,7 @@
 
                     if ($password != "" && $passwordn != "" && $confirmpassword != "") {
                         if ($passwordn == $confirmpassword) {
-                            $result = CambiarClave($CONN, $user, $password, $passwordn);
+                            $result = CambiarClave($user, $password, $passwordn);
                             if ($result) {
                                 echo "<p>Contraseña cambiada correctamente</p>";
                             } else {

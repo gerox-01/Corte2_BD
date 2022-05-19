@@ -3,18 +3,12 @@
 require_once('./../lib/db_tools.php');
 require_once('./../lib/tools.php');
 require_once('./../api/token.php');
-
+require_once('./../lib/regex.php');
 require_once('./../../../vendor/autoload.php');
 
 
 
 LimpiarEntradas();
-
-
-
-// if($_SERVER['REQUEST_METHOD'] == 'GET'){
-//     echo UsuarioActual();
-// }
 
 
 /**
@@ -24,53 +18,84 @@ LimpiarEntradas();
  */
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $datos = MostrarTweet();
-    header('HTTP/1.1 200 OK');
-    echo json_encode($datos);
+    if($datos != NULL){
+        header("HTTP/1.1 200 OK");
+        echo json_encode($datos);
+        exit();
+    } else {
+        header("HTTP/1.1 404 Not Found");
+        echo json_encode(array("error" => "No se encontraron tweets"));
+        exit();
+    }
 }
 
 /**
- * Actualizar los tweets desde la API con un GET request
+ * Actualizar los tweets desde la API con un PUT request
  * Autor: Alejandro Monroy y Gerónimo Quiroga
  * Fecha: 20/04/2022
  */
 if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
-    $tweet = $_PUT['tweet'] ?? NULL;
-    $estado = $_PUT['estado'] ?? NULL;
+    $_PUT = array();
+    parse_str(file_get_contents('php://input'), $_PUT);
 
-    $usuario = token();
-    if ($usuario != NULL) {
-        $datos = Actualizar($_GET['id'], $tweet, $estado);
-        header('HTTP/1.1 200 OK');
-        echo json_encode($datos);
-    }else{
-        header('HTTP/1.1 401 Unauthorized');
+
+    //Limpia las entradas por el método POST
+    $_PUT = ArrayCleaner($_PUT);
+
+    $estadoRegex = isset($_GET['estado']) ? validateBool($_GET['estado']) : null;
+    $idRegex = isset($_GET['id']) ? validateID($_GET['id']) : null;
+
+    try{
+        if($estadoRegex && $idRegex){
+
+            $estado = isset($_GET['estado']) ? $_GET['estado'] : null;
+            $id = isset($_GET['id']) ? $_GET['id'] : null;
+    
+            if ($estado != null) {
+                $datos = Actualizar($_GET['id'], $_GET['estado']);
+                header('HTTP/1.1 200 OK');
+                echo 'Árticulo actualizado exitosamente';
+            } else {
+                header('HTTP/1.1 401 Unauthorized');
+                echo 'No se pudo actualizar el árticulo';
+                exit();
+            }
+        }else{
+            header('HTTP/1.1 400 Bad Request');
+            echo 'No coincide con el formato solicitado';
+            exit();
+        }
+    }catch(Exception $e){
+        header('HTTP/1.1 400 Bad Request');
+        echo 'Error realizando la petición. Comuniquese con el administrador.';
         exit();
     }
 }
 
-
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['mensaje'])) {        
-        $usuarioActual = UsuarioActualId();
-        $datos = GuardarTweet($_POST['mensaje'], $usuarioActual, $_POST['estado']);
-        header('HTTP/1.1 200 OK');
-        echo json_encode($datos);
-    } else {
+
+    //Limpia las entradas por el método POST
+    $_POST = ArrayCleaner($_POST);
+
+    $tweetRegex = isset($_POST['articulo']) ? validateTweet($_POST['articulo']) : null;
+    $estadoRegex = isset($_POST['espublico']) ? validateBool($_POST['espublico']) : null;
+
+    if ($tweetRegex && $estadoRegex) {
+
+        if (isset($_POST['articulo'])) {
+            $usuarioActual = UsuarioActualId();
+            $datos = GuardarTweet($_POST['articulo'], $usuarioActual, $_POST['espublico']);
+            header('HTTP/1.1 200 OK');
+            echo 'Se ha guardado el tweet: ' . $_POST['articulo'] . ' con el estado: ' . $_POST['espublico'];
+        } else {
+            header('HTTP/1.1 400 Bad Request');
+        }
+    }else{
         header('HTTP/1.1 400 Bad Request');
+        echo 'No coincide con el formato de soliciado';
     }
 }
-// if($_SERVER['REQUEST_METHOD'] == 'GET'){
-//     if(isset($_GET['username'])){
-//         $datos = ListarMensajesRecibidos($CONN, $_GET['username']);
-//         header('HTTP/1.1 200 OK');
-//         echo json_encode($datos);
-//         exit();
-//     }else{
-//         header('HTTP/1.1 400 Bad Request');
-//     }
-// }
 
 // /**
 //  * Borrar un tweet con la API
@@ -78,23 +103,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //  * Fecha: 20/04/2022
 //  */
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
-    if (isset($_GET['id'])) {
-        $datos = EliminarTweet($_GET['id']);
-        header('HTTP/1.1 200 OK');
-        echo json_encode($datos);
-    } else {
+
+    $idRegex = isset($_GET['id']) ? validateID($_GET['id']) : null;
+
+    try{
+        if($idRegex){
+            if (isset($_GET['id'])) {
+                $datos = EliminarTweet($_GET['id']);
+                header('HTTP/1.1 200 OK');
+                echo 'Eliminado exitosamente';
+            } else {
+                header('HTTP/1.1 400 Bad Request');
+                echo 'No fue posible eliminar.';
+            }
+        }else{
+            header('HTTP/1.1 400 Bad Request');
+            echo 'No coincide con el formato solicitado';
+            exit();
+        }
+    }catch (Exception $e) {
         header('HTTP/1.1 400 Bad Request');
+        echo 'Error realizando la petición. Comuniquese con el administrador.';
+        exit();
     }
 }
-// if($_SERVER['REQUEST_METHOD'] == 'POST'){
-//     if(isset($_POST['mensaje']) && isset($_POST['iduser'])){
-//         $datos = GuardarTweet($CONN, $_POST['mensaje'], $_POST['iduser'], $_POST['estado']);
-//         header('HTTP/1.1 200 OK');
-//         echo json_encode($datos);
-//     }else{
-//         header('HTTP/1.1 400 Bad Request');
-//     }
-// }
 
 
 
@@ -160,7 +192,6 @@ function UsuarioActualId()
             }
             // var_dump($usuario);
             $json_data  = json_encode((array)$usuario->iduser);
-            print_r($json_data);
             $json_data = str_replace('["', "", $json_data);
             $json_data = str_replace('"]', "", $json_data);
             return $json_data;

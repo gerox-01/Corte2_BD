@@ -17,7 +17,7 @@ function validatePassword($password){
 }
 
 function validateName($name){
-    $regex = '/^[A-Za-z]{1,15}$/';
+    $regex = '/^[A-Za-z ]{1,15}$/';
     if(preg_match($regex, $name)){
         return true;
     }
@@ -25,7 +25,7 @@ function validateName($name){
 }
 
 function validateLastName($lastName){
-    $regex = '/^[A-Za-z]{1,15}$/';
+    $regex = '/^[A-Za-z ]{1,15}$/';
     if(preg_match($regex, $lastName)){
         return true;
     }
@@ -75,6 +75,23 @@ function validateAddresses($addresses){
 function validateContentScript($content){
     $regex = '/<script>.*<\/script>/i';
     if(preg_match($regex, $content)){
+        return true;
+    }
+    return false;
+}
+
+function validateTweet($tweet){
+    // $regex = '/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]{1,140}$/';  
+    $regex = '/^[A-Za-z0-9_ ]{1,140}$/';
+    if(preg_match($regex, $tweet)){
+        return true;
+    }
+    return false;
+}
+
+function validateBool($bool){
+    $regex = '/^[0-1]{1}$/';
+    if(preg_match($regex, $bool)){
         return true;
     }
     return false;

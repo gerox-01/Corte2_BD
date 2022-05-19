@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $datos = ['token' => $jwt];
             header("HTTP/1.1 200 OK");
-            echo json_encode($datos);
+            echo '{"token": "' . $jwt . '"}';
             exit();
         } else {
             header("HTTP/1.1 401 Unauthorized");
@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } else {
         header("HTTP/1.1 401 Unauthorized");
+        echo 'Usuario o contraseña incorrectos';
         exit();
     }
 

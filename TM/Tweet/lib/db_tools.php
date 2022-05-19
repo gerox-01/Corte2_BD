@@ -14,10 +14,10 @@ function ConexionDB()
 {
     $servername = "localhost";
     // $database = "corte2bd";
-    // $password = "";
+    $password = "";
     $username = "root";
     $database = "tm";
-    $password = "123456";
+    // $password = "123456";
 
     $sql = "mysql:host=$servername; dbname=$database;";
     $dsn_Options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
@@ -101,10 +101,8 @@ function RegistrarUsuarioDB(
                 $my_Insert_Statement->bindParam(':id_est_civil', $id_est_civ);
 
                 if ($my_Insert_Statement->execute()) {
-                    echo "Nuevo Usuario Creado";
                     return TRUE;
                 } else {
-                    echo "No se pudo crear Usuario";
                     return FALSE;
                 }
             }
@@ -633,13 +631,12 @@ function Publicar($id)
  * @param boolean estado
  * @return boolean
  */
-function Actualizar($id, $tweet, $estado)
+function Actualizar($id, $estado)
 {
     $CONN = ConexionDB();
-    $sql = "UPDATE tuits SET mensaje_tuit = case when :tweet is null then mensaje_tuit else :tweet end, Estado = case when :estado is null then Estado else :estado end WHERE id_tuit = :id";
+    $sql = "UPDATE tuits SET Estado = case when :estado is null then Estado else :estado end WHERE id_tuit = :id";
     $statement = $CONN->prepare($sql);
     $statement->bindParam(':id', $id);
-    $statement->bindParam(':tweet', $tweet);
     $statement->bindParam(':estado', $estado);
     try {
         if ($statement->execute()) {
