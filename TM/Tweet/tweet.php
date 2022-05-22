@@ -98,10 +98,10 @@
                 }
                 $savet = GuardarTweet($tweet, $_SESSION['iduser'], $estado);
                 if ($savet) {
-                    echo '<p style="color: red">Tweet creado correctamente  </p>';
+                    echo '<p style="color: green">Tweet creado correctamente</p>';
                     // echo '<script>window.location.href="index.php"; </script>';
                 } else {
-                    echo '<p style="color: red"> Error publicando el tweet  </p>';
+                    echo '<p style="color: red"> Error publicando el tweet</p>';
                 }
             } else {
                 echo '<p style="color: red">El tweet no puede contener caracteres especiales</p>';

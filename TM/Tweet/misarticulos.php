@@ -85,12 +85,12 @@
                     echo $htmlm;
                 }
                 $_SESSION['idtuit'] = $_POST['idtuit'] ?? '';
-                DespublicarTweet();
                 EliminarT();
-                PublicarTweet();
             }
         }
         echo '</div>';
+        DespublicarTweet();
+        PublicarTweet();
     }
 
     // echo $_GET['idtuit'];
@@ -101,10 +101,9 @@
             $encrypid = encriptarIdTuit($_SESSION['idtuit']);
             $publicar = Publicar($_SESSION['idtuit']);
             if ($publicar) {
-                echo '<script>alert("Artículo publicado")</script>';
-                echo '<script>window.location.href="index.php"; </script>';
+                echo '<p style="color: green">Artículo publicado</p>';
             } else {
-                echo '<script>alert("Error publicando el artículo")</script>';
+                echo '<p style="color: red">Error publicando el artículo</p>';
             }
         }
     }
@@ -116,10 +115,9 @@
             $encrypid = encriptarIdTuit($_SESSION['idtuit']);
             $despublicar = Despublicar($_SESSION['idtuit']);
             if ($despublicar) {
-                echo '<script>alert("Artículo despublicado")</script>';
-                echo '<script>window.location.href="index.php"; </script>';
+                echo '<p style="color: green">Artículo despublicado</p>';
             } else {
-                echo '<script>alert("Error despublicando el artículo")</script>';
+                echo '<p style="color: red">Error despublicando el artículo</p>';
             }
         }
     }
@@ -130,10 +128,9 @@
             $encrypid = encriptarIdTuit($_SESSION['idtuit']);
             $deletetweet =  EliminarTweet($_SESSION['idtuit']);
             if ($deletetweet) {
-                echo '<script>alert("Artículo eliminado")</script>';
-                echo '<script>window.location.href="index.php"; </script>';
+                echo '<p style="color: green">Artículo eliminado</p>';
             } else {
-                echo '<script>alert("Error eliminando el artículo")</script>';
+                echo '<p style="color: red">Error eliminando el artículo</p>';
             }
         }
     }
