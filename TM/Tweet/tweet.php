@@ -18,15 +18,16 @@
     require_once './lib/tools.php';
     require_once './lib/db_tools.php';
     require_once "funcionesCSRF.php";
+    require_once './lib/regex.php';
     GenerarAnctiCSRF();
 
     $user = $_SESSION['username'] ?? '';
 
-    if($user == '' || $user == null){
+    if ($user == '' || $user == null) {
         header('Location: login.php');
         die();
     }
-    
+
 
     LimpiarEntradas();
     $tweet = $_POST['tweet'] ?? '';
@@ -42,10 +43,10 @@
 
     if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
         if (isset($_POST['exit'])) {
-          session_destroy();
-          header('Location: tweet.php');
+            session_destroy();
+            header('Location: tweet.php');
         }
-      }
+    }
 
 
     if (isset($_POST['todosarticulos'])) {
@@ -86,21 +87,24 @@
     // $DateAndTime = date('m-d-Y');
 
     if (isset($_POST['tweet'])) {
-
         if (isset($_POST['crearTweet'])) {
-            if (!empty($_POST['checkbox'])) {
-                $estado = 1;
-            } else {
-                $estado = 0;
-            }
+            $tweetRegex = validateTweet($tweet);
 
-
-            $savet = GuardarTweet($tweet, $_SESSION['iduser'], $estado);
-            if ($savet) {
-                echo '<script>alert("Tweet creado")</script>';
-                echo '<script>window.location.href="index.php"; </script>';
+            if ($tweetRegex) {
+                if (!empty($_POST['checkbox'])) {
+                    $estado = 1;
+                } else {
+                    $estado = 0;
+                }
+                $savet = GuardarTweet($tweet, $_SESSION['iduser'], $estado);
+                if ($savet) {
+                    echo '<p style="color: red">Tweet creado correctamente  </p>';
+                    // echo '<script>window.location.href="index.php"; </script>';
+                } else {
+                    echo '<p style="color: red"> Error publicando el tweet  </p>';
+                }
             } else {
-                echo '<script>alert("Error publicando el tweet")</script>';
+                echo '<p style="color: red">El tweet no puede contener caracteres especiales</p>';
             }
         }
     }
