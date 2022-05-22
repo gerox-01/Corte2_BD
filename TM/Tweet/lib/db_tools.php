@@ -550,7 +550,7 @@ function MostrarTweet()
 function MostrarTweetU()
 {
     $datostweets = [];
-    $$connection = ConexionDB();
+    $connection = ConexionDB();
     $sql = "SELECT tuits.id_tuit as 'idtuit', tuits.mensaje_tuit as 'mensaje', tuits.fecha_tuit as 'fecha', usuarios.usuario as 'usuario', usuarios.foto as 'foto', tuits.Estado as 'estado' FROM tuits INNER JOIN usuarios ON tuits.id_usuario_tuit = usuarios.id_usuario ORDER BY tuits.fecha_tuit DESC";
     $statement = $connection->prepare($sql);
     try {
