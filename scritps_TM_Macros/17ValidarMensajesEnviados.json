@@ -1,0 +1,32 @@
+{
+  "Name": "17ValidarMensajesEnviados",
+  "CreationDate": "2022-5-22",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/Corte2_BD/TM/Tweet/mensajes.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "//input[@name=\"msenviados\"]",
+      "Value": "",
+      "Targets": [
+        "id=vermensajes",
+        "name=vermensajes",
+        "xpath=//*[@id=\"vermensajes\"]",
+        "xpath=//input[@id='vermensajes']",
+        "xpath=//form[2]/input[2]",
+        "css=#vermensajes"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//div[2]/p[text()=\" Mensaje: Este es un mensaje para Maria con un archivo JPG\"]",
+      "Value": "",
+      "Description": ""
+    }
+  ]
+}

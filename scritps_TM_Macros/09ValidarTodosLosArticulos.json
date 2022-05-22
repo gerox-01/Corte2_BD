@@ -1,0 +1,31 @@
+{
+  "Name": "09ValidarTodosLosArticulos",
+  "CreationDate": "2022-5-22",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/Corte2_BD/TM/Tweet/tweet.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=todosarticulos",
+      "Value": "",
+      "Targets": [
+        "name=todosarticulos",
+        "xpath=/html/body/div/form/input[2]",
+        "xpath=//input[@name='todosarticulos']",
+        "xpath=//body/div/form/input[2]",
+        "css=body > div > form > input:nth-child(2)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//h1[text()=\"No hay Tweets\"]",
+      "Value": "",
+      "Description": ""
+    }
+  ]
+}

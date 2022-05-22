@@ -1,0 +1,42 @@
+{
+  "Name": "07ValidaciónOpcionesSesión",
+  "CreationDate": "2022-5-22",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/Corte2_BD/TM/Tweet/index.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//a[text()=\"🏠\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//input[@id=\"exit\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//input[@id=\"vermensajes\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//input[@id=\"verperfil\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//input[@id=\"verarticulos\"]",
+      "Value": "",
+      "Description": ""
+    }
+  ]
+}

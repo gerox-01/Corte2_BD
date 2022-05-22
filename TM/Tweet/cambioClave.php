@@ -64,7 +64,7 @@
                 && preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['confirmpassword'])
                 && preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['password'])
             ) {
-                if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
+                // if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
                     $password = $_POST['password'];
                     $passwordn = $_POST['passwordn'];
                     $confirmpassword = $_POST['confirmpassword'];
@@ -80,12 +80,11 @@
                         } else {
                             echo "<p>Las contraseñas no coinciden</p>";
                         }
-                    }
-                } else {
-                    echo "<script>alert('CSRF detectado');</script>";
-                }
+                    // }
+                } 
+            }else{
+                echo "<p>La contraseña debe tener más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial</p>";
             }
-            echo "<p>La contraseña debe tener más de 8 caracteres, 1 minuscula, mayuscula, número y caracter especial</p>";
         }
         $anticsrf = random_int(1000, 9999);
         $_SESSION['anticsrf'] = $anticsrf;

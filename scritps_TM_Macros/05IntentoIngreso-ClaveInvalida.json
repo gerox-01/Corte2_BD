@@ -1,0 +1,87 @@
+{
+  "Name": "05IntentoIngreso-ClaveInvalida",
+  "CreationDate": "2022-5-22",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/Corte2_BD/TM/Tweet/login.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=username",
+      "Value": "",
+      "Targets": [
+        "id=username",
+        "name=username",
+        "xpath=//*[@id=\"username\"]",
+        "xpath=//input[@id='username']",
+        "xpath=//input",
+        "css=#username"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=username",
+      "Value": "pepe",
+      "Targets": [
+        "id=username",
+        "name=username",
+        "xpath=//*[@id=\"username\"]",
+        "xpath=//input[@id='username']",
+        "xpath=//input",
+        "css=#username"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=password",
+      "Value": "",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div[2]/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=password",
+      "Value": "*Abc123.",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div[2]/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "name=send",
+      "Value": "",
+      "Targets": [
+        "name=send",
+        "xpath=/html/body/div/form/button",
+        "xpath=//button[@name='send']",
+        "xpath=//button",
+        "css=body > div > form > button"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//p[text()=\"Usuario o clave incorrectos\"]",
+      "Value": "",
+      "Description": ""
+    }
+  ]
+}

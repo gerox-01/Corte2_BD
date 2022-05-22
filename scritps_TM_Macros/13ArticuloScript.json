@@ -1,0 +1,125 @@
+{
+  "Name": "13ArticuloScript",
+  "CreationDate": "2022-5-22",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/Corte2_BD/TM/Tweet/index.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=creararticulo",
+      "Value": "",
+      "Targets": [
+        "name=creararticulo",
+        "xpath=/html/body/div/form/input[4]",
+        "xpath=//input[@name='creararticulo']",
+        "xpath=//input[4]",
+        "css=body > div:nth-child(7) > form > input:nth-child(4)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=tweet",
+      "Value": "",
+      "Targets": [
+        "id=tweet",
+        "name=tweet",
+        "xpath=//*[@id=\"tweet\"]",
+        "xpath=//textarea[@id='tweet']",
+        "xpath=//textarea",
+        "css=#tweet"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=tweet",
+      "Value": "<script>alert('Este es un articulo publico')</script>",
+      "Targets": [
+        "id=tweet",
+        "name=tweet",
+        "xpath=//*[@id=\"tweet\"]",
+        "xpath=//textarea[@id='tweet']",
+        "xpath=//textarea",
+        "css=#tweet"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=checkbox",
+      "Value": "on",
+      "Targets": [
+        "id=checkbox",
+        "name=checkbox",
+        "xpath=//*[@id=\"checkbox\"]",
+        "xpath=//input[@id='checkbox']",
+        "xpath=//div/input",
+        "css=#checkbox"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=checkbox",
+      "Value": "",
+      "Targets": [
+        "id=checkbox",
+        "name=checkbox",
+        "xpath=//*[@id=\"checkbox\"]",
+        "xpath=//input[@id='checkbox']",
+        "xpath=//div/input",
+        "css=#checkbox"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "name=crearTweet",
+      "Value": "",
+      "Targets": [
+        "name=crearTweet",
+        "xpath=/html/body/form/div/div[2]/input[2]",
+        "xpath=//input[@name='crearTweet']",
+        "xpath=//div[2]/input[2]",
+        "css=body > form > div > div:nth-child(4) > input:nth-child(3)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//p[text()=\"El tweet no puede contener caracteres especiales\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "open",
+      "Target": "http://localhost/Corte2_BD/TM/Tweet/tweet.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=todosarticulos",
+      "Value": "",
+      "Targets": [
+        "name=todosarticulos",
+        "xpath=/html/body/div/form/input[2]",
+        "xpath=//input[@name='todosarticulos']",
+        "xpath=//body/div/form/input[2]",
+        "css=body > div > form > input:nth-child(2)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//h1[text()=\"No hay Tweets\"]",
+      "Value": "",
+      "Description": ""
+    }
+  ]
+}

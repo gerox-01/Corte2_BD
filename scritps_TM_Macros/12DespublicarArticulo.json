@@ -1,0 +1,74 @@
+{
+  "Name": "12DespublicarArticulo",
+  "CreationDate": "2022-5-22",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/Corte2_BD/TM/Tweet/index.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=misarticulos",
+      "Value": "",
+      "Targets": [
+        "name=misarticulos",
+        "xpath=/html/body/div/form/input[2]",
+        "xpath=//input[@name='misarticulos']",
+        "xpath=//input[2]",
+        "css=body > div:nth-child(7) > form > input:nth-child(2)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//div[2]/div[1]/p[text()=\"Sí\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//div[2]/div[1]//input[@name=\"despublicar\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "//div[2]/div[1]//input[@name=\"despublicar\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//p[text()=\"Artículo despublicado\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "open",
+      "Target": "http://localhost/Corte2_BD/TM/Tweet/misarticulos.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=todosarticulos",
+      "Value": "",
+      "Targets": [
+        "name=todosarticulos",
+        "xpath=/html/body/div/form/input",
+        "xpath=//input[@name='todosarticulos']",
+        "xpath=//body/div/form/input",
+        "css=body > div:nth-child(6) > form > input:nth-child(1)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//h1[text()=\"No hay Tweets\"]",
+      "Value": "",
+      "Description": ""
+    }
+  ]
+}

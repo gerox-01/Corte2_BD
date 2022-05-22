@@ -1,0 +1,465 @@
+{
+  "Name": "02RegistrarUsuarioExito-Maria",
+  "CreationDate": "2022-5-22",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/Corte2_BD/TM/Tweet/login.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "xpath=/html/body/nav",
+      "Value": "",
+      "Targets": [
+        "xpath=/html/body/nav",
+        "xpath=//nav",
+        "css=body > nav"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "linkText=🗳 Registrar",
+      "Value": "",
+      "Targets": [
+        "linkText=🗳 Registrar",
+        "xpath=/html/body/nav/div/div/div[2]/a",
+        "xpath=//div[2]/a",
+        "css=body > nav > div > div:nth-child(1) > div:nth-child(2) > a"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=name",
+      "Value": "",
+      "Targets": [
+        "id=name",
+        "name=name",
+        "xpath=//*[@id=\"name\"]",
+        "xpath=//input[@id='name']",
+        "xpath=//input",
+        "css=#name"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=name",
+      "Value": "Maria",
+      "Targets": [
+        "id=name",
+        "name=name",
+        "xpath=//*[@id=\"name\"]",
+        "xpath=//input[@id='name']",
+        "xpath=//input",
+        "css=#name"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=lastname",
+      "Value": "Prueba",
+      "Targets": [
+        "id=lastname",
+        "name=lastname",
+        "xpath=//*[@id=\"lastname\"]",
+        "xpath=//input[@id='lastname']",
+        "xpath=//div[2]/input",
+        "css=#lastname"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=email",
+      "Value": "maria@gmail.com",
+      "Targets": [
+        "id=email",
+        "name=email",
+        "xpath=//*[@id=\"email\"]",
+        "xpath=//input[@id='email']",
+        "xpath=//div[3]/input",
+        "css=#email"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "name=tipDoc",
+      "Value": "",
+      "Targets": [
+        "name=tipDoc",
+        "xpath=//*[@id=\"style-5\"]/div/div[4]/select",
+        "xpath=//select[@name='tipDoc']",
+        "xpath=//select",
+        "css=#style-5 > div > div:nth-child(4) > select"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "xpath=//*[@id=\"style-5\"]/div/div[4]/select/option",
+      "Value": "",
+      "Targets": [
+        "xpath=//*[@id=\"style-5\"]/div/div[4]/select/option",
+        "xpath=//option[@value='1']",
+        "xpath=//option",
+        "css=#style-5 > div > div:nth-child(4) > select > option:nth-child(1)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=num_doc",
+      "Value": "",
+      "Targets": [
+        "id=num_doc",
+        "name=num_doc",
+        "xpath=//*[@id=\"num_doc\"]",
+        "xpath=//input[@id='num_doc']",
+        "xpath=//div[5]/input",
+        "css=#num_doc"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=num_doc",
+      "Value": "2021222324",
+      "Targets": [
+        "id=num_doc",
+        "name=num_doc",
+        "xpath=//*[@id=\"num_doc\"]",
+        "xpath=//input[@id='num_doc']",
+        "xpath=//div[5]/input",
+        "css=#num_doc"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "xpath=//*[@id=\"style-5\"]/div/div[6]",
+      "Value": "",
+      "Targets": [
+        "xpath=//*[@id=\"style-5\"]/div/div[6]",
+        "xpath=//div[6]",
+        "css=#style-5 > div > div:nth-child(6)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=direccion",
+      "Value": "",
+      "Targets": [
+        "id=direccion",
+        "name=direccion",
+        "xpath=//*[@id=\"direccion\"]",
+        "xpath=//input[@id='direccion']",
+        "xpath=//div[6]/input",
+        "css=#direccion"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=direccion",
+      "Value": "Carrera 4 #4E - 20",
+      "Targets": [
+        "id=direccion",
+        "name=direccion",
+        "xpath=//*[@id=\"direccion\"]",
+        "xpath=//input[@id='direccion']",
+        "xpath=//div[6]/input",
+        "css=#direccion"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=numhijos",
+      "Value": "",
+      "Targets": [
+        "id=numhijos",
+        "name=numhijos",
+        "xpath=//*[@id=\"numhijos\"]",
+        "xpath=//select[@id='numhijos']",
+        "xpath=//div[7]/select",
+        "css=#numhijos"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "select",
+      "Target": "id=numhijos",
+      "Value": "label=Uno",
+      "Targets": [
+        "id=numhijos",
+        "name=numhijos",
+        "xpath=//*[@id=\"numhijos\"]",
+        "xpath=//select[@id='numhijos']",
+        "xpath=//div[7]/select",
+        "css=#numhijos"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "xpath=//*[@id=\"numhijos\"]/option[2]",
+      "Value": "",
+      "Targets": [
+        "xpath=//*[@id=\"numhijos\"]/option[2]",
+        "xpath=//div[7]/select/option[2]",
+        "css=#numhijos > option:nth-child(2)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=estCivil",
+      "Value": "",
+      "Targets": [
+        "id=estCivil",
+        "name=estCivil",
+        "xpath=//*[@id=\"estCivil\"]",
+        "xpath=//select[@id='estCivil']",
+        "xpath=//div[8]/select",
+        "css=#estCivil"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "select",
+      "Target": "id=estCivil",
+      "Value": "label=Divorciado",
+      "Targets": [
+        "id=estCivil",
+        "name=estCivil",
+        "xpath=//*[@id=\"estCivil\"]",
+        "xpath=//select[@id='estCivil']",
+        "xpath=//div[8]/select",
+        "css=#estCivil"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "xpath=//*[@id=\"estCivil\"]/option[4]",
+      "Value": "",
+      "Targets": [
+        "xpath=//*[@id=\"estCivil\"]/option[4]",
+        "xpath=//option[@value='7']",
+        "xpath=//div[8]/select/option[4]",
+        "css=#estCivil > option:nth-child(4)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=color",
+      "Value": "",
+      "Targets": [
+        "id=color",
+        "name=color",
+        "xpath=//*[@id=\"color\"]",
+        "xpath=//input[@id='color']",
+        "xpath=//div[9]/input",
+        "css=#color"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=color",
+      "Value": "#CCCCC",
+      "Targets": [
+        "id=color",
+        "name=color",
+        "xpath=//*[@id=\"color\"]",
+        "xpath=//input[@id='color']",
+        "xpath=//div[9]/input",
+        "css=#color"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "XClick",
+      "Target": "id=archivo",
+      "Value": "",
+      "Targets": [
+        "id=archivo",
+        "name=archivo",
+        "xpath=//*[@id=\"archivo\"]",
+        "xpath=//input[@id='archivo']",
+        "xpath=//div[2]/div[5]/input",
+        "css=#archivo"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "pause",
+      "Target": "3000",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "XType",
+      "Target": "C:\\tmp\\tmp.jpg",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "pause",
+      "Target": "3000",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "XType",
+      "Target": "${KEY_ENTER}",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=fecha_nac",
+      "Value": "",
+      "Targets": [
+        "id=fecha_nac",
+        "name=fecha_nac",
+        "xpath=//*[@id=\"fecha_nac\"]",
+        "xpath=//input[@id='fecha_nac']",
+        "xpath=//div[3]/div/input",
+        "css=#fecha_nac"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=fecha_nac",
+      "Value": "",
+      "Targets": [
+        "id=fecha_nac",
+        "name=fecha_nac",
+        "xpath=//*[@id=\"fecha_nac\"]",
+        "xpath=//input[@id='fecha_nac']",
+        "xpath=//div[11]/input",
+        "css=#fecha_nac"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=fecha_nac",
+      "Value": "",
+      "Targets": [
+        "id=fecha_nac",
+        "name=fecha_nac",
+        "xpath=//*[@id=\"fecha_nac\"]",
+        "xpath=//input[@id='fecha_nac']",
+        "xpath=//div[11]/input",
+        "css=#fecha_nac"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=fecha_nac",
+      "Value": "2000-05-09",
+      "Targets": [
+        "id=fecha_nac",
+        "name=fecha_nac",
+        "xpath=//*[@id=\"fecha_nac\"]",
+        "xpath=//input[@id='fecha_nac']",
+        "xpath=//div[11]/input",
+        "css=#fecha_nac"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=username",
+      "Value": "",
+      "Targets": [
+        "id=username",
+        "name=username",
+        "xpath=//*[@id=\"username\"]",
+        "xpath=//input[@id='username']",
+        "xpath=//div[12]/input",
+        "css=#username"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=username",
+      "Value": "maria",
+      "Targets": [
+        "id=username",
+        "name=username",
+        "xpath=//*[@id=\"username\"]",
+        "xpath=//input[@id='username']",
+        "xpath=//div[12]/input",
+        "css=#username"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=password",
+      "Value": "*Abc123+",
+      "Targets": [
+        "id=password",
+        "name=password",
+        "xpath=//*[@id=\"password\"]",
+        "xpath=//input[@id='password']",
+        "xpath=//div[13]/input",
+        "css=#password"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=confirmpassword",
+      "Value": "*Abc123+",
+      "Targets": [
+        "id=confirmpassword",
+        "name=confirmpassword",
+        "xpath=//*[@id=\"confirmpassword\"]",
+        "xpath=//input[@id='confirmpassword']",
+        "xpath=//div[14]/input",
+        "css=#confirmpassword"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "XClick",
+      "Target": "name=btnRegistrar",
+      "Value": "",
+      "Targets": [
+        "name=btnRegistrar",
+        "xpath=//*[@id=\"style-5\"]/div/div[15]/input",
+        "xpath=//input[@name='btnRegistrar']",
+        "xpath=//div[15]/input",
+        "css=#style-5 > div > div:nth-child(16) > input"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "comment",
+      "Target": "verifyElementPresent // //p[text()=\"Usuario Registrado\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "comment",
+      "Target": "pause // 2000",
+      "Value": "",
+      "Description": ""
+    }
+  ]
+}

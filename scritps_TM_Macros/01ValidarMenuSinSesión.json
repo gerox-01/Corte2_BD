@@ -1,0 +1,30 @@
+{
+  "Name": "01ValidarMenuSinSesión",
+  "CreationDate": "2022-5-22",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/Corte2_BD/TM/Tweet/login.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//a[text()=\"🙋‍♂️ Ingresar\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//a[text()=\"🗳 Registrar\"]",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementNotPresent",
+      "Target": "//input[@name=\"exit\"]",
+      "Value": "",
+      "Description": ""
+    }
+  ]
+}

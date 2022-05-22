@@ -1,0 +1,171 @@
+{
+  "Name": "16MensajeArchivoPDF-Otto",
+  "CreationDate": "2022-5-22",
+  "Commands": [
+    {
+      "Command": "open",
+      "Target": "http://localhost/Corte2_BD/TM/Tweet/mensajes.php",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=crearmensaje",
+      "Value": "",
+      "Targets": [
+        "name=crearmensaje",
+        "xpath=/html/body/div/form/input[3]",
+        "xpath=//input[@name='crearmensaje']",
+        "xpath=//input[3]",
+        "css=body > div:nth-child(7) > form > input:nth-child(3)"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=txtMensaje",
+      "Value": "",
+      "Targets": [
+        "id=txtMensaje",
+        "name=txtMensaje",
+        "xpath=//*[@id=\"txtMensaje\"]",
+        "xpath=//input[@id='txtMensaje']",
+        "xpath=//div[2]/input",
+        "css=#txtMensaje"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=cmbDestino",
+      "Value": "",
+      "Targets": [
+        "id=cmbDestino",
+        "name=cmbDestino",
+        "xpath=//*[@id=\"cmbDestino\"]",
+        "xpath=//select[@id='cmbDestino']",
+        "xpath=//select",
+        "css=#cmbDestino"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "select",
+      "Target": "id=cmbDestino",
+      "Value": "label=Otto Prueba",
+      "Targets": [
+        "id=cmbDestino",
+        "name=cmbDestino",
+        "xpath=//*[@id=\"cmbDestino\"]",
+        "xpath=//select[@id='cmbDestino']",
+        "xpath=//select",
+        "css=#cmbDestino"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=cmbDestino",
+      "Value": "",
+      "Targets": [
+        "id=cmbDestino",
+        "name=cmbDestino",
+        "xpath=//*[@id=\"cmbDestino\"]",
+        "xpath=//select[@id='cmbDestino']",
+        "xpath=//select",
+        "css=#cmbDestino"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "click",
+      "Target": "id=txtMensaje",
+      "Value": "",
+      "Targets": [
+        "id=txtMensaje",
+        "name=txtMensaje",
+        "xpath=//*[@id=\"txtMensaje\"]",
+        "xpath=//input[@id='txtMensaje']",
+        "xpath=//div[2]/input",
+        "css=#txtMensaje"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "type",
+      "Target": "id=txtMensaje",
+      "Value": "Este es un mensaje para Otto con un archivo PDF",
+      "Targets": [
+        "id=txtMensaje",
+        "name=txtMensaje",
+        "xpath=//*[@id=\"txtMensaje\"]",
+        "xpath=//input[@id='txtMensaje']",
+        "xpath=//div[2]/input",
+        "css=#txtMensaje"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "XClick",
+      "Target": "id=fulAdjunto",
+      "Value": "",
+      "Targets": [
+        "id=fulAdjunto",
+        "name=fulAdjunto",
+        "xpath=//*[@id=\"fulAdjunto\"]",
+        "xpath=//input[@id='fulAdjunto']",
+        "xpath=//div[3]/input",
+        "css=#fulAdjunto"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "pause",
+      "Target": "2000",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "XType",
+      "Target": "C:\\tmp\\tmp.pdf",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "pause",
+      "Target": "2000",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "XType",
+      "Target": "${KEY_ENTER}",
+      "Value": "",
+      "Description": ""
+    },
+    {
+      "Command": "clickAndWait",
+      "Target": "name=btnEnviar",
+      "Value": "",
+      "Targets": [
+        "name=btnEnviar",
+        "xpath=//*[@id=\"style-5\"]/div/form/input[2]",
+        "xpath=//input[@name='btnEnviar']",
+        "xpath=//div[2]/div/form/input[2]",
+        "css=#style-5 > div > form > input.btn.btn-primary"
+      ],
+      "Description": ""
+    },
+    {
+      "Command": "verifyElementPresent",
+      "Target": "//*[text()=\"Archivo subido.\"]",
+      "Value": "",
+      "Targets": [
+        "xpath=/html/body",
+        "xpath=//body",
+        "css=body"
+      ],
+      "Description": ""
+    }
+  ]
+}
