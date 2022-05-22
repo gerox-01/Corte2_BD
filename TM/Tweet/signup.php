@@ -59,6 +59,8 @@
     $fileDestination;
     #endregion
 
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($_POST["name"])) {
             $nameErr = "Name is required";
@@ -120,13 +122,12 @@
         $num = $_POST['num'];
 
         if (
-            isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])
+            isset($_POST['email']) && isset($_POST['username']) && isset($password)
             && isset($_POST['confirmpassword']) && isset($_POST['archivo'])
         ) {
             $archivo = $_POST['archivo'];
             $email = $_POST['email'];
             $username = $_POST['username'];
-            $password = $_POST['password'];
             $confirmpassword = $_POST['confirmpassword'];
             if (empty($password) && empty($confirmpassword)) {
                 $display = '<p>Las contraseñas no pueden estar vacías.</p>';
@@ -302,7 +303,7 @@
 
     if (isset($_POST['name'])) {
         if (
-            preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['password']) &&
+            preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $password) &&
             preg_match("/^[a-z0-9_-]{3,16}$/", $_POST['username']) &&
             preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['confirmpassword']) &&
             preg_match("/^[a-zA-Z\s]+$/", $_POST['name']) &&
@@ -328,7 +329,7 @@
             $_SESSION['estCivil'] =  $_POST['estCivil'];
 
 
-            if ($_POST['password'] == $_POST['confirmpassword']) {
+            if ($password == $_POST['confirmpassword']) {
                 loadImage();
                 $insertuser = RegistrarUsuarioDB(
                     $_SESSION['username'],

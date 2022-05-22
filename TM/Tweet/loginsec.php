@@ -80,13 +80,12 @@
 
         <?php
 
+        $anticsrf = isset($_POST['anticsrf']) ? $_POST['anticsrf'] : '';
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
+        $username = isset($_POST['username']) ? $_POST['username'] : '';
+        $send = isset($_POST['send']) ? $_POST['send'] : '';
 
-        // foreach ($_POST as $key => $value) {
-        //     echo '<p><strong>' . $key . ':</strong> ' . $value . '</p>';
-        // }
-        #region Validar Inicio de Sesión
-
-        if (isset($_POST['anticsrf']) && isset($_SESSION['anticsrf']) && $_POST['anticsrf'] == $_SESSION['anticsrf']) {
+        if (isset($anticsrf) && isset($_SESSION['anticsrf']) && $anticsrf == $_SESSION['anticsrf']) {
             if (isset($_POST['exit'])) {
                 session_destroy();
                 header('Location: loginsec.php');
@@ -107,14 +106,14 @@
                 <!-- <kbd>
                     <pre><?php
                             // var_export($resp); 
-                            if (isset($_POST['username']) && isset($_POST['password'])) {
-                                $vlogin = ValidarLoginDB($_POST['username'], $_POST['password']);
+                            if (isset($username) && isset($password)) {
+                                $vlogin = ValidarLoginDB($username, $password);
                                 if (
                                     preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/", $_POST['password']) &&
-                                    preg_match("/^[a-z0-9_-]{3,16}$/", $_POST['username'])
+                                    preg_match("/^[a-z0-9_-]{3,16}$/", $username)
                                 ) {
                                     if ($vlogin) {
-                                        $_SESSION['username'] = $_POST['username'];
+                                        $_SESSION['username'] = $username;
                                         $_SESSION['password'] = $_POST['password'];
                                         header("Location: index.php");
                                     } else {
