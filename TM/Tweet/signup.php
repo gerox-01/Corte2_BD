@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">7
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="css/styles.css">
 
@@ -349,11 +349,9 @@
                 );
                 session_destroy();
                 if ($insertuser) {
-                    echo '<script>alert("Usuario Registrado")</script>';
-                    echo '<script>window.location.href="login.php"; </script>';
+                    echo '<p style="color: green">Usuario Registrado</p>';
                 } else {
-                    echo '<script>alert("Error. credenciales incorrectas")</script>';
-                    echo '<script>window.location.href="signup.php"; </script>';
+                    echo '<p style="color: red">Error. credenciales incorrectas</p>';
                 }
             }
         } else {
