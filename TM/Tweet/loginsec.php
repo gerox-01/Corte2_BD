@@ -89,6 +89,7 @@
             if (isset($_POST['exit'])) {
                 session_destroy();
                 header('Location: loginsec.php');
+                exit();
             }
         }
 
@@ -147,6 +148,7 @@
         <?php
             endif;
         }
+        
 
 
 
