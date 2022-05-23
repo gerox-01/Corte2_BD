@@ -96,10 +96,11 @@
         if (isset($_POST['send'])) {
             $secretKey = '6LeJHckfAAAAAAmlCL4cRhGSWEkVqt_ifM6-Nrmy';
             $response = null;
+            $recaptchav = isset($_POST['g-recaptcha-response']) ? $_POST['g-recaptcha-response'] : '';
             // comprueba la clave secreta
             $recaptcha = new \ReCaptcha\ReCaptcha($secretKey);
             $resp = $recaptcha->setExpectedHostname($_SERVER['SERVER_NAME'])
-                ->verify($_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR']);
+                ->verify($recaptchav, $_SERVER['REMOTE_ADDR']);
             if ($resp->isSuccess()) :
                 // If the response is a success, that's it!
         ?>
